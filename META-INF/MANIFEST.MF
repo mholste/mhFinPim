@@ -1,0 +1,3 @@
+Bundle-SymbolicName: mhFinPim
+Bundle-Version: 1.0.0.qualifier
+Bundle-Name: mhFinPim
