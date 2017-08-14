@@ -25,7 +25,7 @@ public class Manager
         
         try
         {
-        Connection conn = initializer.getConnecvtion();
+        Connection conn = initializer.getConnection();
         }
         catch (SQLException se) {
 			// TODO: Logging rein...
