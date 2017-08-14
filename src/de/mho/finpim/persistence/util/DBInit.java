@@ -11,7 +11,29 @@ public class DBInit
 	private static final String DATABASE ="jdbc:h2:~/finpim";
 	private static final String USER = "sa";
 	
-	private DBInit() {}
+	private Connection conn;
+	
+	private DBInit() 
+	{
+		try
+		{
+			Class.forName(DRIVER);
+			conn = DriverManager.getConnection(DATABASE, USER, "");
+			
+		}
+		catch (ClassNotFoundException cnfe)
+		{
+			//TODO Fehlerbehandlung
+			System.out.println("Klasse für DB-Treiber nicht gefunden");
+			cnfe.printStackTrace();
+		}
+		catch (SQLException se)
+		{
+			//TODO Fehlerbehandlung
+			System.out.println("Verbindung zur DB fehlgeschlagen");
+			se.printStackTrace();
+		}
+	}
 	
 	public static DBInit getInstance()
 	{
@@ -22,7 +44,7 @@ public class DBInit
 		return instance;
 	}
 	
-	public Connection getConnecvtion() throws SQLException
+	public Connection getConnection() throws SQLException
 	{
 		try
 		{
