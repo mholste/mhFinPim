@@ -1,4 +1,5 @@
-Bundle-SymbolicName: mhFinPim;singleton=true
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: mhFinPim;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Name: mhFinPim
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
