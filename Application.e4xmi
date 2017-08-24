@@ -19,6 +19,8 @@
       </children>
     </children>
   </children>
+  <handlers xmi:id="_U13N8IjJEeeql_FbN0RJIg" elementId="SaveCredential" contributionURI="bundleclass://mhFinPim/de.mho.finpim.handler.SaveCredentialHandler" command="_pg9ZcIjIEeeql_FbN0RJIg"/>
+  <commands xmi:id="_pg9ZcIjIEeeql_FbN0RJIg" elementId="de.mho.finpim.cmd.saveCredential" commandName="SaveCredential"/>
   <addons xmi:id="_YOV-YXc-EeeFFMbj97ie_A" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_YOV-Ync-EeeFFMbj97ie_A" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_YOV-Y3c-EeeFFMbj97ie_A" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
