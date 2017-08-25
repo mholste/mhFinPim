@@ -33,19 +33,17 @@ public class CredentialsPart
 {
 	private String str;
 	
+	/*
 	@Inject
 	ECommandService commandService;
 	
 	@Inject
 	EHandlerService handlerService;
-	
-	@Inject
-	IEclipseContext ctx;
-	
+	*/
 	@PostConstruct
-	public void createControls(Composite parent, MApplication application)
+	public void createControls(Composite parent,  IFinPimService service)
 	{
-		IEclipseContext context = application.getContext();
+		
 		GridLayout layout = new GridLayout(4, false);
 		layout.marginLeft = 15;
 		layout.marginRight = 15;
@@ -77,10 +75,10 @@ public class CredentialsPart
 			@Override
 		    public void widgetSelected(SelectionEvent e) {
 		        System.out.println(txtName.getText());
-		        str = txtName.getText();		       
-		        ctx.set("test", str);
-		        ParameterizedCommand command = commandService.createCommand("de.mho.finpim.cmd.saveCredential", null);
-				handlerService.executeHandler(command);
+		        str = txtName.getText();   
+		        service.savePerson(str);
+		        //ParameterizedCommand command = commandService.createCommand("de.mho.finpim.cmd.saveCredential", null);
+				//handlerService.executeHandler(command);
 		    }
 		});		
 		

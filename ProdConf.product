@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="FinPim" uid="ProdConf" id="mhFinPim.prod" application="org.eclipse.e4.ui.workbench.swt.E4Application" useFeatures="false" includeLaunchers="true">
+<product name="FinPim" uid="ProdConf" id="mhFinPim.prod" application="org.eclipse.e4.ui.workbench.swt.E4Application" useFeatures="true" includeLaunchers="true">
 
    <configIni use="default">
    </configIni>
@@ -9,6 +9,8 @@
    <launcherArgs>
       <programArgs>-clearPersistedState
       </programArgs>
+      <vmArgs>-DREFRESH_BUNDLES=false
+      </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
    </launcherArgs>
@@ -100,14 +102,22 @@
       <feature id="org.eclipse.e4.rcp"/>
       <feature id="org.eclipse.emf.ecore"/>
       <feature id="org.eclipse.emf.common"/>
+      <feature id="org.eclipse.gemini.dbaccess.feature" version="1.1.0.RELEASE"/>
+      <feature id="org.eclipse.gemini.dbaccess.h2.feature" version="1.1.0.RELEASE"/>
+      <feature id="org.eclipse.gemini.ext.di.feature" version="1.1.2.201308292016"/>
+      <feature id="org.eclipse.gemini.jpa.feature" version="1.2.0.M1"/>
+      <feature id="org.eclipse.persistence.jpa" version="2.5.1.v20130913-5eaeb06"/>
    </features>
 
    <configurations>
+      <plugin id="fpModel" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
+      <plugin id="org.eclipse.gemini.dbaccess.h2" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.gemini.jpa" autoStart="true" startLevel="3" />
    </configurations>
 
 </product>
