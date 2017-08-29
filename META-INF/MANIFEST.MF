@@ -18,7 +18,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.13.0",
  javax.inject,
  javax.persistence,
  org.eclipse.gemini.ext.di,
- DatabaseH2;bundle-version="1.0.0"
+ DatabaseH2;bundle-version="1.0.0",
+ fpModel
 Service-Component: OSGI-INF/component.xml,
  OSGI-INF/service.xml
 Bundle-ActivationPolicy: lazy
