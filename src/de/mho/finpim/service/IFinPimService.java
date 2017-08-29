@@ -2,5 +2,5 @@ package de.mho.finpim.service;
 
 public interface IFinPimService 
 {
-	boolean savePerson(String str);
+	boolean saveCredentials(String user, String pwd);
 }
