@@ -14,5 +14,13 @@
          </property>
       </product>
    </extension>
+   <extension
+         id="FP"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.eclipse.e4.ui.workbench.swt.E4Application"
+            name="TestProduct">
+      </product>
+   </extension>
 
 </plugin>
