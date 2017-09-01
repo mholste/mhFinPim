@@ -29,53 +29,68 @@ public class CredentialsPart
 	@PostConstruct
 	public void createControls(Composite parent,  IFinPimService service)
 	{		
-		GridLayout layout = new GridLayout(4, false);
+		// Layout
+		GridLayout layout = new GridLayout(3, false);
 		layout.marginLeft = 15;
 		layout.marginRight = 15;
-		GridData grdWidget = new GridData(SWT.LEFT, SWT.CENTER, true, false, 3, 1);
+		
+		GridData grdWidget = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
+		grdWidget.widthHint = 59;
 		grdWidget.minimumWidth = 100;
+		
+		GridData gd_txtPwd = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
+		gd_txtPwd.widthHint = 88;
 		
 		parent.setLayout(layout);
 		
-		Label lblName = new Label(parent, SWT.NONE);
-		lblName.setText("Name");
+		// Controls
+		Label lblLogin;
+		Label lblName;
+		Label lblPwd;
+		Label lblNewUser;
+		Text txtName;
+		Text txtPwd;
+		Button btnOK;
+		Button btnNewUser;
 		
-		Text txtName = new Text(parent, SWT.BORDER);
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		
+		lblLogin = new Label(parent, SWT.NONE);
+		lblLogin.setText("Bitte anmelden");
+		
+		new Label(parent, SWT.NONE);
+		
+		lblName = new Label(parent, SWT.NONE);
+		lblName.setText("Name");
+		txtName = new Text(parent, SWT.BORDER);
 		txtName.setLayoutData(grdWidget);
 		
-		Label lblPwd = new Label(parent, SWT.NONE);
-		lblPwd.setText("Passwort");		
+		new Label(parent, SWT.NONE);
 		
-		Text txtPwd = new Text(parent, SWT.BORDER);
-		
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
+		lblPwd = new Label(parent, SWT.NONE);
+		lblPwd.setText("Passwort");
+		txtPwd = new Text(parent, SWT.BORDER);
+		txtPwd.setLayoutData(gd_txtPwd);				
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		
-		Button btnOK= new Button(parent, SWT.PUSH);
+		btnOK= new Button(parent, SWT.PUSH);
 		btnOK.setText("OK");
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
 		
-		txtPwd.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent arg0) {
-				btnOK.setFocus();
-			}
-		});
+		lblNewUser = new Label(parent, SWT.NONE);
+		lblNewUser.setText("...oder neuen Nutzer anlegen");
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);	
+		btnNewUser = new Button(parent, SWT.NONE);
+		btnNewUser.setText("Neuer Nutzer >>");
 		
-		txtName.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent arg0) {
-				btnOK.setFocus();
-			}
-		});
+		// Listener
 		
 		btnOK.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -84,6 +99,18 @@ public class CredentialsPart
 		        pwd = txtPwd.getText();
 		        service.saveCredentials(user, pwd);
 		    }
+		});
+		
+		txtName.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent arg0) {
+				btnOK.setFocus();
+			}
+		});
+		
+		txtPwd.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent arg0) {
+				btnOK.setFocus();
+			}
 		});
 		
 	}
