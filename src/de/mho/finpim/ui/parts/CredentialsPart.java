@@ -103,7 +103,7 @@ public class CredentialsPart
 		    public void widgetSelected(SelectionEvent e) {
 		        user = txtName.getText();   
 		        pwd = txtPwd.getText();
-		        service.saveCredentials(user, pwd);
+		        service.checkCedentials(user, pwd);
 		    }
 		});
 		
