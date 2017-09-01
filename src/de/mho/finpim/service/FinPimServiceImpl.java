@@ -1,5 +1,7 @@
 package de.mho.finpim.service;
 
+import java.util.HashMap;
+
 import javax.persistence.EntityManager;
 import de.mho.finpim.lifecycle.Activator;
 import de.mho.finpim.persistence.model.Person;
@@ -7,7 +9,7 @@ import de.mho.finpim.persistence.model.Person;
 public class FinPimServiceImpl implements IFinPimService 
 {
 	@Override
-	public boolean saveCredentials(String user, String pwd) {
+	public boolean checkCedentials(String user, String pwd) {
 		System.out.println("Service");
 		
 		EntityManager em = Activator.getEntityManager();
@@ -20,6 +22,12 @@ public class FinPimServiceImpl implements IFinPimService
         em.getTransaction().commit();
         em.close();        
 		
+		return false;
+	}
+
+	@Override
+	public boolean persistPerson(HashMap values) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 	
