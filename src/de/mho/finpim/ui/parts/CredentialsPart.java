@@ -3,6 +3,10 @@ package de.mho.finpim.ui.parts;
 import org.eclipse.swt.widgets.Composite;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -25,6 +29,8 @@ public class CredentialsPart
 {
 	private String user;	
 	private String pwd;
+	
+	@Inject EPartService partService;
 
 	@PostConstruct
 	public void createControls(Composite parent,  IFinPimService service)
@@ -99,6 +105,13 @@ public class CredentialsPart
 		        pwd = txtPwd.getText();
 		        service.saveCredentials(user, pwd);
 		    }
+		});
+		
+		btnNewUser.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				partService.showPart("mhfinpim.part.register", PartState.ACTIVATE);
+			}
 		});
 		
 		txtName.addModifyListener(new ModifyListener() {
