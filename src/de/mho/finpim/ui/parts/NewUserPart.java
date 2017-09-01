@@ -1,19 +1,27 @@
 package de.mho.finpim.ui.parts;
 
+import java.util.HashMap;
+
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 import org.eclipse.swt.widgets.Composite;
 
 import de.mho.finpim.service.IFinPimService;
-import swing2swt.layout.BoxLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.ModifyEvent;
 
 public class NewUserPart 
 {
@@ -22,6 +30,18 @@ public class NewUserPart
 	private Text txtUsername;
 	private Text txtPwd;
 	private Text txtPwdRepeat;
+	
+	private String strName;
+	private String strFName;
+	private String strUsername;
+	private String strPwd;
+	private String strPwdRepeat;
+	
+	boolean nok;
+	private HashMap<String, String> userValues;
+	
+	@Inject EPartService partService;
+	
 	@PostConstruct
 	public void createControls(Composite parent,  IFinPimService service)
 	{
@@ -119,6 +139,7 @@ public class NewUserPart
 		lblPwdRepeat.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblPwdRepeat.setText("Passwort wiederholen");
 		txtPwdRepeat = new Text(parent, SWT.BORDER);
+		
 		txtPwdRepeat.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
@@ -143,17 +164,44 @@ public class NewUserPart
 		new Label(parent, SWT.NONE);
 		
 		// Listener
-		btnBack.addSelectionListener(new SelectionAdapter() {
+		btnBack.addSelectionListener(new SelectionAdapter() 
+		{
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(SelectionEvent e) 
+			{
+				partService.showPart("mhfinpim.part.credential", PartState.ACTIVATE);
 			}
 		});
 		
-		btnNewUser.addSelectionListener(new SelectionAdapter() {
+		btnNewUser.addSelectionListener(new SelectionAdapter() 
+		{
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-			}
+			public void widgetSelected(SelectionEvent e) 
+			{
+				strName = txtName.getText();
+				strFName = txtFName.getText();
+				strUsername = txtUsername.getText();
+				strPwd = txtPwd.getText();
+				strPwdRepeat = txtPwdRepeat.getText();
+				
+				if(!txtPwd.getText().equals(txtPwdRepeat.getText()))
+				{
+					MessageDialog.openWarning((Shell) parent, "Achtung", "Die Bestätigung entspricht nicht dem Passwort!");
+					nok = true;
+				}
+				
+				if (!nok)
+				{
+					userValues = new HashMap<>();
+					userValues.put("Name", txtName.getText());
+					userValues.put("FName", txtFName.getText());
+					userValues.put("Username", txtUsername.getText());
+					userValues.put("Pwd", txtPwd.getText());
+				}
+			}			
 		});
+		
+		
 	}
 
 }
