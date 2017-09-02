@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public interface IFinPimService 
 {
-	boolean checkCedentials(String user, String pwd);
+	public int checkCedentials(String user, String pwd);
 	
-	boolean persistPerson(HashMap values);
+	public boolean persistPerson(HashMap values);
 }
