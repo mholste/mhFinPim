@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.8"?><target includeMode="feature" name="org.e4.gemini.target" sequenceNumber="21">
+<locations>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.gemini.jpa.feature.feature.group" version="1.1.0.RELEASE"/>
+<repository location="http://download.eclipse.org/gemini/updates/jpa/1.1.0"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.gemini.jpa.feature.feature.group" version="1.2.0.M1"/>
+<repository location="http://download.eclipse.org/gemini/jpa/updates"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.equinox.sdk.feature.group" version="3.9.0.v20130604-2047"/>
+<unit id="org.eclipse.persistence.sdk.feature.group" version="2.5.0.v20130507-3faac2b"/>
+<repository location="http://download.eclipse.org/releases/kepler"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.gemini.dbaccess.h2.feature.feature.group" version="1.1.0.RELEASE"/>
+<repository location="http://download.eclipse.org/gemini/updates/dbaccess/1.1.0"/>
+</location>
+<location path="${eclipse_home}" type="Profile"/>
+</locations>
+<includeBundles>
+<feature id="org.eclipse.buildship"/>
+<feature id="org.eclipse.core.runtime.feature"/>
+<feature id="org.eclipse.draw2d"/>
+<feature id="org.eclipse.e4.core.tools.feature"/>
+<feature id="org.eclipse.e4.core.tools.feature.source"/>
+<feature id="org.eclipse.e4.rcp"/>
+<feature id="org.eclipse.e4.tools.bundle.spy.feature"/>
+<feature id="org.eclipse.e4.tools.context.spy.feature"/>
+<feature id="org.eclipse.e4.tools.css.spy.feature"/>
+<feature id="org.eclipse.e4.tools.event.spy.feature"/>
+<feature id="org.eclipse.e4.tools.model.spy.feature"/>
+<feature id="org.eclipse.e4.tools.preference.spy.feature"/>
+<feature id="org.eclipse.e4.tools.spies.feature"/>
+<feature id="org.eclipse.ecf.core.feature"/>
+<feature id="org.eclipse.ecf.core.ssl.feature"/>
+<feature id="org.eclipse.ecf.filetransfer.feature"/>
+<feature id="org.eclipse.ecf.filetransfer.httpclient4.feature"/>
+<feature id="org.eclipse.ecf.filetransfer.httpclient4.ssl.feature"/>
+<feature id="org.eclipse.ecf.filetransfer.ssl.feature"/>
+<feature id="org.eclipse.eclemma.feature"/>
+<feature id="org.eclipse.emf"/>
+<feature id="org.eclipse.emf.common"/>
+<feature id="org.eclipse.emf.common.ui"/>
+<feature id="org.eclipse.emf.databinding"/>
+<feature id="org.eclipse.emf.databinding.edit"/>
+<feature id="org.eclipse.emf.ecore"/>
+<feature id="org.eclipse.emf.ecore.edit"/>
+<feature id="org.eclipse.emf.ecore.editor"/>
+<feature id="org.eclipse.emf.ecp.sdk.e4.feature"/>
+<feature id="org.eclipse.emf.ecp.sdk.feature"/>
+<feature id="org.eclipse.emfforms.editor.feature"/>
+<feature id="org.eclipse.emfforms.editor.feature.source"/>
+<feature id="org.eclipse.equinox.compendium.sdk"/>
+<feature id="org.eclipse.equinox.core.feature"/>
+<feature id="org.eclipse.equinox.core.sdk"/>
+<feature id="org.eclipse.equinox.executable"/>
+<feature id="org.eclipse.equinox.p2.core.feature"/>
+<feature id="org.eclipse.equinox.p2.core.feature"/>
+<feature id="org.eclipse.equinox.p2.discovery.feature"/>
+<feature id="org.eclipse.equinox.p2.discovery.feature"/>
+<feature id="org.eclipse.equinox.p2.extras.feature"/>
+<feature id="org.eclipse.equinox.p2.extras.feature"/>
+<feature id="org.eclipse.equinox.p2.rcp.feature"/>
+<feature id="org.eclipse.equinox.p2.rcp.feature"/>
+<feature id="org.eclipse.equinox.p2.sdk"/>
+<feature id="org.eclipse.equinox.p2.user.ui"/>
+<feature id="org.eclipse.equinox.sdk"/>
+<feature id="org.eclipse.equinox.server.core"/>
+<feature id="org.eclipse.equinox.server.p2"/>
+<feature id="org.eclipse.equinox.weaving.sdk"/>
+<feature id="org.eclipse.gef"/>
+<feature id="org.eclipse.gemini.dbaccess.feature"/>
+<feature id="org.eclipse.gemini.dbaccess.h2.feature"/>
+<feature id="org.eclipse.gemini.jpa.feature"/>
+<feature id="org.eclipse.help"/>
+<feature id="org.eclipse.jdt"/>
+<feature id="org.eclipse.jgit"/>
+<feature id="org.eclipse.jpt.common.eclipselink.feature"/>
+<feature id="org.eclipse.jpt.common.feature"/>
+<feature id="org.eclipse.jpt.dbws.eclipselink.feature"/>
+<feature id="org.eclipse.jpt.jaxb.eclipselink.feature"/>
+<feature id="org.eclipse.jpt.jaxb.feature"/>
+<feature id="org.eclipse.jpt.jpa.eclipselink.feature"/>
+<feature id="org.eclipse.jpt.jpa.feature"/>
+<feature id="org.eclipse.jsf.feature"/>
+<feature id="org.eclipse.jst.common.fproj.enablement.jdt"/>
+<feature id="org.eclipse.jst.enterprise_core.feature"/>
+<feature id="org.eclipse.jst.enterprise_ui.feature"/>
+<feature id="org.eclipse.jst.enterprise_userdoc.feature"/>
+<feature id="org.eclipse.jst.jsf.apache.trinidad.tagsupport.feature"/>
+<feature id="org.eclipse.jst.server_adapters.ext.feature"/>
+<feature id="org.eclipse.jst.server_adapters.feature"/>
+<feature id="org.eclipse.jst.server_core.feature"/>
+<feature id="org.eclipse.jst.server_ui.feature"/>
+<feature id="org.eclipse.jst.server_userdoc.feature"/>
+<feature id="org.eclipse.jst.web_core.feature"/>
+<feature id="org.eclipse.jst.web_ui.feature"/>
+<feature id="org.eclipse.jst.web_userdoc.feature"/>
+<feature id="org.eclipse.jst.webpageeditor.feature"/>
+<feature id="org.eclipse.jst.ws.axis2tools.feature"/>
+<feature id="org.eclipse.jst.ws.cxf.feature"/>
+<feature id="org.eclipse.jst.ws.jaxws.dom.feature"/>
+<feature id="org.eclipse.jst.ws.jaxws.feature"/>
+<feature id="org.eclipse.jst.ws.jaxws_userdoc.feature"/>
+<feature id="org.eclipse.m2e.feature"/>
+<feature id="org.eclipse.m2e.logback.feature"/>
+<feature id="org.eclipse.m2e.wtp.feature"/>
+<feature id="org.eclipse.m2e.wtp.jaxrs.feature"/>
+<feature id="org.eclipse.m2e.wtp.jpa.feature"/>
+<feature id="org.eclipse.m2e.wtp.jsf.feature"/>
+<feature id="org.eclipse.pde"/>
+<feature id="org.eclipse.persistence.jpa"/>
+<feature id="org.eclipse.persistence.moxy"/>
+<feature id="org.eclipse.persistence.sdk"/>
+<feature id="org.eclipse.persistence.sdo"/>
+<feature id="org.eclipse.platform"/>
+<feature id="org.eclipse.rcp"/>
+<feature id="org.eclipse.recommenders.mylyn.rcp.feature"/>
+<feature id="org.eclipse.recommenders.rcp.feature"/>
+<feature id="org.eclipse.rse"/>
+<feature id="org.eclipse.rse.core"/>
+<feature id="org.eclipse.rse.dstore"/>
+<feature id="org.eclipse.rse.ftp"/>
+<feature id="org.eclipse.rse.local"/>
+<feature id="org.eclipse.rse.ssh"/>
+<feature id="org.eclipse.rse.telnet"/>
+<feature id="org.eclipse.rse.useractions"/>
+<feature id="org.eclipse.wst.xml.xpath2.processor.feature"/>
+<feature id="org.eclipse.wst.xml_core.feature"/>
+<feature id="org.eclipse.wst.xml_ui.feature"/>
+<feature id="org.eclipse.wst.xml_userdoc.feature"/>
+<feature id="org.eclipse.wst.xsl.feature"/>
+<plugin id="com.sun.jna"/>
+<plugin id="com.sun.jna.platform"/>
+<plugin id="net.sourceforge.lpg.lpgjavaruntime"/>
+<plugin id="org.apache.commons.io"/>
+<plugin id="org.apache.commons.lang3"/>
+<plugin id="org.apache.commons.math"/>
+<plugin id="org.apache.commons.pool"/>
+<plugin id="org.apache.solr.client.solrj"/>
+<plugin id="org.apache.ws.commons.util"/>
+<plugin id="org.apache.xmlrpc"/>
+<plugin id="org.eclipse.cdt.core.native"/>
+<plugin id="org.eclipse.cdt.core.win32"/>
+<plugin id="org.eclipse.cdt.core.win32.x86_64"/>
+<plugin id="org.eclipse.core.contenttype.source"/>
+<plugin id="org.eclipse.core.expressions.source"/>
+<plugin id="org.eclipse.core.jobs.source"/>
+<plugin id="org.eclipse.core.runtime.source"/>
+<plugin id="org.eclipse.core.variables.source"/>
+<plugin id="org.eclipse.equinox.p2.transport.ecf.source"/>
+<plugin id="org.eclipse.nebula.widgets.tablecombo"/>
+<plugin id="org.eclipse.xsd"/>
+<plugin id="org.eclipse.xsd.edit"/>
+<plugin id="org.gradle.toolingapi"/>
+<plugin id="org.jsoup"/>
+</includeBundles>
+</target>
