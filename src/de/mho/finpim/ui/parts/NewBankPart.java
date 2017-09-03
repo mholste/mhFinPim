@@ -1,5 +1,7 @@
 package de.mho.finpim.ui.parts;
 
+import java.util.HashMap;
+
 import javax.annotation.PostConstruct;
 
 import org.eclipse.swt.widgets.Composite;
@@ -21,6 +23,10 @@ public class NewBankPart
 	private Text txtBLZ;
 	private Text txtNo;
 	private Text txtPIN;
+	
+	boolean ok = true;
+	HashMap<String, String> bankValues;
+	
 	@PostConstruct
 	public void createControls(Composite parent,  IFinPimService service)
 	{
@@ -143,8 +149,13 @@ public class NewBankPart
 		
 		btnOk.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-			}
+			public void widgetSelected(SelectionEvent e) 
+			{
+				if(ok)
+				{
+					
+				}
+			}	
 		});
 	}
 }
