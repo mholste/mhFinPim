@@ -8,9 +8,13 @@ import javax.inject.Inject;
 import org.eclipse.swt.widgets.Composite;
 
 import de.mho.finpim.service.IFinPimService;
+import de.mho.finpim.service.IServiceValues;
+
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.e4.core.contexts.Active;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -31,16 +35,14 @@ public class NewUserPart
 	private Text txtPwd;
 	private Text txtPwdRepeat;
 	
-	private String strName;
-	private String strFName;
-	private String strUsername;
-	private String strPwd;
-	private String strPwdRepeat;
-	
-	boolean nok;
+	boolean ok = true;
 	private HashMap<String, String> userValues;
 	
 	@Inject EPartService partService;
+	
+	@Inject
+	@Active
+	MPart part;
 	
 	@PostConstruct
 	public void createControls(Composite parent,  IFinPimService service)
@@ -157,7 +159,7 @@ public class NewUserPart
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		Button btnBack = new Button(parent, SWT.NONE);
-		btnBack.setText("<< ZurÃ¼ck");
+		btnBack.setText("<< Zurück");
 		new Label(parent, SWT.NONE);		
 		Button btnNewUser = new Button(parent, SWT.NONE);		
 		btnNewUser.setText("User anlegen");
@@ -170,6 +172,7 @@ public class NewUserPart
 			public void widgetSelected(SelectionEvent e) 
 			{
 				partService.showPart("mhfinpim.part.credential", PartState.ACTIVATE);
+				partService.hidePart(part);
 			}
 		});
 		
@@ -178,25 +181,25 @@ public class NewUserPart
 			@Override
 			public void widgetSelected(SelectionEvent e) 
 			{
-				strName = txtName.getText();
-				strFName = txtFName.getText();
-				strUsername = txtUsername.getText();
-				strPwd = txtPwd.getText();
-				strPwdRepeat = txtPwdRepeat.getText();
-				
 				if(!txtPwd.getText().equals(txtPwdRepeat.getText()))
 				{
-					MessageDialog.openWarning((Shell) parent, "Achtung", "Die BestÃ¤tigung entspricht nicht dem Passwort!");
-					nok = true;
+					MessageDialog.openWarning( parent.getShell(), "Achtung", "Die Bestätigung entspricht nicht dem Passwort!");
+					ok = false;
 				}
 				
-				if (!nok)
+				if (ok)
 				{
 					userValues = new HashMap<>();
-					userValues.put("Name", txtName.getText());
-					userValues.put("FName", txtFName.getText());
-					userValues.put("Username", txtUsername.getText());
-					userValues.put("Pwd", txtPwd.getText());
+					userValues.put(IServiceValues.NAME, txtName.getText());
+					userValues.put(IServiceValues.FIRSTNAME, txtFName.getText());
+					userValues.put(IServiceValues.USERNAME, txtUsername.getText());
+					userValues.put(IServiceValues.PWD, txtPwd.getText());
+					
+					service.persistPerson(userValues);
+					
+					MessageDialog.openInformation( parent.getShell(), "Info", "Der Nutzer " + txtUsername.getText() +" wurde angelegt");
+					
+					partService.hidePart(part);
 				}
 			}			
 		});
