@@ -51,8 +51,21 @@ public class FinPimServiceImpl implements IFinPimService
 	}
 
 	@Override
-	public boolean persistPerson(HashMap values) {
-		// TODO Auto-generated method stub
+	public boolean persistPerson(HashMap values) 
+	{
+		EntityManager em = Activator.getEntityManager();
+		em.getTransaction().begin();
+		
+		Person p = new Person ((String)values.get(IServiceValues.USERNAME));
+		p.setfName((String)values.get(IServiceValues.FIRSTNAME));
+		p.setName((String)values.get(IServiceValues.NAME));
+		p.setPwd((String)values.get(IServiceValues.PWD));
+		
+		em.persist(p);
+		em.getTransaction().commit();
+		
+		em.close();
+		
 		return false;
 	}
 	
