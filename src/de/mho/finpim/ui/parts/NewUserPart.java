@@ -195,7 +195,7 @@ public class NewUserPart
 					userValues.put(IServiceValues.USERNAME, txtUsername.getText());
 					userValues.put(IServiceValues.PWD, txtPwd.getText());
 					
-					service.persistPerson(userValues);
+					//service.persistPerson(userValues);
 					
 					MessageDialog.openInformation( parent.getShell(), "Info", "Der Nutzer " + txtUsername.getText() +" wurde angelegt");
 					
