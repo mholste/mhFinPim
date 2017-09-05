@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Text;
 
 import de.mho.finpim.service.IFinPimService;
 import de.mho.finpim.service.IServiceValues;
+import de.mho.finpim.util.GlobalValues;
 
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.layout.GridData;
@@ -188,11 +189,11 @@ public class CredentialsPart
 	        	String[] rest = first[1].split("\\|", -1);
 	        	String key = rest[0] + "," + rest[1];
 	        	HashMap<String, String> values = new HashMap();
-	        	values.put("Bank", rest[0]);
-	        	values.put("Sitz", rest[1]);
-	        	values.put("BLZ", first[0]);
-	        	values.put("BIC", rest[2]);
-	        	values.put("URI", rest[5]);
+	        	values.put(IServiceValues.BANK, rest[0]);
+	        	values.put(IServiceValues.LOCATION, rest[1]);
+	        	values.put(IServiceValues.BLZ, first[0]);
+	        	values.put(IServiceValues.BIC, rest[2]);
+	        	values.put(IServiceValues.URL, rest[5]);
 	        	
 	        	suggestion.add(key);
 	        	complete.put(key, values);	        	
@@ -206,7 +207,7 @@ public class CredentialsPart
 		    e.printStackTrace();
 		}
 		
-		app.getContext().set("suggest", suggestion);
-		app.getContext().set("bank", complete);
+		app.getContext().set(GlobalValues.SUGGESTION, suggestion);
+		app.getContext().set(GlobalValues.BANK_LIST, complete);
 	}
 }
