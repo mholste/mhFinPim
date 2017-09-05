@@ -7,4 +7,6 @@ public interface IFinPimService
 	public int checkCedentials(String user, String pwd);
 	
 	public boolean persistPerson(HashMap values);
+	
+	public boolean persistBank(HashMap values); 
 }
