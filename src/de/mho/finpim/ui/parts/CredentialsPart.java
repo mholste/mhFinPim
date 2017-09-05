@@ -2,11 +2,24 @@ package de.mho.finpim.ui.parts;
 
 import org.eclipse.swt.widgets.Composite;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.eclipse.e4.core.contexts.Active;
+import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -14,27 +27,34 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import de.mho.finpim.service.IFinPimService;
+import de.mho.finpim.service.IServiceValues;
 
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
-
-
 
 public class CredentialsPart 
 {
 	private String user;	
 	private String pwd;
 	
-	@Inject EPartService partService;
+	@Inject 
+	EPartService partService;
+	
+	@Inject
+	@Active
+	MPart part;
+	
+	@Inject
+	MApplication app;
 
 	@PostConstruct
 	public void createControls(Composite parent,  IFinPimService service)
 	{		
+		this.distributeBankValues();
+		
 		// Layout
 		GridLayout layout = new GridLayout(3, false);
 		layout.marginLeft = 15;
@@ -103,9 +123,30 @@ public class CredentialsPart
 		    public void widgetSelected(SelectionEvent e) {
 		        user = txtName.getText();   
 		        pwd = txtPwd.getText();
-		        service.checkCedentials(user, pwd);
+		        String warningMsg = "";
+		        int retVal = service.checkCedentials(user, pwd);
+		        switch (retVal) 
+		        {
+		        	case IServiceValues.NOUSER:
+		        		warningMsg = "Der Nutzer existiert nicht.";
+		        		break;
+		        	case IServiceValues.USER_MULTIPLE:
+		        		warningMsg = "Der Nutzer ist mehrfach vorhanden";
+		        		break;
+		        	case IServiceValues.PWD_NOK:
+		        		warningMsg = "Das Passwort ist nicht korrekt.";
+		        }
+		        if (warningMsg.equals(""))
+		        {
+		        	partService.showPart("mhfinpim.part.newbank", PartState.ACTIVATE);
+					partService.hidePart(part);
+		        }
+		        else
+		        {
+		        	MessageDialog.openWarning( parent.getShell(), "Achtung", warningMsg);
+		        }
 		    }
-		});
+		});		
 		
 		btnNewUser.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -126,5 +167,46 @@ public class CredentialsPart
 			}
 		});
 		
+	}
+	
+	public void distributeBankValues()
+	{
+		URL url;
+		String line;
+		ArrayList<String> suggestion = new ArrayList<>();
+        HashMap <String, Map> complete = new HashMap<>(); 
+        
+		try 
+		{
+			url = new URL("platform:/plugin/mhFinPim/files/blz.properties");
+		    InputStream inputStream = url.openConnection().getInputStream();
+		    BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
+		   
+		    while ((line = in.readLine()) != null)
+			{
+	        	String[] first = line.split("=");
+	        	String[] rest = first[1].split("\\|", -1);
+	        	String key = rest[0] + "," + rest[1];
+	        	HashMap<String, String> values = new HashMap();
+	        	values.put("Bank", rest[0]);
+	        	values.put("Sitz", rest[1]);
+	        	values.put("BLZ", first[0]);
+	        	values.put("BIC", rest[2]);
+	        	values.put("URI", rest[5]);
+	        	
+	        	suggestion.add(key);
+	        	complete.put(key, values);	        	
+			}
+		 
+		    in.close();		 
+		} 
+		catch (IOException e) 
+		{
+			//TODO Fehlerbehandlung
+		    e.printStackTrace();
+		}
+		
+		app.getContext().set("suggest", suggestion);
+		app.getContext().set("bank", complete);
 	}
 }
