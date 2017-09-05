@@ -10,7 +10,6 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
-import de.mho.finpim.persistence.util.DBInit;
 
 public class Activator implements BundleActivator
 {
