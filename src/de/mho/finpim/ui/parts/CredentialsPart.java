@@ -139,6 +139,8 @@ public class CredentialsPart
 		        }
 		        if (warningMsg.equals(""))
 		        {
+		        	app.getContext().set(GlobalValues.USER, user);
+		        	//TODO anzeige bestehende konten oder neuer user
 		        	partService.showPart("mhfinpim.part.newbank", PartState.ACTIVATE);
 					partService.hidePart(part);
 		        }
