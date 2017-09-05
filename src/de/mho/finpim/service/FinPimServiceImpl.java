@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.IShellProvider;
@@ -30,8 +32,8 @@ public class FinPimServiceImpl implements IFinPimService
 	@Override
 	public int checkCedentials(String user, String pwd) 
 	{	
-		return IServiceValues.CREDENTIAL_OK;
-		/*
+		//return IServiceValues.CREDENTIAL_OK;
+		
 		EntityManager em = Activator.getEntityManager();
 		
 		List<Person> persons = (List<Person>) em.createQuery("SELECT p FROM Person p WHERE p.name=:arg")
@@ -51,7 +53,7 @@ public class FinPimServiceImpl implements IFinPimService
 			return IServiceValues.CREDENTIAL_OK;
 		}
 		return IServiceValues.PWD_NOK;
-		*/
+		
 	}
 
 	@Override
@@ -76,13 +78,30 @@ public class FinPimServiceImpl implements IFinPimService
 	@Override
 	public boolean persistBank(HashMap values)
 	{
-		/*
 		EntityManager em = Activator.getEntityManager();
 		em.getTransaction().begin();
 		
 		Bank b = new Bank();
-		b.setBankName(IServiceValues.BANK);
-		*/
+		b.setBankName((String)values.get(IServiceValues.BANK));
+		b.setLocation((String)values.get(IServiceValues.LOCATION));
+		b.setBlz((String)values.get(IServiceValues.BLZ));
+		b.setBic((String)values.get(IServiceValues.BIC));
+		b.setAccessCode((String)values.get(IServiceValues.ACCESS));
+		b.setPIN((String)values.get(IServiceValues.PIN));
+		
+		em.persist(b);
+		em.getTransaction().commit();
+		
+		TypedQuery<Person> query = em.createNamedQuery("Person.finByName", Person.class).setParameter("name", values.get(IServiceValues.USERNAME));
+		Person p = query.getSingleResult();
+		
+		em.getTransaction().begin();
+		p.addBank(b);
+		em.persist(b);
+		em.getTransaction().commit();
+		
+		em.close();
+		
 		return false;
 	}
 	
