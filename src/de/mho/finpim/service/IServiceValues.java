@@ -13,6 +13,7 @@ public interface IServiceValues
 	public static String BIC = "bic";
 	public static String ACCESS = "access";
 	public static String PIN = "PIN";
+	public static String URL = "url";
 	
 	public static int NOUSER = -1;
 	public static int PWD_NOK = 0;
