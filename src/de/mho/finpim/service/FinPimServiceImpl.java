@@ -11,6 +11,7 @@ import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.widgets.Shell;
 
 import de.mho.finpim.lifecycle.Activator;
+import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.persistence.model.Person;
 
 public class FinPimServiceImpl implements IFinPimService 
@@ -29,6 +30,8 @@ public class FinPimServiceImpl implements IFinPimService
 	@Override
 	public int checkCedentials(String user, String pwd) 
 	{	
+		return IServiceValues.CREDENTIAL_OK;
+		/*
 		EntityManager em = Activator.getEntityManager();
 		
 		List<Person> persons = (List<Person>) em.createQuery("SELECT p FROM Person p WHERE p.name=:arg")
@@ -37,17 +40,18 @@ public class FinPimServiceImpl implements IFinPimService
 		
 		if (persons.isEmpty())
 		{
-			return -1;
+			return IServiceValues.NOUSER;
 		} 
 		else if (persons.size() > 1)
 		{ 
-			return 2;
+			return IServiceValues.USER_MULTIPLE;
 		}
 		else if (persons.get(0).getPwd().equals(pwd))
 		{
-			return 1;
+			return IServiceValues.CREDENTIAL_OK;
 		}
-		return 0;
+		return IServiceValues.PWD_NOK;
+		*/
 	}
 
 	@Override
@@ -66,6 +70,19 @@ public class FinPimServiceImpl implements IFinPimService
 		
 		em.close();
 		
+		return true;
+	}
+	
+	@Override
+	public boolean persistBank(HashMap values)
+	{
+		/*
+		EntityManager em = Activator.getEntityManager();
+		em.getTransaction().begin();
+		
+		Bank b = new Bank();
+		b.setBankName(IServiceValues.BANK);
+		*/
 		return false;
 	}
 	
