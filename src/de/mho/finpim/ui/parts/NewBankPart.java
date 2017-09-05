@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import org.eclipse.swt.widgets.Composite;
 
 import de.mho.finpim.service.IFinPimService;
+import de.mho.finpim.service.IServiceValues;
 import de.mho.finpim.util.GlobalValues;
 
 import org.eclipse.swt.layout.GridLayout;
@@ -17,6 +18,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.e4.core.contexts.Active;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.AutoCompleteField;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.swt.SWT;
@@ -37,11 +39,13 @@ public class NewBankPart
 	private Text txtBLZ;
 	private Text txtNo;
 	private Text txtPIN;
-	
-	boolean ok = true;
-	HashMap<String, String> bankValues;
 	private Text txtBic;
+
+	private HashMap<String, String> bankValues;
 	
+	private String url;
+	
+		
 	@Inject
 	@Active
 	MPart part;
@@ -192,10 +196,19 @@ public class NewBankPart
 			@Override
 			public void widgetSelected(SelectionEvent e) 
 			{
-				if(ok)
-				{
-					
-				}
+				bankValues = new HashMap<String, String>();
+				bankValues.put(IServiceValues.BANK, txtBank.getText());
+				bankValues.put(IServiceValues.LOCATION, txtLoc.getText());
+				bankValues.put(IServiceValues.BLZ, txtBLZ.getText());
+				bankValues.put(IServiceValues.BIC, txtBic.getText());
+				bankValues.put(IServiceValues.URL, url);
+				bankValues.put(IServiceValues.ACCESS, txtNo.getText());
+				bankValues.put(IServiceValues.PIN, txtPIN.getText());
+				
+				service.persistBank(bankValues);
+				
+				MessageDialog.openInformation( parent.getShell(), "Info", "Die Bankverbindung wurde "
+						+ "angelegt");
 			}	
 		});
 		
@@ -207,10 +220,11 @@ public class NewBankPart
 				
 				if (concreteValue != null)
 				{
-					txtBank.setText(concreteValue.get(GlobalValues.BANK));
-					txtLoc.setText(concreteValue.get(GlobalValues.LOCATION));
-					txtBLZ.setText(concreteValue.get(GlobalValues.BLZ));
-					txtBic.setText(concreteValue.get(GlobalValues.BIC));	
+					txtBank.setText(concreteValue.get(IServiceValues.BANK));
+					txtLoc.setText(concreteValue.get(IServiceValues.LOCATION));
+					txtBLZ.setText(concreteValue.get(IServiceValues.BLZ));
+					txtBic.setText(concreteValue.get(IServiceValues.BIC));
+					url = concreteValue.get(IServiceValues.URL);
 				}
 			}
 		});
