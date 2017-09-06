@@ -9,9 +9,10 @@
           </children>
           <children xsi:type="basic:PartSashContainer" xmi:id="_iMOSQHeKEeeei8tEDdR7hg" elementId="mhfinpim.partsashcontainer.1" containerData="75">
             <children xsi:type="basic:PartStack" xmi:id="_j8_sUHeKEeeei8tEDdR7hg" elementId="mhfinpim.partstack.r_oben" containerData="80">
-              <children xsi:type="basic:Part" xmi:id="_nrCrYHeKEeeei8tEDdR7hg" elementId="mhfinpim.part.credential" containerData="50" contributionURI="bundleclass://mhFinPim/de.mho.finpim.ui.parts.CredentialsPart" label="Anmeldung" closeable="false"/>
+              <children xsi:type="basic:Part" xmi:id="_nrCrYHeKEeeei8tEDdR7hg" elementId="mhfinpim.part.credential" containerData="50" contributionURI="bundleclass://mhFinPim/de.mho.finpim.ui.parts.CredentialsPart" label="Anmeldung"/>
               <children xsi:type="basic:Part" xmi:id="_qZbBEI7fEeeicOIo9EvMcA" elementId="mhfinpim.part.register" toBeRendered="false" contributionURI="bundleclass://mhFinPim/de.mho.finpim.ui.parts.NewUserPart" label="Neuer Nutzer"/>
               <children xsi:type="basic:Part" xmi:id="_vs6CMI8GEeeicOIo9EvMcA" elementId="mhfinpim.part.newbank" toBeRendered="false" contributionURI="bundleclass://mhFinPim/de.mho.finpim.ui.parts.NewBankPart" label="Neue Bankverbindung"/>
+              <children xsi:type="basic:Part" xmi:id="_rKYtMJK_EeeaOfoJmndxbw" elementId="mhfinpim.part.bankaccoverview" visible="false" contributionURI="bundleclass://mhFinPim/de.mho.finpim.ui.parts.BankAccountOverviewPart" label="Neue Bankverbindung: Konten"/>
             </children>
             <children xsi:type="basic:PartStack" xmi:id="_jQz7wHeKEeeei8tEDdR7hg" elementId="mhfinpim.partstack.1" containerData="20">
               <children xsi:type="basic:Part" xmi:id="_nMr7cHeKEeeei8tEDdR7hg" elementId="mhfinpim.part.1" containerData="50"/>
