@@ -92,8 +92,9 @@ public class FinPimServiceImpl implements IFinPimService
 		em.persist(b);
 		em.getTransaction().commit();
 		
-		TypedQuery<Person> query = em.createNamedQuery("Person.finByName", Person.class).setParameter("name", values.get(IServiceValues.USERNAME));
-		Person p = query.getSingleResult();
+		List<Person> persons = (List<Person>) em.createQuery("SELECT p FROM Person p WHERE p.name=:arg")
+				.setParameter("arg", values.get(IServiceValues.USERNAME)).getResultList();
+		Person p = persons.get(0);
 		
 		em.getTransaction().begin();
 		p.addBank(b);
