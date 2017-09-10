@@ -11,6 +11,10 @@ import javax.persistence.TypedQuery;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.widgets.Shell;
+import org.kapott.hbci.callback.HBCICallback;
+import org.kapott.hbci.callback.HBCICallbackConsole;
+import org.kapott.hbci.manager.HBCIHandler;
+import org.kapott.hbci.passport.HBCIPassport;
 
 import de.mho.finpim.lifecycle.Activator;
 import de.mho.finpim.persistence.model.Bank;
@@ -18,13 +22,26 @@ import de.mho.finpim.persistence.model.Person;
 
 public class FinPimServiceImpl implements IFinPimService 
 {
+	private static class FinPimHBCICallback extends HBCICallbackConsole
+    {
+		public void callback(HBCIPassport passport,int reason,String msg,int dataType,StringBuffer retData)
+		{
+			if (reason == HBCICallback.CLOSE_CONNECTION || reason == HBCICallback.NEED_CONNECTION)
+				return;
+        
+			//TODO Logging
+			System.out.println("Callback fÃ¼r folgendes Passport: "+passport.getClientData("init").toString() + ", reason=" + reason);
+			super.callback(passport,reason,msg,dataType,retData);
+		}
+    }
+	
 	/**
 	 * Implementierung der Interface-Methode. Checkt, ob die Kombination aus User/Passwort in der Datenbak 
 	 * vorhanden und korrekt ist. 
 	 * @param user Der eingegebene Username
 	 * @param pwd Daseingegebne Passwort
 	 * @return int -1 Der User ist in der DB nicht vorhanden
-	 *              0 Das Passwort für den User ist nicht korrekt
+	 *              0 Das Passwort fï¿½r den User ist nicht korrekt
 	 *              1 Die Kombination ist korrekt
 	 *              2 Der User ist mehrfach vorhanden 
 	 */
@@ -104,6 +121,14 @@ public class FinPimServiceImpl implements IFinPimService
 		em.close();
 		
 		return false;
+	}
+	
+	@Override
+	public void connectBankInitial()
+	{
+		HBCIPassport passport   = null;
+        HBCIHandler  hbciHandle = null;
+        
 	}
 	
 }
