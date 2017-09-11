@@ -143,6 +143,7 @@ public class CredentialsPart
 		        	//TODO anzeige bestehende konten oder neuer user
 		        	partService.showPart("mhfinpim.part.newbank", PartState.ACTIVATE);
 					partService.hidePart(part);
+					service.connectBankInitial();
 		        }
 		        else
 		        {
