@@ -22,18 +22,6 @@ import de.mho.finpim.persistence.model.Person;
 
 public class FinPimServiceImpl implements IFinPimService 
 {
-	private static class FinPimHBCICallback extends HBCICallbackConsole
-    {
-		public void callback(HBCIPassport passport,int reason,String msg,int dataType,StringBuffer retData)
-		{
-			if (reason == HBCICallback.CLOSE_CONNECTION || reason == HBCICallback.NEED_CONNECTION)
-				return;
-        
-			//TODO Logging
-			System.out.println("Callback für folgendes Passport: "+passport.getClientData("init").toString() + ", reason=" + reason);
-			super.callback(passport,reason,msg,dataType,retData);
-		}
-    }
 	
 	/**
 	 * Implementierung der Interface-Methode. Checkt, ob die Kombination aus User/Passwort in der Datenbak 
