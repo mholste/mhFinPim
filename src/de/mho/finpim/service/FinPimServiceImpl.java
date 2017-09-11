@@ -1,7 +1,13 @@
 package de.mho.finpim.service;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -11,14 +17,19 @@ import javax.persistence.TypedQuery;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.widgets.Shell;
+
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.callback.HBCICallbackConsole;
 import org.kapott.hbci.manager.HBCIHandler;
+import org.kapott.hbci.manager.HBCIUtils;
+import org.kapott.hbci.passport.AbstractHBCIPassport;
 import org.kapott.hbci.passport.HBCIPassport;
+import org.kapott.hbci.structures.Konto;
 
 import de.mho.finpim.lifecycle.Activator;
 import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.persistence.model.Person;
+import de.mho.finpim.util.HBCICallbackFinPim;
 
 public class FinPimServiceImpl implements IFinPimService 
 {
@@ -37,8 +48,8 @@ public class FinPimServiceImpl implements IFinPimService
 	@Override
 	public int checkCedentials(String user, String pwd) 
 	{	
-		//return IServiceValues.CREDENTIAL_OK;
-		
+		return IServiceValues.CREDENTIAL_OK;
+		/*
 		EntityManager em = Activator.getEntityManager();
 		
 		List<Person> persons = (List<Person>) em.createQuery("SELECT p FROM Person p WHERE p.name=:arg")
@@ -58,12 +69,13 @@ public class FinPimServiceImpl implements IFinPimService
 			return IServiceValues.CREDENTIAL_OK;
 		}
 		return IServiceValues.PWD_NOK;
+		*/
 		
 	}
 
 	@Override
 	public boolean persistPerson(HashMap values) 
-	{
+	{				
 		EntityManager em = Activator.getEntityManager();
 		em.getTransaction().begin();
 		
@@ -77,7 +89,7 @@ public class FinPimServiceImpl implements IFinPimService
 		
 		em.close();
 		
-		return true;
+		return true;		
 	}
 	
 	@Override
@@ -115,8 +127,25 @@ public class FinPimServiceImpl implements IFinPimService
 	public void connectBankInitial()
 	{
 		HBCIPassport passport   = null;
-        HBCIHandler  hbciHandle = null;
+        HBCIHandler  hbciHandle = null;             
+        Properties prop = new Properties();
+        URL url;
         
+        try 
+        {
+            url = new URL("platform:/plugin/mhFinPim/files/hbci.properties");
+            InputStream inputStream = url.openConnection().getInputStream();
+            prop.load(inputStream);
+         
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        HBCIUtils.init(prop, new HBCICallbackFinPim());
+        passport=AbstractHBCIPassport.getInstance("PinTan", null);
+        
+        Konto[] konten = passport.getAccounts();         
+                
 	}
 	
 }
