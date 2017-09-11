@@ -9,11 +9,13 @@ import org.eclipse.swt.widgets.Composite;
 
 import de.mho.finpim.service.IFinPimService;
 import de.mho.finpim.service.IServiceValues;
+import de.mho.finpim.util.GlobalValues;
 
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.e4.core.contexts.Active;
+import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
@@ -43,6 +45,9 @@ public class NewUserPart
 	@Inject
 	@Active
 	MPart part;
+	
+	@Inject
+	MApplication app;
 	
 	@PostConstruct
 	public void createControls(Composite parent,  IFinPimService service)
@@ -159,7 +164,7 @@ public class NewUserPart
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		Button btnBack = new Button(parent, SWT.NONE);
-		btnBack.setText("<< Zurück");
+		btnBack.setText("<< Zurï¿½ck");
 		new Label(parent, SWT.NONE);		
 		Button btnNewUser = new Button(parent, SWT.NONE);		
 		btnNewUser.setText("User anlegen");
@@ -183,7 +188,7 @@ public class NewUserPart
 			{
 				if(!txtPwd.getText().equals(txtPwdRepeat.getText()))
 				{
-					MessageDialog.openWarning( parent.getShell(), "Achtung", "Die Bestätigung entspricht nicht dem Passwort!");
+					MessageDialog.openWarning( parent.getShell(), "Achtung", "Die BestÃ¤tigung entspricht nicht dem Passwort!");
 					ok = false;
 				}
 				
@@ -196,9 +201,11 @@ public class NewUserPart
 					userValues.put(IServiceValues.PWD, txtPwd.getText());
 					
 					//service.persistPerson(userValues);
+					app.getContext().set(GlobalValues.USER, txtUsername.getText());
 					
 					MessageDialog.openInformation( parent.getShell(), "Info", "Der Nutzer " + txtUsername.getText() +" wurde angelegt");
 					
+					partService.showPart("mhfinpim.part.newbank", PartState.ACTIVATE);
 					partService.hidePart(part);
 				}
 			}			
