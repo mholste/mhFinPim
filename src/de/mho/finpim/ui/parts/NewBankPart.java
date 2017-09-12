@@ -18,6 +18,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.e4.core.contexts.Active;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.AutoCompleteField;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
@@ -45,7 +47,9 @@ public class NewBankPart
 	
 	private String url;
 	
-		
+	@Inject 
+	EPartService partService;
+	
 	@Inject
 	@Active
 	MPart part;
@@ -210,6 +214,9 @@ public class NewBankPart
 				
 				MessageDialog.openInformation( parent.getShell(), "Info", "Die Bankverbindung wurde "
 						+ "angelegt");
+				
+				partService.showPart("mhfinpim.part.bankaccselection", PartState.ACTIVATE);
+				partService.hidePart(part);
 			}	
 		});
 		
