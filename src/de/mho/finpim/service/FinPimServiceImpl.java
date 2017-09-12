@@ -40,7 +40,7 @@ public class FinPimServiceImpl implements IFinPimService
 	 * @param user Der eingegebene Username
 	 * @param pwd Daseingegebne Passwort
 	 * @return int -1 Der User ist in der DB nicht vorhanden
-	 *              0 Das Passwort f�r den User ist nicht korrekt
+	 *              0 Das Passwort fï¿½r den User ist nicht korrekt
 	 *              1 Die Kombination ist korrekt
 	 *              2 Der User ist mehrfach vorhanden 
 	 */
@@ -124,7 +124,7 @@ public class FinPimServiceImpl implements IFinPimService
 	}
 	
 	@Override
-	public void connectBankInitial()
+	public Konto[] connectBankInitial()
 	{
 		HBCIPassport passport   = null;
         HBCIHandler  hbciHandle = null;             
@@ -144,7 +144,13 @@ public class FinPimServiceImpl implements IFinPimService
         HBCIUtils.init(prop, new HBCICallbackFinPim());
         passport=AbstractHBCIPassport.getInstance("PinTan", null);
         
-        Konto[] konten = passport.getAccounts();         
+        Konto[] konten = passport.getAccounts(); 
+        
+        for (int i=0; i<konten.length; i++) {
+            System.out.println("Konto " + i + ":  " + konten[i]);
+        }  
+        
+        return konten;
                 
 	}
 	
