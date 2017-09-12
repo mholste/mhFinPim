@@ -42,6 +42,10 @@ public class HBCICallbackFinPim extends HBCICallbackConsole
         	case NEED_PASSPHRASE_SAVE:
         		retData.replace(0,retData.length(),"123");
         		break;
+        	case NEED_COUNTRY:
+        		retData.replace(0,retData.length(), "DE");
+                //retData.replace(0,retData.length(),(String)currentData.get("data_country"));
+                break;
         	default:
                 throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CALLB_UNKNOWN",Integer.toString(reason)));
         }
