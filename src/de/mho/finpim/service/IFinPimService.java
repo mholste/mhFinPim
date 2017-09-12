@@ -2,6 +2,8 @@ package de.mho.finpim.service;
 
 import java.util.HashMap;
 
+import org.kapott.hbci.structures.Konto;
+
 public interface IFinPimService 
 {
 	public int checkCedentials(String user, String pwd);
@@ -10,5 +12,5 @@ public interface IFinPimService
 	
 	public boolean persistBank(HashMap values); 
 	
-	public void connectBankInitial();
+	public Konto[] connectBankInitial();
 }
