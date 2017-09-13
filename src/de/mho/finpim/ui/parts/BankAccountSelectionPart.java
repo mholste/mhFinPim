@@ -1,19 +1,25 @@
 package de.mho.finpim.ui.parts;
 
+import java.awt.Event;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.eclipse.e4.core.contexts.Active;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import de.mho.finpim.service.IFinPimService;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.layout.FillLayout;
@@ -103,17 +109,24 @@ public class BankAccountSelectionPart
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		
+		// Zeile 6
+		
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, 5, 1));		
+		composite.setLayout(new FillLayout());
 		
 		
-		TableViewer tableViewer = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION);
-	    table = tableViewer.getTable();
+		viewer = new TableViewer(composite, SWT.BORDER | SWT.FULL_SELECTION | SWT.CHECK);		
+	    table = viewer.getTable();
 	    table.setLinesVisible(true);
 	    table.setHeaderVisible(true);
-
-	    tableViewer.setContentProvider(ArrayContentProvider.getInstance());
+	    CheckboxTableViewer cViewer = new CheckboxTableViewer(table);
+	    
+	    
+	    viewer.setContentProvider(ArrayContentProvider.getInstance());
 	    
 
-	    TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+	    TableViewerColumn tableViewerColumn = new TableViewerColumn(viewer, SWT.NONE);
 	    TableColumn tblclmnTest = tableViewerColumn.getColumn();
 	    tblclmnTest.setWidth(120);
 	    tblclmnTest.setText("Kontonummer");
@@ -127,7 +140,7 @@ public class BankAccountSelectionPart
 			}
 	    });
 
-	    TableViewerColumn tableViewerColumn2 = new TableViewerColumn(tableViewer, SWT.NONE);
+	    TableViewerColumn tableViewerColumn2 = new TableViewerColumn(viewer, SWT.NONE);
 	    TableColumn tblclmnTest2 = tableViewerColumn2.getColumn();
 	    tblclmnTest2.setWidth(150);
 	    tblclmnTest2.setText("Kontotyp");
@@ -141,7 +154,7 @@ public class BankAccountSelectionPart
 			}
 	    });
 
-	    TableViewerColumn tableViewerColumn3 = new TableViewerColumn(tableViewer, SWT.NONE);
+	    TableViewerColumn tableViewerColumn3 = new TableViewerColumn(viewer, SWT.NONE);
 	    TableColumn tblclmnTest3 = tableViewerColumn3.getColumn();
 	    tblclmnTest3.setWidth(200);
 	    tblclmnTest3.setText("IBAN");
@@ -154,9 +167,52 @@ public class BankAccountSelectionPart
 				return acc.iban;
 			}
 	    });
-	    
-	    //tableViewer.setInput(new String[][]{{"1", "2", "3"},{"1", "2", "3"},{"1", "2", "3"}});
-	    tableViewer.setInput(this.accounts);
+	    viewer.setInput(this.accounts);
+	    table.addListener(SWT.Selection, new Listener()
+	    		{
+					@Override
+					public void handleEvent(org.eclipse.swt.widgets.Event event) 
+					{
+						String string;
+						if (event.detail == SWT.CHECK)
+							string = "Checked";
+						else
+							string = "Selected";
+	    				System.out.println(event.item + " " + string);
+						
+					}
+	    		});
+	    	    
+	    new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		
+		// Zeile 7
+		
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		
+		
+	    // Zeile 8
+		Button btnOK= new Button(parent, SWT.PUSH);
+		btnOK.setText("OK");
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		
+		// Zeile 9
+		
+		
 	}
 	
 
