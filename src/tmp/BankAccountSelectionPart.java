@@ -48,6 +48,7 @@ public class BankAccountSelectionPart
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
+		
 		new Label(parent, SWT.NONE);
 		
 		Label lblNewLabel = new Label(parent, SWT.NONE);
@@ -59,6 +60,7 @@ public class BankAccountSelectionPart
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
+		
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
@@ -67,6 +69,7 @@ public class BankAccountSelectionPart
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
+		
 		new Label(parent, SWT.NONE);
 		
 		Label lblNewLabel_1 = new Label(parent, SWT.NONE);
