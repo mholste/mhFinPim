@@ -210,7 +210,7 @@ public class NewBankPart
 				bankValues.put(IServiceValues.PIN, txtPIN.getText());
 				bankValues.put(IServiceValues.USERNAME, (String) app.getContext().get(IServiceValues.USERNAME));   
 				
-				service.persistBank(bankValues);
+				//service.persistBank(bankValues);
 				
 				MessageDialog.openInformation( parent.getShell(), "Info", "Die Bankverbindung wurde "
 						+ "angelegt");
