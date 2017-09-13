@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.TableColumn;
 import org.kapott.hbci.structures.Konto;
@@ -40,7 +41,8 @@ public class BankAccountSelectionPart
 		accounts = service.connectBankInitial();
 		
 		parent.setLayout(new GridLayout(8, false));
-		new Label(parent, SWT.NONE);
+		
+		// Zeile 1
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
@@ -50,9 +52,10 @@ public class BankAccountSelectionPart
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		
-		Label lblNewLabel = new Label(parent, SWT.NONE);
-		lblNewLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		lblNewLabel.setText("Kontoübersicht");
+		// Zeile 2			
+		Label lblHeadline = new Label(parent, SWT.NONE);
+		lblHeadline.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		lblHeadline.setText("Kontoübersicht");
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
@@ -60,6 +63,8 @@ public class BankAccountSelectionPart
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
+		
+		// Zeile 3
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
@@ -69,114 +74,91 @@ public class BankAccountSelectionPart
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		
-		Label lblNewLabel_1 = new Label(parent, SWT.NONE);
-		lblNewLabel_1.setText("New Label");
+		// Zeile 4
+		Label lblOwner = new Label(parent, SWT.NONE);
+		lblOwner.setText("Kontoinhaber");
+		Label lblOwnerVal = new Label(parent, SWT.NONE);
+		lblOwnerVal.setText("---");
 		new Label(parent, SWT.NONE);
-		
-		Label lblNewLabel_2 = new Label(parent, SWT.NONE);
-		lblNewLabel_2.setText("BLZ");
-		
-		Label lblNewLabel_3 = new Label(parent, SWT.NONE);
-		lblNewLabel_3.setText("New Label");
 		new Label(parent, SWT.NONE);
-		
-		Label lblNewLabel_5 = new Label(parent, SWT.NONE);
-		lblNewLabel_5.setText("BIC");
-		
-		Label lblNewLabel_4 = new Label(parent, SWT.NONE);
-		lblNewLabel_4.setText("New Label");
+		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		
-		Label lblNewLabel_6 = new Label(parent, SWT.NONE);
-		lblNewLabel_6.setText("Kontoinhaber");
+		// Zeile 5
+		Label lblBLZ = new Label(parent, SWT.NONE);
+		lblBLZ.setText("BLZ");
+		Label lblNLZVal = new Label(parent, SWT.NONE);
+		lblNLZVal.setText("---");
 		
-		Label lblNewLabel_7 = new Label(parent, SWT.NONE);
-		lblNewLabel_7.setText("New Label");
 		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-	
-	
-		//createTable(parent);
-	}
-	
-	private void createTable(Composite parent)
-	{	
-		viewer = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION);		
-		createColumns(parent, viewer);
 		
-		table = viewer.getTable();
-		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 7, 1));
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
+		Label lblBIC = new Label(parent, SWT.NONE);
+		lblBIC.setText("BIC");
+		Label lblBICVal = new Label(parent, SWT.NONE);
+		lblBICVal.setText("---");
 		
-		viewer.setContentProvider(new ArrayContentProvider());
-		//viewer.setInput(this.accounts);
-		viewer.setInput(new String[][] {{"1", "2", "3"}, {"1", "2", "3"}, {"1", "2", "3"}});
-	}		
-	
-	
-	private void createColumns(final Composite patent, final TableViewer tableViewer)
-	{
-		TableViewerColumn selectColumn = createTableViewerColumn("Auswahl", 100);
-		selectColumn.setLabelProvider(new ColumnLabelProvider()
-		{
-			@Override
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		
+		
+		
+		TableViewer tableViewer = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION);
+	    table = tableViewer.getTable();
+	    table.setLinesVisible(true);
+	    table.setHeaderVisible(true);
+
+	    tableViewer.setContentProvider(ArrayContentProvider.getInstance());
+	    
+
+	    TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+	    TableColumn tblclmnTest = tableViewerColumn.getColumn();
+	    tblclmnTest.setWidth(120);
+	    tblclmnTest.setText("Kontonummer");
+	    tableViewerColumn.setLabelProvider(new ColumnLabelProvider()
+	    {
+	        @Override
 			public String getText(Object element)
 			{
-				return super.getText(((String[])element)[0]);
+				Konto acc = (Konto) element;
+				return acc.number;
 			}
-		});
-		
-		TableViewerColumn noColumn = createTableViewerColumn("Kontonummer", 100);
-		noColumn.setLabelProvider(new ColumnLabelProvider()
-		{
-			@Override
+	    });
+
+	    TableViewerColumn tableViewerColumn2 = new TableViewerColumn(tableViewer, SWT.NONE);
+	    TableColumn tblclmnTest2 = tableViewerColumn2.getColumn();
+	    tblclmnTest2.setWidth(150);
+	    tblclmnTest2.setText("Kontotyp");
+	    tableViewerColumn2.setLabelProvider(new ColumnLabelProvider()
+	    {
+	    	@Override
 			public String getText(Object element)
 			{
-				//Konto acc = (Konto) element;
-				return super.getText(((String[])element)[1]);
+				Konto acc = (Konto) element;
+				return acc.type;
 			}
-		});
-		
-		TableViewerColumn typeColumn = createTableViewerColumn("Kontoart", 100);
-		typeColumn.setLabelProvider(new ColumnLabelProvider()
-		{
-			@Override
-			public String getText(Object element)
-			{
-				//Konto acc = (Konto) element;
-				return super.getText(((String[])element)[2]);
-			}
-		});
-		
-		/*TableViewerColumn ibanColumn = createTableViewerColumn("IBAN", 100);
-		ibanColumn.setLabelProvider(new ColumnLabelProvider()
-		{
-			@Override
+	    });
+
+	    TableViewerColumn tableViewerColumn3 = new TableViewerColumn(tableViewer, SWT.NONE);
+	    TableColumn tblclmnTest3 = tableViewerColumn3.getColumn();
+	    tblclmnTest3.setWidth(200);
+	    tblclmnTest3.setText("IBAN");
+	    tableViewerColumn3.setLabelProvider(new ColumnLabelProvider()
+	    {
+	    	@Override
 			public String getText(Object element)
 			{
 				Konto acc = (Konto) element;
 				return acc.iban;
 			}
-		}); */
-			
+	    });
+	    
+	    //tableViewer.setInput(new String[][]{{"1", "2", "3"},{"1", "2", "3"},{"1", "2", "3"}});
+	    tableViewer.setInput(this.accounts);
 	}
-	
-	private TableViewerColumn createTableViewerColumn(String title, int bound)
-	{
-		final TableViewerColumn viewerColumn = new TableViewerColumn(viewer, SWT.NONE);
-		final TableColumn column = viewerColumn.getColumn();
-		column.setText(title);
-		column.setWidth(bound);
-		column.setResizable(true);
-		column.setMoveable(true);
-		return viewerColumn;
-	}
-	
 	
 
 }
+
