@@ -1,6 +1,7 @@
 package de.mho.finpim.ui.parts;
 
 import java.awt.Event;
+import java.util.HashMap;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -25,6 +26,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.Widget;
 import org.kapott.hbci.structures.Konto;
 import org.eclipse.jface.viewers.TableViewerColumn;
 
@@ -39,6 +41,7 @@ public class BankAccountSelectionPart
 	
 	private Table table;
 	private TableViewer viewer;
+	private HashMap<String, Boolean> saveAccounts;
 	Konto[] accounts;
 	
 	@PostConstruct
@@ -61,7 +64,7 @@ public class BankAccountSelectionPart
 		// Zeile 2			
 		Label lblHeadline = new Label(parent, SWT.NONE);
 		lblHeadline.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		lblHeadline.setText("KontoÃ¼bersicht");
+		lblHeadline.setText("Kontoübersicht");
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
@@ -111,26 +114,11 @@ public class BankAccountSelectionPart
 		
 		// Zeile 6
 		
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, 5, 1));		
-		composite.setLayout(new FillLayout());
-		
-		
-		viewer = new TableViewer(composite, SWT.BORDER | SWT.FULL_SELECTION | SWT.CHECK);		
-	    table = viewer.getTable();
-	    table.setLinesVisible(true);
-	    table.setHeaderVisible(true);
-	    CheckboxTableViewer cViewer = new CheckboxTableViewer(table);
-	    
-	    
+		viewer = this.createTable(parent);
 	    viewer.setContentProvider(ArrayContentProvider.getInstance());
 	    
-
-	    TableViewerColumn tableViewerColumn = new TableViewerColumn(viewer, SWT.NONE);
-	    TableColumn tblclmnTest = tableViewerColumn.getColumn();
-	    tblclmnTest.setWidth(120);
-	    tblclmnTest.setText("Kontonummer");
-	    tableViewerColumn.setLabelProvider(new ColumnLabelProvider()
+	    TableViewerColumn colNo = this.createColumns("Kontonummer2", 120);
+	    colNo.setLabelProvider(new ColumnLabelProvider()
 	    {
 	        @Override
 			public String getText(Object element)
@@ -140,11 +128,8 @@ public class BankAccountSelectionPart
 			}
 	    });
 
-	    TableViewerColumn tableViewerColumn2 = new TableViewerColumn(viewer, SWT.NONE);
-	    TableColumn tblclmnTest2 = tableViewerColumn2.getColumn();
-	    tblclmnTest2.setWidth(150);
-	    tblclmnTest2.setText("Kontotyp");
-	    tableViewerColumn2.setLabelProvider(new ColumnLabelProvider()
+	    TableViewerColumn colType = this.createColumns("Kontotyp", 150);
+	    colType.setLabelProvider(new ColumnLabelProvider()
 	    {
 	    	@Override
 			public String getText(Object element)
@@ -154,11 +139,8 @@ public class BankAccountSelectionPart
 			}
 	    });
 
-	    TableViewerColumn tableViewerColumn3 = new TableViewerColumn(viewer, SWT.NONE);
-	    TableColumn tblclmnTest3 = tableViewerColumn3.getColumn();
-	    tblclmnTest3.setWidth(200);
-	    tblclmnTest3.setText("IBAN");
-	    tableViewerColumn3.setLabelProvider(new ColumnLabelProvider()
+	    TableViewerColumn colIBAN = this.createColumns("IBAN", 200);
+	    colIBAN.setLabelProvider(new ColumnLabelProvider()
 	    {
 	    	@Override
 			public String getText(Object element)
@@ -168,6 +150,7 @@ public class BankAccountSelectionPart
 			}
 	    });
 	    viewer.setInput(this.accounts);
+	    saveAccounts = new HashMap<>();
 	    table.addListener(SWT.Selection, new Listener()
 	    		{
 					@Override
@@ -175,11 +158,16 @@ public class BankAccountSelectionPart
 					{
 						String string;
 						if (event.detail == SWT.CHECK)
-							string = "Checked";
-						else
-							string = "Selected";
-	    				System.out.println(event.item + " " + string);
-						
+						{
+							if (saveAccounts.containsKey(event.item.toString().substring(11, event.item.toString().length() - 1)))
+							{
+								saveAccounts.put(event.item.toString().substring(11, event.item.toString().length() - 1), false);
+							}
+							else 
+							{
+								saveAccounts.put(event.item.toString().substring(11, event.item.toString().length() - 1), true);
+							}
+						}
 					}
 	    		});
 	    	    
@@ -215,6 +203,30 @@ public class BankAccountSelectionPart
 		
 	}
 	
+	private TableViewer createTable(Composite parent)
+	{
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, 5, 1));		
+		composite.setLayout(new FillLayout());
+		
+		TableViewer tableViewer = new TableViewer(composite, SWT.BORDER | SWT.FULL_SELECTION | SWT.CHECK);		
+	    table = tableViewer.getTable();
+	    table.setLinesVisible(true);
+	    table.setHeaderVisible(true);
+		
+		return tableViewer;
+	}
+	
+	
+	private TableViewerColumn createColumns(String title, int width)
+	{
+		TableViewerColumn tableViewColumn = new TableViewerColumn(viewer, SWT.NONE);
+		TableColumn tableColumn = tableViewColumn.getColumn();
+		tableColumn.setWidth(width);
+		tableColumn.setText(title);
+		
+		return tableViewColumn;
+	}
 
 }
 
