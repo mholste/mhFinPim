@@ -13,4 +13,6 @@ public interface IFinPimService
 	public boolean persistBank(HashMap values); 
 	
 	public Konto[] connectBankInitial();
+	
+	public boolean persistAccounts(HashMap accounts);
 }
