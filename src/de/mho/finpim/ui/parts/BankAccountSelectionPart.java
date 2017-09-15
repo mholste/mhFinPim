@@ -4,6 +4,7 @@ import java.awt.Event;
 import java.util.HashMap;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.e4.core.contexts.Active;
@@ -17,6 +18,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -47,6 +50,7 @@ public class BankAccountSelectionPart
 	@PostConstruct
 	public void createControls(Composite parent,  IFinPimService service)
 	{
+		saveAccounts = new HashMap<>();
 		accounts = service.connectBankInitial();
 		
 		parent.setLayout(new GridLayout(8, false));
@@ -149,27 +153,26 @@ public class BankAccountSelectionPart
 				return acc.iban;
 			}
 	    });
-	    viewer.setInput(this.accounts);
-	    saveAccounts = new HashMap<>();
+	    viewer.setInput(this.accounts);	    
 	    table.addListener(SWT.Selection, new Listener()
+	    {
+	    	@Override
+	    	public void handleEvent(org.eclipse.swt.widgets.Event event) 
+	    	{
+	    		String string;
+	    		if (event.detail == SWT.CHECK)
 	    		{
-					@Override
-					public void handleEvent(org.eclipse.swt.widgets.Event event) 
-					{
-						String string;
-						if (event.detail == SWT.CHECK)
-						{
-							if (saveAccounts.containsKey(event.item.toString().substring(11, event.item.toString().length() - 1)))
-							{
-								saveAccounts.put(event.item.toString().substring(11, event.item.toString().length() - 1), false);
-							}
-							else 
-							{
-								saveAccounts.put(event.item.toString().substring(11, event.item.toString().length() - 1), true);
-							}
-						}
-					}
-	    		});
+	    			if (saveAccounts.containsKey(event.item.toString().substring(11, event.item.toString().length() - 1)))
+	    			{
+	    				saveAccounts.put(event.item.toString().substring(11, event.item.toString().length() - 1), false);
+	    			}
+	    			else 
+	    			{
+	    				saveAccounts.put(event.item.toString().substring(11, event.item.toString().length() - 1), true);
+	    			}
+	    		}
+	    	}
+	    });
 	    	    
 	    new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
@@ -188,10 +191,23 @@ public class BankAccountSelectionPart
 		
 		
 	    // Zeile 8
+		new Label(parent, SWT.NONE);
 		Button btnOK= new Button(parent, SWT.PUSH);
-		btnOK.setText("OK");
+		btnOK.setText("OK");	
+		btnOK.addSelectionListener(new SelectionAdapter() 
+		{
+			@Override
+		    public void widgetSelected(SelectionEvent e) 
+			{
+				service.persistAccounts(saveAccounts);
+				//TODO reaktion
+				// Anzeige der Konten unten
+				// Anzeige Übersicht mit Kontoständen (ggf. alt mit Möglichkeit zur Aktualisierung
+			}
+		});
 		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
+		Button btnProceed= new Button(parent, SWT.PUSH);
+		btnProceed.setText("Weiter >>");
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
@@ -226,6 +242,12 @@ public class BankAccountSelectionPart
 		tableColumn.setText(title);
 		
 		return tableViewColumn;
+	}
+	
+	@PreDestroy
+	public void preDestroy()
+	{
+		saveAccounts = null;
 	}
 
 }
