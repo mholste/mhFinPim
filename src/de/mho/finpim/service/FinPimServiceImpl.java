@@ -20,13 +20,14 @@ import javax.persistence.TypedQuery;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.widgets.Shell;
-
+import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.callback.HBCICallbackConsole;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.passport.AbstractHBCIPassport;
 import org.kapott.hbci.passport.HBCIPassport;
+import org.kapott.hbci.status.HBCIExecStatus;
 import org.kapott.hbci.structures.Konto;
 
 import de.mho.finpim.lifecycle.Activator;
@@ -163,6 +164,14 @@ public class FinPimServiceImpl implements IFinPimService
         	account.put("Typ", k.type);
         	listAccounts.add(account);        	
         }
+        
+        String version=passport.getHBCIVersion();
+        hbciHandle=new HBCIHandler((version.length()!=0)?version:"plus",passport);
+        
+        HBCIJob auszug=hbciHandle.newJob("KUmsAll");
+        auszug.setParam("my",konten[2]);        
+        auszug.addToQueue();
+        HBCIExecStatus ret=hbciHandle.execute();
         
         return listAccounts;
                 
