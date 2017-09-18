@@ -2,6 +2,7 @@ package de.mho.finpim.ui.parts;
 
 import java.awt.Event;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -45,7 +46,7 @@ public class BankAccountSelectionPart
 	private Table table;
 	private TableViewer viewer;
 	private HashMap<String, Boolean> saveAccounts;
-	Konto[] accounts;
+	List accounts;
 	
 	@PostConstruct
 	public void createControls(Composite parent,  IFinPimService service)
@@ -127,8 +128,8 @@ public class BankAccountSelectionPart
 	        @Override
 			public String getText(Object element)
 			{
-				Konto acc = (Konto) element;
-				return acc.number;
+				HashMap acc = (HashMap) element;
+				return (String)acc.get("No");
 			}
 	    });
 
@@ -138,8 +139,8 @@ public class BankAccountSelectionPart
 	    	@Override
 			public String getText(Object element)
 			{
-				Konto acc = (Konto) element;
-				return acc.type;
+	    		HashMap acc = (HashMap) element;
+				return (String)acc.get("Typ");
 			}
 	    });
 
@@ -149,8 +150,8 @@ public class BankAccountSelectionPart
 	    	@Override
 			public String getText(Object element)
 			{
-				Konto acc = (Konto) element;
-				return acc.iban;
+	    		HashMap acc = (HashMap) element;
+				return (String)acc.get("IBAN");
 			}
 	    });
 	    viewer.setInput(this.accounts);	    
@@ -199,7 +200,7 @@ public class BankAccountSelectionPart
 			@Override
 		    public void widgetSelected(SelectionEvent e) 
 			{
-				service.persistAccounts(saveAccounts);
+				//service.persistAccounts(saveAccounts, accounts);
 				//TODO reaktion
 				// Anzeige der Konten unten
 				// Anzeige Übersicht mit Kontoständen (ggf. alt mit Möglichkeit zur Aktualisierung
