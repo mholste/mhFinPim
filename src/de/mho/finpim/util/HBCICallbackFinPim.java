@@ -2,6 +2,9 @@ package de.mho.finpim.util;
 
 import java.util.Hashtable;
 
+import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.dialogs.StatusDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.kapott.hbci.callback.HBCICallbackConsole;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
@@ -46,6 +49,12 @@ public class HBCICallbackFinPim extends HBCICallbackConsole
         		retData.replace(0,retData.length(), "DE");
                 //retData.replace(0,retData.length(),(String)currentData.get("data_country"));
                 break;
+        	case NEED_PT_PIN:
+        		InputDialog id = new InputDialog(new Shell(), "PIN", "Bitte PIN eingeben", "", null);
+        		id.create();
+        		id.open();
+        		String s = id.getValue();
+        		retData.replace(0,retData.length(),s);
         	default:
                 throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CALLB_UNKNOWN",Integer.toString(reason)));
         }
