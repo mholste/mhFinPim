@@ -1,6 +1,7 @@
 package de.mho.finpim.service;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.kapott.hbci.structures.Konto;
 
@@ -12,7 +13,7 @@ public interface IFinPimService
 	
 	public boolean persistBank(HashMap values); 
 	
-	public Konto[] connectBankInitial();
+	public List connectBankInitial();
 	
 	public boolean persistAccounts(HashMap accountPointer, Konto[] accounts);
 }
