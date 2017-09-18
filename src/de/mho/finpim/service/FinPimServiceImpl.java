@@ -21,6 +21,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.widgets.Shell;
 import org.kapott.hbci.GV.HBCIJob;
+import org.kapott.hbci.GV_Result.GVRKUms;
 import org.kapott.hbci.callback.HBCICallback;
 import org.kapott.hbci.callback.HBCICallbackConsole;
 import org.kapott.hbci.manager.HBCIHandler;
@@ -172,6 +173,7 @@ public class FinPimServiceImpl implements IFinPimService
         auszug.setParam("my",konten[2]);        
         auszug.addToQueue();
         HBCIExecStatus ret=hbciHandle.execute();
+        GVRKUms result=(GVRKUms)auszug.getJobResult();
         
         return listAccounts;
                 
