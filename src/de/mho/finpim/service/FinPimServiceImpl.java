@@ -5,8 +5,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.inject.Inject;
@@ -27,6 +30,7 @@ import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.structures.Konto;
 
 import de.mho.finpim.lifecycle.Activator;
+import de.mho.finpim.persistence.model.Account;
 import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.persistence.model.Person;
 import de.mho.finpim.util.HBCICallbackFinPim;
@@ -124,7 +128,7 @@ public class FinPimServiceImpl implements IFinPimService
 	}
 	
 	@Override
-	public Konto[] connectBankInitial()
+	public List connectBankInitial()
 	{
 		HBCIPassport passport   = null;
         HBCIHandler  hbciHandle = null;             
@@ -142,16 +146,45 @@ public class FinPimServiceImpl implements IFinPimService
         }
         
         HBCIUtils.init(prop, new HBCICallbackFinPim());
-        passport=AbstractHBCIPassport.getInstance("PinTan", null);
+        passport=AbstractHBCIPassport.getInstance("PinTan", null);        
+        Konto[] konten = passport.getAccounts();         
+        List<Map<String, String>> listAccounts = new ArrayList<Map<String, String>>();
+        for (Konto k : konten)
+        {
+        	Map<String, String> account = new HashMap<>();
+        	account.put("BIC", k.bic);
+        	account.put("BLZ", k.blz);
+        	account.put("County", k.country);
+        	account.put("Currency", k.curr);
+        	account.put("CustomerId", k.customerid);
+        	account.put("IBAN", k.iban);
+        	account.put("Name", k.name);
+        	account.put("No", k.number);
+        	account.put("Typ", k.type);
+        	listAccounts.add(account);        	
+        }
         
-        Konto[] konten = passport.getAccounts(); 
-        
-        for (int i=0; i<konten.length; i++) {
-            System.out.println("Konto " + i + ":  " + konten[i]);
-        }  
-        
-        return konten;
+        return listAccounts;
                 
 	}
 	
+	@Override
+	public boolean persistAccounts(HashMap accountPointer, List<HashMap> accounts)
+	{
+		for (HashMap m : accounts)
+		{
+			if (accountPointer.containsKey(m.get("No")) && ((boolean)accountPointer.get(m.get("No")) == false))
+			{
+				accounts.remove(m);
+			}
+		}
+				
+		EntityManager em = Activator.getEntityManager();
+		em.getTransaction().begin();
+		
+		Account acc = new Account();
+		
+		
+		return false;
+	}
 }
