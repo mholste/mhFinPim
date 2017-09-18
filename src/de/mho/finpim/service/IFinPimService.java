@@ -15,5 +15,5 @@ public interface IFinPimService
 	
 	public List connectBankInitial();
 	
-	public boolean persistAccounts(HashMap accountPointer, Konto[] accounts);
+	public boolean persistAccounts(HashMap accountPointer, List accounts);
 }
