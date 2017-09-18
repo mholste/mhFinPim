@@ -3,7 +3,9 @@ package de.mho.finpim.util;
 import java.util.Hashtable;
 
 import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.StatusDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.kapott.hbci.callback.HBCICallbackConsole;
 import org.kapott.hbci.exceptions.HBCI_Exception;
@@ -50,15 +52,22 @@ public class HBCICallbackFinPim extends HBCICallbackConsole
                 //retData.replace(0,retData.length(),(String)currentData.get("data_country"));
                 break;
         	case NEED_PT_PIN:
-        		InputDialog id = new InputDialog(new Shell(), "PIN", "Bitte PIN eingeben", "", null);
+        		/*
+        		InputDialog id = new InputDialog(Display.getCurrent().getActiveShell(), 
+        				"PIN", "Bitte PIN eingeben", "", null);
         		id.create();
-        		id.open();
+        		id.open();       
         		String s = id.getValue();
-        		retData.replace(0,retData.length(),s);
+        		*/
+        		retData.replace(0,retData.length(),"14698");
+        	case NEED_CONNECTION:
+        	case CLOSE_CONNECTION:
+        		MessageDialog md = new MessageDialog( Display.getCurrent().getActiveShell(),
+        				"Verbindung", null, "Es wird  eine Verbindung benötigt...",
+        				MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+        	
         	default:
                 throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_CALLB_UNKNOWN",Integer.toString(reason)));
-        }
-        
-        
-    }
+        }    
+    }	
 }
