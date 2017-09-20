@@ -16,7 +16,7 @@
               <children xsi:type="basic:Part" xmi:id="_mcsC8J3LEeeXb-oTwkHiXw" elementId="mhfinpim.part.overview" toBeRendered="false" contributionURI="bundleclass://mhFinPim/de.mho.finpim.ui.parts.OverviewPart" label="&#xdc;bersicht"/>
             </children>
             <children xsi:type="basic:PartStack" xmi:id="_jQz7wHeKEeeei8tEDdR7hg" elementId="mhfinpim.partstack.1" containerData="20">
-              <children xsi:type="basic:Part" xmi:id="_nMr7cHeKEeeei8tEDdR7hg" elementId="mhfinpim.part.account_choice" toBeRendered="false" containerData="50" contributionURI="bundleclass://mhFinPim/de.mho.finpim.ui.parts.AccountChoicePart"/>
+              <children xsi:type="basic:Part" xmi:id="_nMr7cHeKEeeei8tEDdR7hg" elementId="mhfinpim.part.account_choice" toBeRendered="false" containerData="50" contributionURI="bundleclass://mhFinPim/de.mho.finpim.ui.parts.AccountChoicePart" label="Konten"/>
             </children>
           </children>
         </children>
