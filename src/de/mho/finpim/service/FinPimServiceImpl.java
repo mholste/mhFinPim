@@ -35,6 +35,7 @@ import de.mho.finpim.lifecycle.Activator;
 import de.mho.finpim.persistence.model.Account;
 import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.persistence.model.Person;
+import de.mho.finpim.util.GlobalValues;
 import de.mho.finpim.util.HBCICallbackFinPim;
 
 public class FinPimServiceImpl implements IFinPimService 
@@ -154,15 +155,15 @@ public class FinPimServiceImpl implements IFinPimService
         for (Konto k : konten)
         {
         	Map<String, String> account = new HashMap<>();
-        	account.put("BIC", k.bic);
-        	account.put("BLZ", k.blz);
-        	account.put("County", k.country);
-        	account.put("Currency", k.curr);
-        	account.put("CustomerId", k.customerid);
-        	account.put("IBAN", k.iban);
-        	account.put("Name", k.name);
-        	account.put("No", k.number);
-        	account.put("Typ", k.type);
+        	account.put(GlobalValues.ACC_BIC, k.bic);
+        	account.put(GlobalValues.ACC_BLZ, k.blz);
+        	account.put(GlobalValues.ACC_COUNTRY, k.country);
+        	account.put(GlobalValues.ACC_CURRENCY, k.curr);
+        	account.put(GlobalValues.ACC_CUSTOMER_ID, k.customerid);
+        	account.put(GlobalValues.ACC_IBAN, k.iban);
+        	account.put(GlobalValues.ACC__NAME, k.name);
+        	account.put(GlobalValues.ACC_NO, k.number);
+        	account.put(GlobalValues.ACC_TYPE, k.type);
         	listAccounts.add(account);        	
         }
         
@@ -180,16 +181,8 @@ public class FinPimServiceImpl implements IFinPimService
 	}
 	
 	@Override
-	public boolean persistAccounts(HashMap accountPointer, List<HashMap> accounts)
-	{
-		for (HashMap m : accounts)
-		{
-			if (accountPointer.containsKey(m.get("No")) && ((boolean)accountPointer.get(m.get("No")) == false))
-			{
-				accounts.remove(m);
-			}
-		}
-				
+	public boolean persistAccounts(List<HashMap> accounts)
+	{				
 		EntityManager em = Activator.getEntityManager();
 		em.getTransaction().begin();
 		
