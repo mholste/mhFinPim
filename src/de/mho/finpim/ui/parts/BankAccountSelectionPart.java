@@ -1,7 +1,8 @@
 package de.mho.finpim.ui.parts;
 
-import java.awt.Event;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -11,10 +12,14 @@ import javax.inject.Inject;
 import org.eclipse.e4.core.contexts.Active;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import de.mho.finpim.service.IFinPimService;
+import de.mho.finpim.util.GlobalValues;
+
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -22,16 +27,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.Widget;
-import org.kapott.hbci.structures.Konto;
 import org.eclipse.jface.viewers.TableViewerColumn;
 
 public class BankAccountSelectionPart 
@@ -43,15 +44,18 @@ public class BankAccountSelectionPart
 	@Inject
 	MApplication app;
 	
+	@Inject 
+	EPartService partService;
+	
 	private Table table;
 	private TableViewer viewer;
 	private HashMap<String, Boolean> saveAccounts;
-	List accounts;
+	List<HashMap> accounts;
 	
 	@PostConstruct
 	public void createControls(Composite parent,  IFinPimService service)
 	{
-		saveAccounts = new HashMap<>();
+		saveAccounts = new HashMap<String, Boolean>();
 		accounts = service.connectBankInitial();
 		
 		parent.setLayout(new GridLayout(8, false));
@@ -69,7 +73,7 @@ public class BankAccountSelectionPart
 		// Zeile 2			
 		Label lblHeadline = new Label(parent, SWT.NONE);
 		lblHeadline.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		lblHeadline.setText("Kontoübersicht");
+		lblHeadline.setText("Kontoï¿½bersicht");
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
@@ -129,7 +133,7 @@ public class BankAccountSelectionPart
 			public String getText(Object element)
 			{
 				HashMap acc = (HashMap) element;
-				return (String)acc.get("No");
+				return (String)acc.get(GlobalValues.ACC_NO);
 			}
 	    });
 
@@ -140,7 +144,7 @@ public class BankAccountSelectionPart
 			public String getText(Object element)
 			{
 	    		HashMap acc = (HashMap) element;
-				return (String)acc.get("Typ");
+				return (String)acc.get(GlobalValues.ACC_TYPE);
 			}
 	    });
 
@@ -151,7 +155,7 @@ public class BankAccountSelectionPart
 			public String getText(Object element)
 			{
 	    		HashMap acc = (HashMap) element;
-				return (String)acc.get("IBAN");
+				return (String)acc.get(GlobalValues.ACC_IBAN);
 			}
 	    });
 	    viewer.setInput(this.accounts);	    
@@ -200,10 +204,35 @@ public class BankAccountSelectionPart
 			@Override
 		    public void widgetSelected(SelectionEvent e) 
 			{
-				//service.persistAccounts(saveAccounts, accounts);
+				List<HashMap> removeAccounts = new ArrayList();
+				for (HashMap m : accounts)
+				{	
+					if (saveAccounts.containsKey(m.get(GlobalValues.ACC_NO))) 
+					{
+						Boolean value = saveAccounts.get(GlobalValues.ACC_NO) != null ? 
+								saveAccounts.get(GlobalValues.ACC_NO) : false;
+						if (value == false)
+						{
+							removeAccounts.add(m);
+						}
+					}
+					else
+					{
+						removeAccounts.add(m);
+					}
+				}
+				accounts.removeAll(removeAccounts);
+				app.getContext().set(GlobalValues.ACCOUNTS, accounts);
+				
+				//service.persistAccounts(accounts);
+				
+				partService.showPart("mhfinpim.part.overview", PartState.ACTIVATE);
+				partService.showPart("mhfinpim.part.account_choice", PartState.VISIBLE);
+				partService.hidePart(part);
+				
 				//TODO reaktion
 				// Anzeige der Konten unten
-				// Anzeige Übersicht mit Kontoständen (ggf. alt mit Möglichkeit zur Aktualisierung
+				// Anzeige ï¿½bersicht mit Kontostï¿½nden (ggf. alt mit Mï¿½glichkeit zur Aktualisierung
 			}
 		});
 		new Label(parent, SWT.NONE);
