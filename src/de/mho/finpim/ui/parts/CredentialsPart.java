@@ -97,7 +97,7 @@ public class CredentialsPart
 		
 		lblPwd = new Label(parent, SWT.NONE);
 		lblPwd.setText("Passwort");
-		txtPwd = new Text(parent, SWT.BORDER);
+		txtPwd = new Text(parent, SWT.PASSWORD | SWT.BORDER);
 		txtPwd.setLayoutData(gd_txtPwd);				
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
@@ -141,7 +141,7 @@ public class CredentialsPart
 		        {
 		        	app.getContext().set(GlobalValues.USER, user);
 		        	//TODO anzeige bestehende konten oder neuer user
-		        	partService.showPart("mhfinpim.part.newbank", PartState.ACTIVATE);
+		        	partService.showPart("mhfinpim.part.overview", PartState.ACTIVATE);
 					partService.hidePart(part);
 		        }
 		        else
@@ -157,19 +157,6 @@ public class CredentialsPart
 				partService.showPart("mhfinpim.part.register", PartState.ACTIVATE);
 			}
 		});
-		
-		txtName.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent arg0) {
-				btnOK.setFocus();
-			}
-		});
-		
-		txtPwd.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent arg0) {
-				btnOK.setFocus();
-			}
-		});
-		
 	}
 	
 	public void distributeBankValues()
