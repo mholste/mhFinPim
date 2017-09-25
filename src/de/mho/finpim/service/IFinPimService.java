@@ -3,6 +3,8 @@ package de.mho.finpim.service;
 import java.util.HashMap;
 import java.util.List;
 
+import de.mho.finpim.persistence.model.Bank;
+
 public interface IFinPimService 
 {
 	public int checkCedentials(String user, String pwd);
@@ -15,5 +17,5 @@ public interface IFinPimService
 	
 	public boolean persistAccounts(List<HashMap> accounts);
 	
-	public int checkBankAvailable(String user);
+	public List<Bank> getBanks(String user);
 }
