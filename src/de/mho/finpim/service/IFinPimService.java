@@ -3,8 +3,6 @@ package de.mho.finpim.service;
 import java.util.HashMap;
 import java.util.List;
 
-import org.kapott.hbci.structures.Konto;
-
 public interface IFinPimService 
 {
 	public int checkCedentials(String user, String pwd);
