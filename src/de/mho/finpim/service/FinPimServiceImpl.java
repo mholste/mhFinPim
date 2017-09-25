@@ -1,29 +1,19 @@
 package de.mho.finpim.service;
 
-import java.io.BufferedReader;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.window.IShellProvider;
-import org.eclipse.swt.widgets.Shell;
 import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.GV_Result.GVRKUms;
-import org.kapott.hbci.callback.HBCICallback;
-import org.kapott.hbci.callback.HBCICallbackConsole;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.kapott.hbci.passport.AbstractHBCIPassport;
@@ -55,8 +45,8 @@ public class FinPimServiceImpl implements IFinPimService
 	@Override
 	public int checkCedentials(String user, String pwd) 
 	{	
-		return IServiceValues.CREDENTIAL_OK;
-		/*
+		//return IServiceValues.CREDENTIAL_OK;
+		
 		EntityManager em = Activator.getEntityManager();
 		
 		List<Person> persons = (List<Person>) em.createQuery("SELECT p FROM Person p WHERE p.name=:arg")
@@ -76,7 +66,7 @@ public class FinPimServiceImpl implements IFinPimService
 			return IServiceValues.CREDENTIAL_OK;
 		}
 		return IServiceValues.PWD_NOK;
-		*/
+		
 		
 	}
 
@@ -191,4 +181,18 @@ public class FinPimServiceImpl implements IFinPimService
 		
 		return false;
 	}
+
+	@Override
+	public List<Bank> getBanks(String user) 
+	{
+		EntityManager em = Activator.getEntityManager();
+		
+		List<Person> persons = (List<Person>) em.createQuery("SELECT p FROM Person p WHERE p.name=:arg")
+				.setParameter("arg", user).getResultList();
+		em.close();
+		
+		return persons.get(0).getBanks();
+	}
+	
+	
 }
