@@ -16,4 +16,6 @@ public interface IFinPimService
 	public List connectBankInitial();
 	
 	public boolean persistAccounts(List<HashMap> accounts);
+	
+	public int checkBankAvailable(String user);
 }
