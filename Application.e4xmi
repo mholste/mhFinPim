@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="ASCII"?>
 <application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmi:id="_YOV-YHc-EeeFFMbj97ie_A" elementId="mhFinPim.application">
-  <children xsi:type="basic:TrimmedWindow" xmi:id="_ixEWQHc-EeeFFMbj97ie_A" elementId="mhfinpim.trimmedwindow.label" label="Label" x="300" y="200" width="1024" height="600">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_ixEWQHc-EeeFFMbj97ie_A" elementId="mhfinpim.trimmedwindow.label" label="Label" x="300" y="200" width="1280" height="768">
     <children xsi:type="advanced:PerspectiveStack" xmi:id="_Iz1gAIfYEeeurYpPXyetAg" elementId="mhfinpim.perspectivestack">
       <children xsi:type="advanced:Perspective" xmi:id="_NsWuIIfYEeeurYpPXyetAg" elementId="mhfinpim.perspective.0">
         <children xsi:type="basic:PartSashContainer" xmi:id="__1Yk8HeJEeeei8tEDdR7hg" elementId="mhfinpim.partsashcontainer.0" containerData="" horizontal="true">
-          <children xsi:type="basic:PartStack" xmi:id="_b86QUHeKEeeei8tEDdR7hg" elementId="mhfinpim.partstack.0" containerData="25">
+          <children xsi:type="basic:PartStack" xmi:id="_b86QUHeKEeeei8tEDdR7hg" elementId="mhfinpim.partstack.0" containerData="20">
             <children xsi:type="basic:Part" xmi:id="_fH_sQHeKEeeei8tEDdR7hg" elementId="mhfinpim.part.0" containerData=""/>
           </children>
-          <children xsi:type="basic:PartSashContainer" xmi:id="_iMOSQHeKEeeei8tEDdR7hg" elementId="mhfinpim.partsashcontainer.1" containerData="75">
-            <children xsi:type="basic:PartStack" xmi:id="_j8_sUHeKEeeei8tEDdR7hg" elementId="mhfinpim.partstack.r_oben" containerData="80">
+          <children xsi:type="basic:PartSashContainer" xmi:id="_iMOSQHeKEeeei8tEDdR7hg" elementId="mhfinpim.partsashcontainer.1" containerData="80">
+            <children xsi:type="basic:PartStack" xmi:id="_j8_sUHeKEeeei8tEDdR7hg" elementId="mhfinpim.partstack.r_oben" containerData="75">
               <children xsi:type="basic:Part" xmi:id="_nrCrYHeKEeeei8tEDdR7hg" elementId="mhfinpim.part.credential" containerData="50" contributionURI="bundleclass://mhFinPim/de.mho.finpim.ui.parts.CredentialsPart" label="Anmeldung"/>
               <children xsi:type="basic:Part" xmi:id="_qZbBEI7fEeeicOIo9EvMcA" elementId="mhfinpim.part.register" toBeRendered="false" contributionURI="bundleclass://mhFinPim/de.mho.finpim.ui.parts.NewUserPart" label="Neuer Nutzer"/>
               <children xsi:type="basic:Part" xmi:id="_vs6CMI8GEeeicOIo9EvMcA" elementId="mhfinpim.part.newbank" toBeRendered="false" contributionURI="bundleclass://mhFinPim/de.mho.finpim.ui.parts.NewBankPart" label="Neue Bankverbindung"/>
               <children xsi:type="basic:Part" xmi:id="_rKYtMJK_EeeaOfoJmndxbw" elementId="mhfinpim.part.bankaccselection" toBeRendered="false" contributionURI="bundleclass://mhFinPim/de.mho.finpim.ui.parts.BankAccountSelectionPart" label="Neue Bankverbindung: Konten"/>
               <children xsi:type="basic:Part" xmi:id="_mcsC8J3LEeeXb-oTwkHiXw" elementId="mhfinpim.part.overview" toBeRendered="false" contributionURI="bundleclass://mhFinPim/de.mho.finpim.ui.parts.OverviewPart" label="&#xdc;bersicht"/>
             </children>
-            <children xsi:type="basic:PartStack" xmi:id="_jQz7wHeKEeeei8tEDdR7hg" elementId="mhfinpim.partstack.1" containerData="20">
+            <children xsi:type="basic:PartStack" xmi:id="_jQz7wHeKEeeei8tEDdR7hg" elementId="mhfinpim.partstack.1" containerData="25">
               <children xsi:type="basic:Part" xmi:id="_nMr7cHeKEeeei8tEDdR7hg" elementId="mhfinpim.part.account_choice" toBeRendered="false" containerData="50" contributionURI="bundleclass://mhFinPim/de.mho.finpim.ui.parts.AccountChoicePart" label="Konten"/>
             </children>
           </children>
