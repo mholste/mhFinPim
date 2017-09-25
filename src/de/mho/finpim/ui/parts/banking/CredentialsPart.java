@@ -141,7 +141,8 @@ public class CredentialsPart
 		        {
 		        	app.getContext().set(GlobalValues.USER, user);
 		        	//TODO anzeige bestehende konten oder neuer user
-		        	partService.showPart("mhfinpim.part.overview", PartState.ACTIVATE);
+		        	partService.showPart("mhfinpim.part.overview", PartState.ACTIVATE);		        	
+		        	partService.showPart("mhfinpim.part.left_top", PartState.VISIBLE);
 					partService.hidePart(part);
 		        }
 		        else
