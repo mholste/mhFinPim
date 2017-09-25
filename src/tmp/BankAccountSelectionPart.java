@@ -37,7 +37,7 @@ public class BankAccountSelectionPart
 	@PostConstruct
 	public void createControls(Composite parent,  IFinPimService service)
 	{
-		accounts = service.connectBankInitial();
+		//accounts = service.connectBankInitial();
 		
 		parent.setLayout(new GridLayout(8, false));
 		new Label(parent, SWT.NONE);

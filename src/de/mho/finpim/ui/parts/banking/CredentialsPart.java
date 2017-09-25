@@ -1,4 +1,4 @@
-package de.mho.finpim.ui.parts;
+package de.mho.finpim.ui.parts.banking;
 
 import org.eclipse.swt.widgets.Composite;
 

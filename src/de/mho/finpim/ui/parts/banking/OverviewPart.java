@@ -1,5 +1,5 @@
 
-package de.mho.finpim.ui.parts;
+package de.mho.finpim.ui.parts.banking;
 
 import javax.annotation.PostConstruct;
 import org.eclipse.swt.widgets.Composite;
