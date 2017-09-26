@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Composite;
 import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.service.IFinPimService;
 import de.mho.finpim.service.IServiceValues;
+import de.mho.finpim.util.GlobalValues;
 
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -34,7 +35,7 @@ public class BankingNaviSelectionPart
 	@PostConstruct
 	public void postConstruct(Composite parent, IFinPimService service) 
 	{
-		String user = (String) app.getContext().get(IServiceValues.USERNAME);
+		String user = (String) app.getContext().get(GlobalValues.USER);
 		
 		parent.setLayout(new RowLayout(SWT.VERTICAL));
 		
@@ -51,7 +52,7 @@ public class BankingNaviSelectionPart
 				}
 				else
 				{
-					
+					//Auswahl der Bank
 				}
 				partService.showPart("mhfinpim.part.bankaccselection", PartState.ACTIVATE);	
 			}
