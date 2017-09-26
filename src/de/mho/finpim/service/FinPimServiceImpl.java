@@ -195,4 +195,34 @@ public class FinPimServiceImpl implements IFinPimService
 	}
 	
 	
+	// ----- Office Methoden ----- ///
+	
+	public boolean officePersistPerson(HashMap values)
+	{
+		Properties prop = new Properties();
+        URL url;
+        
+		try 
+        {
+			url = new URL("platform:/plugin/mhFinPim/files/office.properties");
+            InputStream inputStream = url.openConnection().getInputStream();
+            prop.load(inputStream);
+            
+            prop.setProperty("person.username",(String)values.get(IServiceValues.USERNAME));
+            prop.setProperty("person.firstname", (String)values.get(IServiceValues.FIRSTNAME));
+            prop.setProperty("person.name", (String)values.get(IServiceValues.NAME));
+            prop.setProperty("person.pwd", (String)values.get(IServiceValues.PWD));
+            
+            prop.store(url.openConnection().getOutputStream(), null);
+         
+        } 
+		catch (IOException e) 
+		{
+            e.printStackTrace();
+        }
+				
+		return true;
+	}
+	
+	
 }

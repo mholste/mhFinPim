@@ -41,6 +41,8 @@ public class CredentialsPart
 	private String user;	
 	private String pwd;
 	
+	boolean isOffice = true;
+	
 	@Inject 
 	EPartService partService;
 	
@@ -54,6 +56,7 @@ public class CredentialsPart
 	@PostConstruct
 	public void createControls(Composite parent,  IFinPimService service)
 	{		
+		app.getContext().set("loc", new Boolean(isOffice));
 		this.distributeBankValues();
 		
 		// Layout
