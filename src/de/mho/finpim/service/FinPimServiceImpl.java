@@ -106,7 +106,7 @@ public class FinPimServiceImpl implements IFinPimService
 		em.persist(b);
 		em.getTransaction().commit();
 		
-		List<Person> persons = (List<Person>) em.createQuery("SELECT p FROM Person p WHERE p.name=:arg")
+		List<Person> persons = (List<Person>) em.createQuery("SELECT p FROM Person p WHERE p.uName=:arg")
 				.setParameter("arg", values.get(IServiceValues.USERNAME)).getResultList();
 		Person p = persons.get(0);
 		
@@ -187,9 +187,9 @@ public class FinPimServiceImpl implements IFinPimService
 	{
 		EntityManager em = Activator.getEntityManager();
 		
-		List<Person> persons = (List<Person>) em.createQuery("SELECT p FROM Person p WHERE p.name=:arg")
+		List<Person> persons = (List<Person>) em.createQuery("SELECT p FROM Person p WHERE p.uName=:arg")
 				.setParameter("arg", user).getResultList();
-		em.close();
+		em.close();		
 		
 		return persons.get(0).getBanks();
 	}
