@@ -1,13 +1,22 @@
 
 package de.mho.finpim.ui.parts.navigation;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.eclipse.swt.widgets.Composite;
+
+import de.mho.finpim.persistence.model.Bank;
+import de.mho.finpim.service.IFinPimService;
+import de.mho.finpim.service.IServiceValues;
+
 import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.layout.RowData;
@@ -18,10 +27,15 @@ public class BankingNaviSelectionPart
 {
 	@Inject 
 	EPartService partService;
+	
+	@Inject
+	MApplication app;
 
 	@PostConstruct
-	public void postConstruct(Composite parent) 
+	public void postConstruct(Composite parent, IFinPimService service) 
 	{
+		String user = (String) app.getContext().get(IServiceValues.USERNAME);
+		
 		parent.setLayout(new RowLayout(SWT.VERTICAL));
 		
 		Button btnAccount = new Button(parent, SWT.BORDER | SWT.FLAT);
@@ -29,7 +43,16 @@ public class BankingNaviSelectionPart
 		{
 			@Override
 			public void widgetSelected(SelectionEvent e) 
-			{				
+			{	
+				List<Bank> banks = service.getBanks(user);
+				if (banks.size() == 0)
+				{
+					MessageDialog.openWarning( parent.getShell(), "Achtung", "Bitte zunächst eine Bankverbindung anlegen.");
+				}
+				else
+				{
+					
+				}
 				partService.showPart("mhfinpim.part.bankaccselection", PartState.ACTIVATE);	
 			}
 		});
