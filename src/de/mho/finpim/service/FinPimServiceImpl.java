@@ -49,7 +49,7 @@ public class FinPimServiceImpl implements IFinPimService
 		
 		EntityManager em = Activator.getEntityManager();
 		
-		List<Person> persons = (List<Person>) em.createQuery("SELECT p FROM Person p WHERE p.name=:arg")
+		List<Person> persons = (List<Person>) em.createQuery("SELECT p FROM Person p WHERE p.uName=:arg")
 				.setParameter("arg", user).getResultList();
 		em.close();
 		
