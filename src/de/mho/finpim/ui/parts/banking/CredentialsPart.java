@@ -126,7 +126,15 @@ public class CredentialsPart
 		        user = txtName.getText();   
 		        pwd = txtPwd.getText();
 		        String warningMsg = "";
-		        int retVal = service.checkCedentials(user, pwd);
+		        int retVal = 0;
+		        if (isOffice)
+		        {	
+		        	retVal = service.officeCheckCedentials(user, pwd);
+		        }
+		        else
+		        {	
+		        	retVal = service.checkCedentials(user, pwd);
+		        }
 		        switch (retVal) 
 		        {
 		        	case IServiceValues.NOUSER:
