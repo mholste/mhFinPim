@@ -1,9 +1,13 @@
 package de.mho.finpim.service;
 
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -200,20 +204,19 @@ public class FinPimServiceImpl implements IFinPimService
 	public boolean officePersistPerson(HashMap values)
 	{
 		Properties prop = new Properties();
-        URL url;
+        File  file;
         
 		try 
         {
-			url = new URL("platform:/plugin/mhFinPim/files/office.properties");
-            InputStream inputStream = url.openConnection().getInputStream();
-            prop.load(inputStream);
+			file = new File("C:/Users/te_gza2g3_01/git/mhFinPim/files/office.properties");
+			FileOutputStream out = new FileOutputStream(file);			
             
             prop.setProperty("person.username",(String)values.get(IServiceValues.USERNAME));
             prop.setProperty("person.firstname", (String)values.get(IServiceValues.FIRSTNAME));
             prop.setProperty("person.name", (String)values.get(IServiceValues.NAME));
             prop.setProperty("person.pwd", (String)values.get(IServiceValues.PWD));
             
-            prop.store(url.openConnection().getOutputStream(), null);
+            prop.store(out, null);
          
         } 
 		catch (IOException e) 
@@ -224,5 +227,36 @@ public class FinPimServiceImpl implements IFinPimService
 		return true;
 	}
 	
+	public int officeCheckCedentials(String user, String pwd)
+	{
+		Properties prop = new Properties();
+        File  file;
+        String propUser = "";
+        String propPwd = "";
+        
+		try 
+        {
+			file = new File("C:/Users/te_gza2g3_01/git/mhFinPim/files/office.properties");
+			FileInputStream in = new FileInputStream(file);
+			prop.load(in);
+			
+			propUser = prop.getProperty("person.username");
+			propPwd = prop.getProperty("person.pwd");
+        } 
+		catch (IOException e) 
+		{
+            e.printStackTrace();
+        }
+		
+		if (propUser == null || propUser.equals(""))
+		{
+			return IServiceValues.NOUSER;
+		} 
+		else if (propUser.equals(user) && propPwd.equals(pwd))
+		{
+			return IServiceValues.CREDENTIAL_OK;
+		}
+		return IServiceValues.PWD_NOK;
+	}
 	
 }
