@@ -22,4 +22,6 @@ public interface IFinPimService
 	public boolean officePersistPerson(HashMap values);
 	
 	public int officeCheckCedentials(String user, String pwd);
+	
+	public boolean offivePersistBank(HashMap values); 
 }
