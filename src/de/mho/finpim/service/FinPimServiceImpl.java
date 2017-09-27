@@ -94,7 +94,7 @@ public class FinPimServiceImpl implements IFinPimService
 	}
 	
 	@Override
-	public boolean persistBank(HashMap values)
+	public int persistBank(HashMap values)
 	{
 		EntityManager em = Activator.getEntityManager();
 		em.getTransaction().begin();
@@ -121,7 +121,8 @@ public class FinPimServiceImpl implements IFinPimService
 		
 		em.close();
 		
-		return false;
+		
+		return b.getBId();
 	}
 	
 	@Override
@@ -257,6 +258,37 @@ public class FinPimServiceImpl implements IFinPimService
 			return IServiceValues.CREDENTIAL_OK;
 		}
 		return IServiceValues.PWD_NOK;
+	}
+	
+	public int offivePersistBank(HashMap values)
+	{
+		Properties prop = new Properties();
+        File  file;
+        String bId = "1";
+        
+		try 
+        {
+			file = new File("C:/Users/te_gza2g3_01/git/mhFinPim/files/office.properties");
+			FileOutputStream out = new FileOutputStream(file);			
+            
+            prop.setProperty("person.bank",bId);
+            prop.setProperty("bank.id", bId);
+            prop.setProperty("bank.name", (String)values.get(IServiceValues.BANK));
+            prop.setProperty("bank.location", (String)values.get(IServiceValues.LOCATION));
+            prop.setProperty("bank.blz", (String)values.get(IServiceValues.BLZ));
+            prop.setProperty("bank.bic", (String)values.get(IServiceValues.BIC));
+            prop.setProperty("bank.access", (String)values.get(IServiceValues.ACCESS));
+            prop.setProperty("bank.pin", (String)values.get(IServiceValues.PIN));
+            
+            prop.store(out, null);
+         
+        } 
+		catch (IOException e) 
+		{
+            e.printStackTrace();
+        }		
+
+		return Integer.parseInt(bId);
 	}
 	
 }
