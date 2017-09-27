@@ -20,4 +20,6 @@ public interface IFinPimService
 	public List<Bank> getBanks(String user);
 	
 	public boolean officePersistPerson(HashMap values);
+	
+	public int officeCheckCedentials(String user, String pwd);
 }
