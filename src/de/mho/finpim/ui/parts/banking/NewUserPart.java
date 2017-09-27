@@ -52,6 +52,8 @@ public class NewUserPart
 	@PostConstruct
 	public void createControls(Composite parent,  IFinPimService service)
 	{
+		System.out.println(app.getContext().get("loc"));
+		
 		parent.setLayout(new GridLayout(6, false));
 		
 		// Zeile 1
@@ -200,7 +202,7 @@ public class NewUserPart
 					userValues.put(IServiceValues.USERNAME, txtUsername.getText());
 					userValues.put(IServiceValues.PWD, txtPwd.getText());
 					
-					if (app.getContext().get("loc").equals(Boolean.TRUE))
+					if (app.getContext().get("loc").equals(Boolean.FALSE))
 					{
 						service.persistPerson(userValues);
 					}
