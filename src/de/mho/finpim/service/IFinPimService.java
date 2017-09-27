@@ -11,7 +11,7 @@ public interface IFinPimService
 	
 	public boolean persistPerson(HashMap values);	
 	
-	public boolean persistBank(HashMap values); 
+	public int persistBank(HashMap values); 
 	
 	public List connectBankInitial();
 	
@@ -23,5 +23,5 @@ public interface IFinPimService
 	
 	public int officeCheckCedentials(String user, String pwd);
 	
-	public boolean offivePersistBank(HashMap values); 
+	public int offivePersistBank(HashMap values); 
 }
