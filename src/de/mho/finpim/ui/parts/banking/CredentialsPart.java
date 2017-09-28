@@ -39,7 +39,7 @@ public class CredentialsPart
 	private String user;	
 	private String pwd;
 	
-	boolean isOffice = true;
+	boolean isOffice = false;
 	
 	@Inject 
 	EPartService partService;
@@ -152,6 +152,7 @@ public class CredentialsPart
 		        	//TODO anzeige bestehende konten oder neuer user
 		        	partService.showPart("mhfinpim.part.overview", PartState.ACTIVATE);		        	
 		        	partService.showPart("mhfinpim.part.left_top", PartState.VISIBLE);
+		        	partService.showPart("mhfinpim.part.account_choice", PartState.VISIBLE);
 					partService.hidePart(part);
 		        }
 		        else
