@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import de.mho.finpim.persistence.model.Bank;
+import de.mho.finpim.persistence.model.Person;
 
 public interface IFinPimService 
 {
