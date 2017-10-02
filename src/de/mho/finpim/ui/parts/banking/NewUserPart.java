@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import org.eclipse.swt.widgets.Composite;
 
+import de.mho.finpim.persistence.model.Person;
 import de.mho.finpim.service.IFinPimService;
 import de.mho.finpim.service.IServiceValues;
 import de.mho.finpim.util.GlobalValues;
@@ -202,7 +203,9 @@ public class NewUserPart
 					userValues.put(IServiceValues.USERNAME, txtUsername.getText());
 					userValues.put(IServiceValues.PWD, txtPwd.getText());
 					
-					app.getContext().set(GlobalValues.USER, txtUsername.getText());
+					Person p = service.persistPerson(userValues);
+					
+					app.getContext().set(GlobalValues.USER, p);
 					
 					MessageDialog.openInformation( parent.getShell(), "Info", "Der Nutzer " + txtUsername.getText() +" wurde angelegt");
 					
