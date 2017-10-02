@@ -94,7 +94,7 @@ public class FinPimServiceImpl implements IFinPimService
 	}
 	
 	@Override
-	public int persistBank(HashMap values)
+	public Bank persistBank(HashMap values)
 	{
 		EntityManager em = Activator.getEntityManager();
 		em.getTransaction().begin();
@@ -122,7 +122,7 @@ public class FinPimServiceImpl implements IFinPimService
 		em.close();
 		
 		
-		return b.getBId();
+		return b;
 	}
 	
 	@Override
