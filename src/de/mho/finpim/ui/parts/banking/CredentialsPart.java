@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -55,6 +56,8 @@ public class CredentialsPart
 	public void createControls(Composite parent,  IFinPimService service)
 	{		
 		app.getContext().set("loc", new Boolean(isOffice));
+		Map<String, String> l = app.getProperties();
+		System.out.println(l.toString());
 		this.distributeBankValues();
 		
 		// Layout
