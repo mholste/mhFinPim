@@ -7,7 +7,7 @@ import de.mho.finpim.persistence.model.Bank;
 
 public interface IFinPimService 
 {
-	public int checkCedentials(String user, String pwd);
+	public HashMap checkCedentials(String user, String pwd);
 	
 	public boolean persistPerson(HashMap values);	
 	
