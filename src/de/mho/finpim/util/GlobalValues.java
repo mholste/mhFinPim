@@ -6,6 +6,7 @@ public interface GlobalValues
 	public static String BANK_LIST = "bank";
 	public static String USER ="user";
 	public static String BANK = "bank";
+	public static String LOCATION = "location";
 	
 	// Werte f�r die HashMap zur Ablage der Konten
 	public static String ACC_BIC = "bic";
