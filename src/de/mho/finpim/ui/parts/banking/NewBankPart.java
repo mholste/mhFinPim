@@ -9,6 +9,7 @@ import javax.inject.Inject;
 
 import org.eclipse.swt.widgets.Composite;
 
+import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.service.IFinPimService;
 import de.mho.finpim.service.IServiceValues;
 import de.mho.finpim.util.GlobalValues;
@@ -210,7 +211,10 @@ public class NewBankPart
 				bankValues.put(IServiceValues.PIN, txtPIN.getText());
 				bankValues.put(IServiceValues.USERNAME, (String) app.getContext().get(IServiceValues.USERNAME));   
 				
-				//service.persistBank(bankValues);
+				Bank bank = service.persistBank(bankValues);
+				ArrayList banks = (ArrayList) app.getContext().get(GlobalValues.BANK);
+				banks.add(bank);
+				app.getContext().set(GlobalValues.BANK, banks);
 				
 				MessageDialog.openInformation( parent.getShell(), "Info", "Die Bankverbindung wurde "
 						+ "angelegt");
