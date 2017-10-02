@@ -88,7 +88,7 @@ public class FinPimServiceImpl implements IFinPimService
 	}
 
 	@Override
-	public boolean persistPerson(HashMap values) 
+	public Person persistPerson(HashMap values) 
 	{				
 		EntityManager em = Activator.getEntityManager();
 		em.getTransaction().begin();
@@ -103,7 +103,7 @@ public class FinPimServiceImpl implements IFinPimService
 		
 		em.close();
 		
-		return true;		
+		return p;		
 	}
 	
 	@Override
