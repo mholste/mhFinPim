@@ -9,7 +9,7 @@ public interface IFinPimService
 {
 	public HashMap checkCedentials(String user, String pwd);
 	
-	public boolean persistPerson(HashMap values);	
+	public Person persistPerson(HashMap values);	
 	
 	public Bank persistBank(HashMap values); 
 	
