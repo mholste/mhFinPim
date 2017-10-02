@@ -56,6 +56,7 @@ public class CredentialsPart
 	public void createControls(Composite parent,  IFinPimService service)
 	{		
 		app.getContext().set("loc", new Boolean(isOffice));
+		app.getContext().set("bank", new ArrayList());
 		Map<String, String> l = app.getProperties();
 		System.out.println(l.toString());
 		this.distributeBankValues();
