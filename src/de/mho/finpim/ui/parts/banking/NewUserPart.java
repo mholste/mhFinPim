@@ -202,14 +202,6 @@ public class NewUserPart
 					userValues.put(IServiceValues.USERNAME, txtUsername.getText());
 					userValues.put(IServiceValues.PWD, txtPwd.getText());
 					
-					if (app.getContext().get("loc").equals(Boolean.FALSE))
-					{
-						service.persistPerson(userValues);
-					}
-					else
-					{
-						service.officePersistPerson(userValues);
-					}
 					app.getContext().set(GlobalValues.USER, txtUsername.getText());
 					
 					MessageDialog.openInformation( parent.getShell(), "Info", "Der Nutzer " + txtUsername.getText() +" wurde angelegt");
