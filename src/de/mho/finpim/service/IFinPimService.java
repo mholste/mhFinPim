@@ -11,7 +11,7 @@ public interface IFinPimService
 	
 	public boolean persistPerson(HashMap values);	
 	
-	public int persistBank(HashMap values); 
+	public Bank persistBank(HashMap values); 
 	
 	public List connectBankInitial();
 	
