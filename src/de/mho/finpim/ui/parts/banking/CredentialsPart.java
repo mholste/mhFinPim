@@ -130,16 +130,10 @@ public class CredentialsPart
 		        user = txtName.getText();   
 		        pwd = txtPwd.getText();
 		        String warningMsg = "";
-		        int retVal = 0;
-		        if (isOffice)
-		        {	
-		        	retVal = service.officeCheckCedentials(user, pwd);
-		        }
-		        else
-		        {	
-		        	retVal = service.checkCedentials(user, pwd);
-		        }
-		        switch (retVal) 
+		        
+		        HashMap retVal = service.checkCedentials(user, pwd);
+		        int status = ((Integer)retVal.get(GlobalValues.STATUS)).intValue(); 	        
+		        switch (status) 
 		        {
 		        	case IServiceValues.NOUSER:
 		        		warningMsg = "Der Nutzer existiert nicht.";
@@ -152,7 +146,7 @@ public class CredentialsPart
 		        }
 		        if (warningMsg.equals(""))
 		        {
-		        	app.getContext().set(GlobalValues.USER, user);
+		        	app.getContext().set(GlobalValues.USER, retVal.get(GlobalValues.PERSON));
 		        	//TODO anzeige bestehende konten oder neuer user
 		        	partService.showPart("mhfinpim.part.overview", PartState.ACTIVATE);		        	
 		        	partService.showPart("mhfinpim.part.left_top", PartState.VISIBLE);
