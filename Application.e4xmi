@@ -21,13 +21,14 @@
               <children xsi:type="basic:Part" xmi:id="_mcsC8J3LEeeXb-oTwkHiXw" elementId="mhfinpim.part.overview" toBeRendered="false" contributionURI="bundleclass://mhFinPim/de.mho.finpim.ui.parts.banking.OverviewPart" label="&#xdc;bersicht"/>
             </children>
             <children xsi:type="basic:PartStack" xmi:id="_jQz7wHeKEeeei8tEDdR7hg" elementId="mhfinpim.partstack.1" containerData="25">
-              <children xsi:type="basic:Part" xmi:id="_nMr7cHeKEeeei8tEDdR7hg" elementId="mhfinpim.part.account_choice" toBeRendered="false" containerData="50" contributionURI="bundleclass://mhFinPim/de.mho.finpim.ui.parts.bankingAccountChoicePart" label="Konten"/>
+              <children xsi:type="basic:Part" xmi:id="_nMr7cHeKEeeei8tEDdR7hg" elementId="mhfinpim.part.account_choice" toBeRendered="false" containerData="50" contributionURI="bundleclass://mhFinPim/de.mho.finpim.ui.parts.banking.AccountChoicePart" label="Konten"/>
             </children>
           </children>
         </children>
       </children>
     </children>
   </children>
+  <properties key="test" value="123"/>
   <handlers xmi:id="_U13N8IjJEeeql_FbN0RJIg" elementId="SaveCredential" contributionURI="bundleclass://mhFinPim/de.mho.finpim.handler.SaveCredentialHandler" command="_pg9ZcIjIEeeql_FbN0RJIg"/>
   <commands xmi:id="_pg9ZcIjIEeeql_FbN0RJIg" elementId="de.mho.finpim.cmd.saveCredential" commandName="SaveCredential"/>
   <addons xmi:id="_YOV-YXc-EeeFFMbj97ie_A" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
