@@ -209,7 +209,7 @@ public class NewBankPart
 				bankValues.put(IServiceValues.URL, url);
 				bankValues.put(IServiceValues.ACCESS, txtNo.getText());
 				bankValues.put(IServiceValues.PIN, txtPIN.getText());
-				bankValues.put(IServiceValues.USERNAME, (String) app.getContext().get(IServiceValues.USERNAME));   
+				bankValues.put(IServiceValues.USERNAME, (String) app.getContext().get(GlobalValues.USER));   
 				
 				Bank bank = service.persistBank(bankValues);
 				ArrayList banks = (ArrayList) app.getContext().get(GlobalValues.BANK);
