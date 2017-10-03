@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import org.eclipse.swt.widgets.Composite;
 
 import de.mho.finpim.persistence.model.Bank;
+import de.mho.finpim.persistence.model.Person;
 import de.mho.finpim.service.IFinPimService;
 import de.mho.finpim.service.IServiceValues;
 import de.mho.finpim.util.GlobalValues;
@@ -201,6 +202,7 @@ public class NewBankPart
 			@Override
 			public void widgetSelected(SelectionEvent e) 
 			{
+				String user = ((Person) app.getContext().get(GlobalValues.USER)).getUName();
 				bankValues = new HashMap<String, String>();
 				bankValues.put(IServiceValues.BANK, txtBank.getText());
 				bankValues.put(IServiceValues.LOCATION, txtLoc.getText());
@@ -209,12 +211,12 @@ public class NewBankPart
 				bankValues.put(IServiceValues.URL, url);
 				bankValues.put(IServiceValues.ACCESS, txtNo.getText());
 				bankValues.put(IServiceValues.PIN, txtPIN.getText());
-				bankValues.put(IServiceValues.USERNAME, (String) app.getContext().get(GlobalValues.USER));   
+				bankValues.put(IServiceValues.USERNAME, user);   
 				
 				Bank bank = service.persistBank(bankValues);
-				ArrayList banks = (ArrayList) app.getContext().get(GlobalValues.BANK);
+				ArrayList banks = (ArrayList) app.getContext().get("banken");
 				banks.add(bank);
-				app.getContext().set(GlobalValues.BANK, banks);
+				app.getContext().set("banken", banks);
 				
 				MessageDialog.openInformation( parent.getShell(), "Info", "Die Bankverbindung wurde "
 						+ "angelegt");

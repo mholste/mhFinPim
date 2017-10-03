@@ -52,9 +52,7 @@ public class NewUserPart
 	
 	@PostConstruct
 	public void createControls(Composite parent,  IFinPimService service)
-	{
-		System.out.println(app.getContext().get("loc"));
-		
+	{		
 		parent.setLayout(new GridLayout(6, false));
 		
 		// Zeile 1

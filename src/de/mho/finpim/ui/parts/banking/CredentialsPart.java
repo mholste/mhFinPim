@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.e4.core.contexts.Active;
@@ -39,9 +40,8 @@ public class CredentialsPart
 {
 	private String user;	
 	private String pwd;
-	
-	boolean isOffice = false;
-	
+	private ArrayList banks;
+
 	@Inject 
 	EPartService partService;
 	
@@ -55,8 +55,8 @@ public class CredentialsPart
 	@PostConstruct
 	public void createControls(Composite parent,  IFinPimService service)
 	{		
-		app.getContext().set(GlobalValues.LOCATION, new Boolean(isOffice));
-		app.getContext().set(GlobalValues.BANK, new ArrayList());
+		banks = new ArrayList();
+		app.getContext().set("banken", banks);
 		Map<String, String> l = app.getProperties();
 		System.out.println(l.toString());
 		this.distributeBankValues();
@@ -145,7 +145,7 @@ public class CredentialsPart
 		        		warningMsg = "Das Passwort ist nicht korrekt.";
 		        }
 		        if (warningMsg.equals(""))
-		        {
+		        {		        	
 		        	app.getContext().set(GlobalValues.USER, retVal.get(GlobalValues.PERSON));
 		        	//TODO anzeige bestehende konten oder neuer user
 		        	partService.showPart("mhfinpim.part.overview", PartState.ACTIVATE);		        	
@@ -207,5 +207,11 @@ public class CredentialsPart
 		
 		app.getContext().set(GlobalValues.SUGGESTION, suggestion);
 		app.getContext().set(GlobalValues.BANK_LIST, complete);
+	}
+	
+	@PreDestroy
+	private void clearValues()
+	{
+		this.banks = null;
 	}
 }
