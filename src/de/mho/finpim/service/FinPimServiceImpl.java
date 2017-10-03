@@ -124,6 +124,8 @@ public class FinPimServiceImpl implements IFinPimService
 		b.setBic((String)values.get(IServiceValues.BIC));
 		b.setAccessCode((String)values.get(IServiceValues.ACCESS));
 		b.setPIN((String)values.get(IServiceValues.PIN));
+		b.setHost((String)values.get(IServiceValues.URL));
+		b.setCustomerId((String)values.get(IServiceValues.CUST_ID));
 		b.setPerson(p);
 		
 		em.persist(b);
@@ -141,7 +143,7 @@ public class FinPimServiceImpl implements IFinPimService
 	}
 	
 	@Override
-	public List connectBankInitial()
+	public List connectBankInitial(Bank b)
 	{
 		HBCIPassport passport   = null;
         HBCIHandler  hbciHandle = null;             
@@ -158,7 +160,7 @@ public class FinPimServiceImpl implements IFinPimService
             e.printStackTrace();
         }
         
-        HBCIUtils.init(prop, new HBCICallbackFinPim());
+        HBCIUtils.init(prop, new HBCICallbackFinPim(b));
         passport=AbstractHBCIPassport.getInstance("PinTan", null);        
         Konto[] konten = passport.getAccounts();         
         List<Map<String, String>> listAccounts = new ArrayList<Map<String, String>>();

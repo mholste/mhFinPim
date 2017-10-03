@@ -44,6 +44,7 @@ public class NewBankPart
 	private Text txtNo;
 	private Text txtPIN;
 	private Text txtBic;
+	private Text txtCust;
 
 	private HashMap<String, String> bankValues;
 	
@@ -147,12 +148,17 @@ public class NewBankPart
 		// Zeile 9
 		Label lblNo = new Label(parent, SWT.NONE);
 		lblNo.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblNo.setText("Zugangsnummer/Kundennummer");
+		lblNo.setText("Zugangsnummer");
 		txtNo = new Text(parent, SWT.BORDER);
 		txtNo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
+		
+		Label lblCust = new Label(parent, SWT.NONE);
+		lblCust.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblCust.setText("Kundennummer");
+		
+		txtCust = new Text(parent, SWT.BORDER);
+		txtCust.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		
 		// Zeile 10
 		new Label(parent, SWT.NONE);
@@ -211,13 +217,15 @@ public class NewBankPart
 				bankValues.put(IServiceValues.URL, url);
 				bankValues.put(IServiceValues.ACCESS, txtNo.getText());
 				bankValues.put(IServiceValues.PIN, txtPIN.getText());
-				bankValues.put(IServiceValues.USERNAME, user);   
+				bankValues.put(IServiceValues.USERNAME, user);
+				bankValues.put(IServiceValues.CUST_ID, txtCust.getText());
 				
 				Bank bank = service.persistBank(bankValues);
 				ArrayList banks = (ArrayList) app.getContext().get("banken");
 				banks.add(bank);
+				int bankIndex = banks.indexOf(bank);
 				app.getContext().set("banken", banks);
-				
+				app.getContext().set("bank.aktiv", bankIndex);
 				MessageDialog.openInformation( parent.getShell(), "Info", "Die Bankverbindung wurde "
 						+ "angelegt");
 				

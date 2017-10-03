@@ -17,6 +17,7 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
+import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.service.IFinPimService;
 import de.mho.finpim.util.GlobalValues;
 
@@ -50,13 +51,18 @@ public class BankAccountSelectionPart
 	private Table table;
 	private TableViewer viewer;
 	private HashMap<String, Boolean> saveAccounts;
-	List<HashMap> accounts;
+	private List<HashMap> accounts;
+	private ArrayList banks;
+	private Bank activeBank;
 	
 	@PostConstruct
 	public void createControls(Composite parent,  IFinPimService service)
 	{
 		saveAccounts = new HashMap<String, Boolean>();
-		accounts = service.connectBankInitial();
+		int bankAktiv = (int) app.getContext().get("bank.aktiv");
+		banks = (ArrayList) app.getContext().get("banken");
+		activeBank = (Bank) banks.get(bankAktiv);
+		accounts = service.connectBankInitial(activeBank);
 		
 		parent.setLayout(new GridLayout(8, false));
 		

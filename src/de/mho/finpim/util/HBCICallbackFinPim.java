@@ -12,14 +12,24 @@ import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.passport.HBCIPassport;
 
+import de.mho.finpim.persistence.model.Bank;
+
 public class HBCICallbackFinPim extends HBCICallbackConsole 
 {
 	protected Hashtable<HBCIPassport, Hashtable<String, Object>> passports;
+	private Bank bank;
     
     public HBCICallbackFinPim()
     {
         super();
-        passports=new Hashtable<HBCIPassport, Hashtable<String, Object>>();
+        this.passports = new Hashtable<HBCIPassport, Hashtable<String, Object>>();
+    }
+    
+    public HBCICallbackFinPim(Bank bank)
+    {
+        super();
+        this.passports = new Hashtable<HBCIPassport, Hashtable<String, Object>>();
+        this.bank = bank;
     }
     
 	public void callback(final HBCIPassport passport, int reason, String msg, int datatype, StringBuffer retData)
@@ -43,13 +53,39 @@ public class HBCICallbackFinPim extends HBCICallbackConsole
         
         switch (reason) 
         {
+        	case NEED_BLZ:
+        		retData.replace(0, retData.length(), bank.getBlz());
+                break;
+        	case NEED_HOST:
+                if (bank.getHost() != null)
+                {
+                	retData.replace(0, retData.length(), bank.getHost());
+                }
+                else
+                {
+                	InputDialog id = new InputDialog(Display.getCurrent().getActiveShell(), 
+            				"Hostname", "Bitte die URL des HBCI-Servers angeben.", "", null);
+            		id.create();
+            		id.open();       
+            		String s = id.getValue();
+              		retData.replace(0,retData.length(), s);
+                }
+                break;
+        	 case NEED_PORT:
+                 retData.replace(0, retData.length(), "3000");
+                 break;
+        	 case NEED_USERID:
+                 retData.replace(0, retData.length(), bank.getAccessCode());
+                 break;
+        	 case NEED_CUSTOMERID:
+                 retData.replace(0, retData.length(), bank.getCustomerId());
+                 break;
         	case NEED_PASSPHRASE_LOAD:
         	case NEED_PASSPHRASE_SAVE:
         		retData.replace(0,retData.length(),"123");
         		break;
         	case NEED_COUNTRY:
-        		retData.replace(0,retData.length(), "DE");
-                //retData.replace(0,retData.length(),(String)currentData.get("data_country"));
+        		retData.replace(0,retData.length(), "DE");                
                 break;
         	case NEED_PT_PIN:
         		
@@ -60,6 +96,9 @@ public class HBCICallbackFinPim extends HBCICallbackConsole
         		String s = id.getValue();
           		retData.replace(0,retData.length(), s);
         		break;
+        	case NEED_FILTER:
+                retData.replace(0, retData.length(), "Base64");
+                break;
         	case NEED_CONNECTION:
         	case CLOSE_CONNECTION:
         		/*
