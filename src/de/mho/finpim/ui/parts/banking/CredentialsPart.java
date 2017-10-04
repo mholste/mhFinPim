@@ -136,16 +136,7 @@ public class CredentialsPart
 		btnNewUser = new Button(parent, SWT.NONE);
 		btnNewUser.setText("Neuer Nutzer >>");
 		
-		// Zeile 8
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
 		
-		// Zeile 9
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);	
-		btnDirectory = new Button(parent, SWT.NONE);
-		btnDirectory.setText("Arbeitsverzeichnis setzen");
 		
 		// Listener
 		
@@ -203,16 +194,6 @@ public class CredentialsPart
 		        	return;
 		        }
 				partService.showPart("mhfinpim.part.register", PartState.ACTIVATE);
-			}
-		});
-		
-		btnDirectory.addSelectionListener(new SelectionAdapter() 
-		{
-			@Override
-		    public void widgetSelected(SelectionEvent e) 
-			{
-				DirectoryDialog dialog = new DirectoryDialog(parent.getShell(), SWT.OPEN);
-				workDirectory = dialog.open();
 			}
 		});
 	}
