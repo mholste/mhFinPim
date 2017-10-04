@@ -86,7 +86,6 @@ public class CredentialsPart
 		Text txtPwd;
 		Button btnOK;
 		Button btnNewUser;
-		Button btnDirectory;
 		
 		// Zeile 1
 		new Label(parent, SWT.NONE);
