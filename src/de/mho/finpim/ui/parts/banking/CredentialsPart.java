@@ -1,6 +1,8 @@
 package de.mho.finpim.ui.parts.banking;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.FileDialog;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,7 +11,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -41,6 +42,7 @@ public class CredentialsPart
 	private String user;	
 	private String pwd;
 	private ArrayList banks;
+	private String workDirectory = "";
 
 	@Inject 
 	EPartService partService;
@@ -84,13 +86,16 @@ public class CredentialsPart
 		Text txtPwd;
 		Button btnOK;
 		Button btnNewUser;
+		Button btnDirectory;
 		
+		// Zeile 1
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		
 		lblLogin = new Label(parent, SWT.NONE);
 		lblLogin.setText("Bitte anmelden");
 		
+		// Zeile 2
 		new Label(parent, SWT.NONE);
 		
 		lblName = new Label(parent, SWT.NONE);
@@ -98,36 +103,63 @@ public class CredentialsPart
 		txtName = new Text(parent, SWT.BORDER);
 		txtName.setLayoutData(grdWidget);
 		
+		// Zeile 3
 		new Label(parent, SWT.NONE);
 		
 		lblPwd = new Label(parent, SWT.NONE);
 		lblPwd.setText("Passwort");
 		txtPwd = new Text(parent, SWT.PASSWORD | SWT.BORDER);
-		txtPwd.setLayoutData(gd_txtPwd);				
+		txtPwd.setLayoutData(gd_txtPwd);	
+		
+		// Zeile 4
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		
 		btnOK= new Button(parent, SWT.PUSH);
 		btnOK.setText("OK");
+		
+		// Zeile 5
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
+		
+		// Zeile 6
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		
 		lblNewUser = new Label(parent, SWT.NONE);
 		lblNewUser.setText("...oder neuen Nutzer anlegen");
+		
+		// Zeile 7
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);	
 		btnNewUser = new Button(parent, SWT.NONE);
 		btnNewUser.setText("Neuer Nutzer >>");
 		
+		// Zeile 8
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		
+		// Zeile 9
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);	
+		btnDirectory = new Button(parent, SWT.NONE);
+		btnDirectory.setText("Arbeitsverzeichnis setzen");
+		
 		// Listener
 		
-		btnOK.addSelectionListener(new SelectionAdapter() {
+		btnOK.addSelectionListener(new SelectionAdapter() 
+		{
 			@Override
-		    public void widgetSelected(SelectionEvent e) {
-		        user = txtName.getText();   
+		    public void widgetSelected(SelectionEvent e) 
+			{
+		        if (workDirectory.equals(""))
+		        {
+		        	MessageDialog.openWarning(parent.getShell(), "Achtung", "Bitte zunächst ein Arbeitverzeichnis auswählen.");
+		        	return;
+		        }
+				user = txtName.getText();   
 		        pwd = txtPwd.getText();
 		        String warningMsg = "";
 		        
@@ -160,10 +192,27 @@ public class CredentialsPart
 		    }
 		});		
 		
-		btnNewUser.addSelectionListener(new SelectionAdapter() {
+		btnNewUser.addSelectionListener(new SelectionAdapter() 
+		{
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(SelectionEvent e) 
+			{
+				if (workDirectory.equals(""))
+		        {
+		        	MessageDialog.openWarning(parent.getShell(), "Achtung", "Bitte zunächst ein Arbeitverzeichnis auswählen.");
+		        	return;
+		        }
 				partService.showPart("mhfinpim.part.register", PartState.ACTIVATE);
+			}
+		});
+		
+		btnDirectory.addSelectionListener(new SelectionAdapter() 
+		{
+			@Override
+		    public void widgetSelected(SelectionEvent e) 
+			{
+				DirectoryDialog dialog = new DirectoryDialog(parent.getShell(), SWT.OPEN);
+				workDirectory = dialog.open();
 			}
 		});
 	}

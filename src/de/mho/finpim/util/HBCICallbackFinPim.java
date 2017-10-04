@@ -3,10 +3,7 @@ package de.mho.finpim.util;
 import java.util.Hashtable;
 
 import org.eclipse.jface.dialogs.InputDialog;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.StatusDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.kapott.hbci.callback.HBCICallbackConsole;
 import org.kapott.hbci.exceptions.HBCI_Exception;
 import org.kapott.hbci.manager.HBCIUtilsInternal;
@@ -34,7 +31,7 @@ public class HBCICallbackFinPim extends HBCICallbackConsole
     
 	public void callback(final HBCIPassport passport, int reason, String msg, int datatype, StringBuffer retData)
     {
-        if (msg == null) { msg=""; }
+		if (msg == null) { msg=""; }
             
         Hashtable<String, Object> currentData = passports.get(passport);
         if (currentData == null) 
@@ -82,19 +79,25 @@ public class HBCICallbackFinPim extends HBCICallbackConsole
                  break;
         	case NEED_PASSPHRASE_LOAD:
         	case NEED_PASSPHRASE_SAVE:
-        		retData.replace(0,retData.length(),"123");
+        		retData.replace(0,retData.length(),bank.getCustomerId());
         		break;
         	case NEED_COUNTRY:
         		retData.replace(0,retData.length(), "DE");                
                 break;
         	case NEED_PT_PIN:
-        		
-        		InputDialog id = new InputDialog(Display.getCurrent().getActiveShell(), 
-        				"PIN", "Bitte PIN eingeben", "", null);
-        		id.create();
-        		id.open();       
-        		String s = id.getValue();
-          		retData.replace(0,retData.length(), s);
+        		if (bank.getPIN() == null || bank.getPIN().equals(""))
+        		{     		
+        			InputDialog id = new InputDialog(Display.getCurrent().getActiveShell(), 
+        					"PIN", "Bitte PIN eingeben", "", null);
+        			id.create();
+        			id.open();       
+        			String s = id.getValue();
+        			retData.replace(0,retData.length(), s);
+        		}
+        		else
+        		{
+        			retData.replace(0,retData.length(), bank.getPIN());
+        		}
         		break;
         	case NEED_FILTER:
                 retData.replace(0, retData.length(), "Base64");

@@ -49,6 +49,9 @@ public class FinPimServiceImpl implements IFinPimService
 	 *              0 Das Passwort fï¿½r den User ist nicht korrekt
 	 *              1 Die Kombination ist korrekt
 	 *              2 Der User ist mehrfach vorhanden 
+	 *              Wert im Key PERSON
+	 *              null    wenn die Credentials falsch sind
+	 *              person  Das Person Objekt des erfolgreich angemeldeten Users
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -214,6 +217,12 @@ public class FinPimServiceImpl implements IFinPimService
 		em.close();		
 		
 		return persons.get(0).getBanks();
+	}
+	
+	@Override
+	public void setPassportFile(String path)
+	{
+		
 	}
 	
 	

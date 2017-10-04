@@ -1,11 +1,15 @@
 package de.mho.finpim.lifecycle;
 
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.ui.workbench.lifecycle.PostContextCreate;
 import org.eclipse.equinox.app.IApplicationContext;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -38,15 +42,23 @@ public class Manager
     	String ppFile = path + "/pp.dat";
     	Properties prop = new Properties();
         URL url;
+        File file = null;
         
         try 
         {
             url = new URL("platform:/plugin/mhFinPim/files/hbci.properties");
+            URL resURL = FileLocator.resolve(url);
+            file = new File(resURL.getFile());
             InputStream inputStream = url.openConnection().getInputStream();
             prop.load(inputStream);
-            prop.setProperty("client.passport.PinTan.filename", path);
-         
-        } catch (IOException e) {
+            inputStream.close();
+            prop.setProperty("client.passport.PinTan.filename", ppFile);
+            OutputStream outStream = new FileOutputStream(file);            
+            prop.store(outStream, null);
+            outStream.close();           
+        } 
+        catch (IOException e) 
+        {
             e.printStackTrace();
         }
     }
