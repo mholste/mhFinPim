@@ -42,10 +42,6 @@
 <feature id="org.eclipse.emf.ecore"/>
 <feature id="org.eclipse.emf.ecore.edit"/>
 <feature id="org.eclipse.emf.ecore.editor"/>
-<feature id="org.eclipse.emf.ecp.sdk.e4.feature"/>
-<feature id="org.eclipse.emf.ecp.sdk.feature"/>
-<feature id="org.eclipse.emfforms.editor.feature"/>
-<feature id="org.eclipse.emfforms.editor.feature.source"/>
 <feature id="org.eclipse.equinox.compendium.sdk"/>
 <feature id="org.eclipse.equinox.compendium.sdk"/>
 <feature id="org.eclipse.equinox.core.feature"/>
@@ -114,8 +110,12 @@
 <feature id="org.eclipse.m2e.wtp.jsf.feature"/>
 <feature id="org.eclipse.pde"/>
 <feature id="org.eclipse.persistence.jpa"/>
+<feature id="org.eclipse.persistence.jpa"/>
+<feature id="org.eclipse.persistence.moxy"/>
 <feature id="org.eclipse.persistence.moxy"/>
 <feature id="org.eclipse.persistence.sdk"/>
+<feature id="org.eclipse.persistence.sdk"/>
+<feature id="org.eclipse.persistence.sdo"/>
 <feature id="org.eclipse.persistence.sdo"/>
 <feature id="org.eclipse.platform"/>
 <feature id="org.eclipse.rcp"/>
