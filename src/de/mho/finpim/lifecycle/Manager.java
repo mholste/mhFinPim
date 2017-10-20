@@ -39,7 +39,7 @@ public class Manager
     
     private void setWorkLocation(String path)
     {
-    	String ppFile = path + "/pp.dat";
+    	String ppFile = path + "pp.dat";
     	Properties prop = new Properties();
         URL url;
         File file = null;

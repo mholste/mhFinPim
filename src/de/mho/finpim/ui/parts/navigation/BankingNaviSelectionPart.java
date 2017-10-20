@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import org.eclipse.swt.widgets.Composite;
 
 import de.mho.finpim.persistence.model.Bank;
+import de.mho.finpim.persistence.model.Person;
 import de.mho.finpim.service.IFinPimService;
 import de.mho.finpim.service.IServiceValues;
 import de.mho.finpim.util.GlobalValues;
@@ -35,8 +36,7 @@ public class BankingNaviSelectionPart
 	@PostConstruct
 	public void postConstruct(Composite parent, IFinPimService service) 
 	{
-		String user = (String) app.getContext().get(GlobalValues.USER);
-		
+		String user = ((Person) app.getContext().get(GlobalValues.USER)).getUName();
 		parent.setLayout(new RowLayout(SWT.VERTICAL));
 		
 		Button btnAccount = new Button(parent, SWT.BORDER | SWT.FLAT);

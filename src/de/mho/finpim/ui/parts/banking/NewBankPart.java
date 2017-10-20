@@ -190,7 +190,7 @@ public class NewBankPart
 		Button btnBack = new Button(parent, SWT.NONE);
 		
 		btnBack.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
-		btnBack.setText("<< Zur\u00FCck");
+		btnBack.setText("<< Anmeldung");
 		new Label(parent, SWT.NONE);
 		Button btnOk = new Button(parent, SWT.NONE);
 		
@@ -198,13 +198,18 @@ public class NewBankPart
 		new Label(parent, SWT.NONE);
 		
 		//Listener
-		btnBack.addSelectionListener(new SelectionAdapter() {
+		btnBack.addSelectionListener(new SelectionAdapter() 
+		{
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(SelectionEvent e) 
+			{
+				partService.showPart("mhfinpim.part.credential", PartState.ACTIVATE);
+				partService.hidePart(part);				
 			}
 		});
 		
-		btnOk.addSelectionListener(new SelectionAdapter() {
+		btnOk.addSelectionListener(new SelectionAdapter() 
+		{
 			@Override
 			public void widgetSelected(SelectionEvent e) 
 			{

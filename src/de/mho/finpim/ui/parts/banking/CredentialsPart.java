@@ -1,8 +1,6 @@
 package de.mho.finpim.ui.parts.banking;
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.FileDialog;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,7 +40,6 @@ public class CredentialsPart
 	private String user;	
 	private String pwd;
 	private ArrayList banks;
-	private String workDirectory = "";
 
 	@Inject 
 	EPartService partService;
@@ -144,11 +141,6 @@ public class CredentialsPart
 			@Override
 		    public void widgetSelected(SelectionEvent e) 
 			{
-		        if (workDirectory.equals(""))
-		        {
-		        	MessageDialog.openWarning(parent.getShell(), "Achtung", "Bitte zunächst ein Arbeitverzeichnis auswählen.");
-		        	return;
-		        }
 				user = txtName.getText();   
 		        pwd = txtPwd.getText();
 		        String warningMsg = "";
@@ -186,12 +178,7 @@ public class CredentialsPart
 		{
 			@Override
 			public void widgetSelected(SelectionEvent e) 
-			{
-				if (workDirectory.equals(""))
-		        {
-		        	MessageDialog.openWarning(parent.getShell(), "Achtung", "Bitte zunächst ein Arbeitverzeichnis auswählen.");
-		        	return;
-		        }
+			{				
 				partService.showPart("mhfinpim.part.register", PartState.ACTIVATE);
 			}
 		});
