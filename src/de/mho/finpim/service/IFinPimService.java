@@ -21,10 +21,5 @@ public interface IFinPimService
 	public List<Bank> getBanks(String user);
 	
 	public void setPassportFile(String path);
-	
-	public boolean officePersistPerson(HashMap values);
-	
-	public int officeCheckCedentials(String user, String pwd);
-	
-	public int offivePersistBank(HashMap values); 
+		
 }
