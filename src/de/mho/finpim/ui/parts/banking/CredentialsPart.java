@@ -187,16 +187,19 @@ public class CredentialsPart
 			@Override
 			public void widgetSelected(SelectionEvent e) 
 			{
-				if (workDirectory.equals(""))
+				/*if (workDirectory.equals(""))
 		        {
 		        	MessageDialog.openWarning(parent.getShell(), "Achtung", "Bitte zunächst ein Arbeitverzeichnis auswählen.");
 		        	return;
-		        }
+		        }*/
 				partService.showPart("mhfinpim.part.register", PartState.ACTIVATE);
 			}
 		});
 	}
 	
+	/**
+	 * Werte aus blz.properties in Liste für Vorschläge in kommender Maske eingefuegt.
+	 */
 	public void distributeBankValues()
 	{
 		URL url;
