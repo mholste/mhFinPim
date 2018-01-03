@@ -144,11 +144,11 @@ public class CredentialsPart
 			@Override
 		    public void widgetSelected(SelectionEvent e) 
 			{
-		        if (workDirectory.equals(""))
+		        /*if (workDirectory.equals(""))
 		        {
 		        	MessageDialog.openWarning(parent.getShell(), "Achtung", "Bitte zunächst ein Arbeitverzeichnis auswählen.");
 		        	return;
-		        }
+		        }*/
 				user = txtName.getText();   
 		        pwd = txtPwd.getText();
 		        String warningMsg = "";
