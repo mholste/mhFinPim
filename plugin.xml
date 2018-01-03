@@ -12,6 +12,10 @@
                name="appName"
                value="FinPim">
          </property>
+         <property
+               name="applicationXMI"
+               value="mhFinPim/Application.e4xmi">
+         </property>
          <property name="lifeCycleURI" value="bundleclass://mhFinPim/de.mho.finpim.lifecycle.Manager"></property>
       </product>
    </extension>
