@@ -1,8 +1,6 @@
 package de.mho.finpim.ui.parts.banking;
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.FileDialog;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.e4.core.contexts.Active;
@@ -29,6 +26,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.service.IFinPimService;
 import de.mho.finpim.service.IServiceValues;
 import de.mho.finpim.util.GlobalValues;
@@ -42,6 +40,7 @@ public class CredentialsPart
 	private String user;	
 	private String pwd;
 	private String workDirectory = "";
+	private ArrayList<Bank> banks;
 
 	@Inject 
 	EPartService partService;
@@ -203,6 +202,11 @@ public class CredentialsPart
 		String line;
 		ArrayList<String> suggestion = new ArrayList<>();
         HashMap <String, Map> complete = new HashMap<>(); 
+        
+        
+        // Leere ArrayList als Platzhalter in den Context
+        banks = new ArrayList<>();
+        app.getContext().set(GlobalValues.USER_BANKS, banks);
         
 		try 
 		{
