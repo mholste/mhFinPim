@@ -41,7 +41,6 @@ public class CredentialsPart
 {
 	private String user;	
 	private String pwd;
-	private ArrayList banks;
 	private String workDirectory = "";
 
 	@Inject 
@@ -57,9 +56,7 @@ public class CredentialsPart
 	@PostConstruct
 	public void createControls(Composite parent,  IFinPimService service)
 	{		
-		banks = new ArrayList();
-		app.getContext().set("banken", banks);
-		Map<String, String> l = app.getProperties();
+		Map<String, String> l = app.getProperties(); //Werte aus Application.e4xmi
 		System.out.println(l.toString());
 		this.distributeBankValues();
 		
@@ -239,11 +236,5 @@ public class CredentialsPart
 		
 		app.getContext().set(GlobalValues.SUGGESTION, suggestion);
 		app.getContext().set(GlobalValues.BANK_LIST, complete);
-	}
-	
-	@PreDestroy
-	private void clearValues()
-	{
-		this.banks = null;
 	}
 }
