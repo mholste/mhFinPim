@@ -221,11 +221,11 @@ public class NewBankPart
 				bankValues.put(IServiceValues.CUST_ID, txtCust.getText());
 				
 				Bank bank = service.persistBank(bankValues);
-				ArrayList banks = (ArrayList) app.getContext().get("banken");
+				ArrayList banks = (ArrayList) app.getContext().get(GlobalValues.USER_BANKS);
 				banks.add(bank);
 				int bankIndex = banks.indexOf(bank);
-				app.getContext().set("banken", banks);
-				app.getContext().set("bank.aktiv", bankIndex);
+				app.getContext().set(GlobalValues.USER_BANKS, banks);
+				app.getContext().set(GlobalValues.BANK_AKTIV, bankIndex);
 				MessageDialog.openInformation( parent.getShell(), "Info", "Die Bankverbindung wurde "
 						+ "angelegt");
 				
