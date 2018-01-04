@@ -165,7 +165,7 @@ public class NewUserPart
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		Button btnBack = new Button(parent, SWT.NONE);
-		btnBack.setText("<< Zur�ck");
+		btnBack.setText("<< Zurück");
 		new Label(parent, SWT.NONE);		
 		Button btnNewUser = new Button(parent, SWT.NONE);		
 		btnNewUser.setText("User anlegen");
