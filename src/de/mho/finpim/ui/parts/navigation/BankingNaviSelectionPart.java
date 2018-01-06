@@ -54,13 +54,14 @@ public class BankingNaviSelectionPart
 				}
 				else
 				{
-					//Auswahl der Bank
+					app.getContext().set(GlobalValues.USER_BANKS, banks);
+					app.getContext().set(GlobalValues.BANK_AKTIV, 0);
 				}
 				partService.showPart("mhfinpim.part.bankaccselection", PartState.ACTIVATE);	
 			}
 		});
 		btnAccount.setLayoutData(new RowData(SWT.DEFAULT, 40));
-		btnAccount.setText("Neues Konto anlegen");
+		btnAccount.setText("Neue Kontoverbindung auswählen");
 		
 		Button btnBank = new Button(parent, SWT.BORDER);
 		btnBank.addSelectionListener(new SelectionAdapter() 
