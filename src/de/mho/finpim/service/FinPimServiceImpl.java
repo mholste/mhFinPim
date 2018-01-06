@@ -165,6 +165,7 @@ public class FinPimServiceImpl implements IFinPimService
         
         HBCIUtils.init(prop, new HBCICallbackFinPim(b));
         passport=AbstractHBCIPassport.getInstance("PinTan", null);        
+        passport.setPort(443);
         Konto[] konten = passport.getAccounts();         
         List<Map<String, String>> listAccounts = new ArrayList<Map<String, String>>();
         for (Konto k : konten)
