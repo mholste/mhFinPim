@@ -7,7 +7,7 @@ public interface GlobalValues
 	public static final String SUGGESTION = "suggest";
 	//Liste aller Banken aus blz.properties
 	public static final String BANK_LIST = "bank";
-	//Name des aktuellen Users
+	//Person Objekt des aktuellen Users
 	public static final String USER ="user";
 	//Liste der Nanken des aktuelles Users
 	public static  String USER_BANKS = "banken";
