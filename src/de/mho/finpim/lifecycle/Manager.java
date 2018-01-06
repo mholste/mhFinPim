@@ -17,10 +17,7 @@ import java.util.Properties;
 
 public class Manager 
 {
-	
-	
-	
-    @PostContextCreate
+	@PostContextCreate
     public void postContextCreate(IApplicationContext appContext) throws IllegalStateException, IOException 
     {
     	String path = "";
