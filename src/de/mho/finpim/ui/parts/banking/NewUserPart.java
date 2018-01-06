@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import org.eclipse.swt.widgets.Composite;
 
 import de.mho.finpim.persistence.model.Person;
-import de.mho.finpim.service.IFinPimService;
+import de.mho.finpim.service.IFinPimPersistence;
 import de.mho.finpim.service.IServiceValues;
 import de.mho.finpim.util.GlobalValues;
 
@@ -51,7 +51,7 @@ public class NewUserPart
 	MApplication app;
 	
 	@PostConstruct
-	public void createControls(Composite parent,  IFinPimService service)
+	public void createControls(Composite parent,  IFinPimPersistence service)
 	{		
 		parent.setLayout(new GridLayout(6, false));
 		

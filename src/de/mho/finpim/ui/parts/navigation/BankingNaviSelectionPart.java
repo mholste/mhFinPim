@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import org.eclipse.swt.widgets.Composite;
 
 import de.mho.finpim.persistence.model.Bank;
-import de.mho.finpim.service.IFinPimService;
+import de.mho.finpim.service.IFinPimPersistence;
 import de.mho.finpim.service.IServiceValues;
 import de.mho.finpim.util.GlobalValues;
 
@@ -33,7 +33,7 @@ public class BankingNaviSelectionPart
 	MApplication app;
 
 	@PostConstruct
-	public void postConstruct(Composite parent, IFinPimService service) 
+	public void postConstruct(Composite parent, IFinPimPersistence service) 
 	{
 		String user = (String) app.getContext().get(GlobalValues.USER);
 		

@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import de.mho.finpim.persistence.model.Bank;
-import de.mho.finpim.service.IFinPimService;
+import de.mho.finpim.service.IFinPimPersistence;
 import de.mho.finpim.util.GlobalValues;
 
 import org.eclipse.swt.layout.GridLayout;
@@ -56,7 +56,7 @@ public class BankAccountSelectionPart
 	private Bank activeBank;
 	
 	@PostConstruct
-	public void createControls(Composite parent,  IFinPimService service)
+	public void createControls(Composite parent,  IFinPimPersistence service)
 	{
 		saveAccounts = new HashMap<String, Boolean>();
 		int bankAktiv = (int) app.getContext().get("bank.aktiv");
