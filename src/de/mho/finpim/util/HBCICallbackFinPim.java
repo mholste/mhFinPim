@@ -78,6 +78,7 @@ public class HBCICallbackFinPim extends HBCICallbackConsole
                  retData.replace(0, retData.length(), bank.getCustomerId());
                  break;
         	case NEED_PASSPHRASE_LOAD:
+        		retData.replace(0,retData.length(),bank.getCustomerId());
         	case NEED_PASSPHRASE_SAVE:
         		retData.replace(0,retData.length(),bank.getCustomerId());
         		break;
