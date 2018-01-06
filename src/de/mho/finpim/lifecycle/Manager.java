@@ -25,8 +25,9 @@ public class Manager
 
         if (!Platform.getInstanceLocation().isSet()) 
         {
-            String defaultPath = System.getProperty("user.home");
-            path = defaultPath + "/mhFinpim/";
+            //String defaultPath = System.getProperty("user.home");
+            //path = defaultPath + "/mhFinpim/";
+        	path ="/opt/FP";
             URL instanceLocationUrl = new URL("file", null, path);
             Platform.getInstanceLocation().set(instanceLocationUrl, false);
         }
