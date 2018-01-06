@@ -2,9 +2,17 @@ package de.mho.finpim.util;
 
 public interface GlobalValues 
 {	
+	// Namen für Context-Parameter
+	//Name für Vorschlagsliste bei Nankenauswahl
 	public static final String SUGGESTION = "suggest";
+	//Liste aller Banken aus blz.properties
 	public static final String BANK_LIST = "bank";
+	//Name des aktuellen Users
 	public static final String USER ="user";
+	//Liste der Nanken des aktuelles Users
+	public static  String USER_BANKS = "banken";
+	//Index der aktiv genutzten Bank in der ArrayList USER_BANKS
+	public static final String BANK_AKTIV = "bank.aktiv";
 	public static final String BANK = "bank";
 	public static final String LOCATION = "location";
 	
