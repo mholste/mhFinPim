@@ -9,12 +9,12 @@ public class FinPimServiceContextFunction extends ContextFunction{
 	
 	@Override
 	public Object compute(IEclipseContext context, String contextKey) {
-		IFinPimService finPimService =
-				ContextInjectionFactory.make(FinPimServiceImpl.class, context);
+		IFinPimPersistence finPimService =
+				ContextInjectionFactory.make(FinPimPersistenceImpl.class, context);
 		
 		MApplication app = context.get(MApplication.class);
 		IEclipseContext appCtx = app.getContext();
-		appCtx.set(IFinPimService.class, finPimService);
+		appCtx.set(IFinPimPersistence.class, finPimService);
 
 		return finPimService;
 	}
