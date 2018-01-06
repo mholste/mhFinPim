@@ -3,9 +3,9 @@ package de.mho.finpim.util;
 public interface GlobalValues 
 {	
 	// Namen für Context-Parameter
-	//Name für Vorschlagsliste bei Nankenauswahl
+	//Name für Vorschlagsliste bei Nankenauswahl (beinhaltet nur den Namen der Nank)
 	public static final String SUGGESTION = "suggest";
-	//Liste aller Banken aus blz.properties
+	//Liste aller Banken aus blz.properties, mit allen Werten wie,URI, BLZ, Sitz, etc. 
 	public static final String BANK_LIST = "bank";
 	//Person Objekt des aktuellen Users
 	public static final String USER ="user";
