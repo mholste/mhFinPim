@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import org.eclipse.swt.widgets.Composite;
 
 import de.mho.finpim.persistence.model.Bank;
+import de.mho.finpim.persistence.model.Person;
 import de.mho.finpim.service.IFinPimPersistence;
 import de.mho.finpim.service.IServiceValues;
 import de.mho.finpim.util.GlobalValues;
@@ -35,7 +36,8 @@ public class BankingNaviSelectionPart
 	@PostConstruct
 	public void postConstruct(Composite parent, IFinPimPersistence service) 
 	{
-		String user = (String) app.getContext().get(GlobalValues.USER);
+		Person user = (Person) app.getContext().get(GlobalValues.USER);
+	
 		
 		parent.setLayout(new RowLayout(SWT.VERTICAL));
 		
@@ -45,7 +47,7 @@ public class BankingNaviSelectionPart
 			@Override
 			public void widgetSelected(SelectionEvent e) 
 			{	
-				List<Bank> banks = service.getBanks(user);
+				List<Bank> banks = service.getBanks(user.getUName());
 				if (banks.size() == 0)
 				{
 					MessageDialog.openWarning( parent.getShell(), "Achtung", "Bitte zunächst eine Bankverbindung anlegen.");
