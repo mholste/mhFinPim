@@ -1,6 +1,7 @@
 
 package de.mho.finpim.ui.parts.navigation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -54,7 +55,8 @@ public class BankingNaviSelectionPart
 				}
 				else
 				{
-					app.getContext().set(GlobalValues.USER_BANKS, banks);
+					ArrayList bankList = new ArrayList<>(banks);
+					app.getContext().set(GlobalValues.USER_BANKS, bankList);
 					app.getContext().set(GlobalValues.BANK_AKTIV, 0);
 				}
 				partService.showPart("mhfinpim.part.bankaccselection", PartState.ACTIVATE);	
