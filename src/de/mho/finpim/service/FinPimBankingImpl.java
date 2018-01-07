@@ -1,8 +1,10 @@
 package de.mho.finpim.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.security.KeyStore.PasswordProtection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,8 +13,10 @@ import java.util.Properties;
 
 import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.GV_Result.GVRKUms;
+import org.kapott.hbci.manager.BankInfo;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
+import org.kapott.hbci.manager.HBCIVersion;
 import org.kapott.hbci.passport.AbstractHBCIPassport;
 import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.status.HBCIExecStatus;
@@ -24,10 +28,16 @@ import de.mho.finpim.util.HBCICallbackFinPim;
 
 public class FinPimBankingImpl implements IFinPimBanking
 {
+	private final static HBCIVersion VERSION = HBCIVersion.HBCI_300;
+	private HBCIHandler handle = null;
 	
 	@Override
 	public List connectBankInitial(Bank b)
 	{
+		HBCIPassport passport = initBanking(b);
+		handle = new HBCIHandler(VERSION.getId(),passport);
+		
+		/*
 		HBCIPassport passport   = null;
         HBCIHandler  hbciHandle = null;             
         Properties prop = new Properties();
@@ -46,6 +56,7 @@ public class FinPimBankingImpl implements IFinPimBanking
         HBCIUtils.init(prop, new HBCICallbackFinPim(b));
         passport=AbstractHBCIPassport.getInstance("PinTan", null);        
         passport.setPort(443);
+        */
         Konto[] konten = passport.getAccounts();         
         List<Map<String, String>> listAccounts = new ArrayList<Map<String, String>>();
         for (Konto k : konten)
@@ -64,15 +75,34 @@ public class FinPimBankingImpl implements IFinPimBanking
         }
         
         String version=passport.getHBCIVersion();
-        hbciHandle=new HBCIHandler((version.length()!=0)?version:"plus",passport);
+        //handle = new HBCIHandler((version.length() != 0) ? version : "plus", passport);
         
-        HBCIJob auszug=hbciHandle.newJob("KUmsAll");
+        HBCIJob auszug = handle.newJob("KUmsAll");
         auszug.setParam("my",konten[2]);        
         auszug.addToQueue();
-        HBCIExecStatus ret=hbciHandle.execute();
-        GVRKUms result=(GVRKUms)auszug.getJobResult();
+        HBCIExecStatus ret = handle.execute();
+        GVRKUms result = (GVRKUms)auszug.getJobResult();
         
-        return listAccounts;
-                
+        return listAccounts;                
+	}
+	
+	private HBCIPassport initBanking(Bank b)
+	{
+		Properties props = new Properties();
+		HBCIUtils.init(props, new HBCICallbackFinPim(b));
+		
+		final File passportFile = new File("tPP.dat");
+		HBCIUtils.setParam("client.passport.default","PinTan"); // Legt als Verfahren PIN/TAN fest.
+	    HBCIUtils.setParam("client.passport.PinTan.filename",passportFile.getAbsolutePath());
+	    HBCIUtils.setParam("client.passport.PinTan.init","1");
+	    
+	    HBCIPassport passport = AbstractHBCIPassport.getInstance();
+	    passport.setCountry("DE");
+	    BankInfo info = HBCIUtils.getBankInfo(b.getBlz());
+	    passport.setHost(info.getPinTanAddress());
+	    passport.setPort(443);
+	    passport.setFilterType("Base64");
+	    
+	    return passport;	    
 	}
 }
