@@ -133,7 +133,7 @@ public class BankAccountSelectionPart
 		viewer = this.createTable(parent);
 	    viewer.setContentProvider(ArrayContentProvider.getInstance());
 	    
-	    TableViewerColumn colNo = this.createColumns("Kontonummer2", 120);
+	    TableViewerColumn colNo = this.createColumns("Kontonummer", 120);
 	    colNo.setLabelProvider(new ColumnLabelProvider()
 	    {
 	        @Override
@@ -171,13 +171,15 @@ public class BankAccountSelectionPart
 	    	@Override
 	    	public void handleEvent(org.eclipse.swt.widgets.Event event) 
 	    	{
-	    		String string;
+	    		// alle markierten Konten kommen in die HashMap die die Konten für die spätere Nutzung hält.
 	    		if (event.detail == SWT.CHECK)
 	    		{
+	    			// Wenn das Konto schon markiert ist und der Check wieder entzogen wird, wird der Wert false gesetzt
 	    			if (saveAccounts.containsKey(event.item.toString().substring(11, event.item.toString().length() - 1)))
 	    			{
 	    				saveAccounts.put(event.item.toString().substring(11, event.item.toString().length() - 1), false);
 	    			}
+	    			// Ansonsten einfach in die HashMap
 	    			else 
 	    			{
 	    				saveAccounts.put(event.item.toString().substring(11, event.item.toString().length() - 1), true);
@@ -218,17 +220,21 @@ public class BankAccountSelectionPart
 					{
 						Boolean value = saveAccounts.get(GlobalValues.ACC_NO) != null ? 
 								saveAccounts.get(GlobalValues.ACC_NO) : false;
+						// Wenn ein Konto in der HashMap ist und als false markiert, 
+						// soll es wohl nicht weiter genutzt werden 
 						if (value == false)
 						{
 							removeAccounts.add(m);
 						}
 					}
-					else
+					// Und wenn das Konto eh nicht in der HashMap ist, soll es auch nicht genutzt werden
+					else 
 					{
 						removeAccounts.add(m);
 					}
 				}
 				accounts.removeAll(removeAccounts);
+				// Die übtig gebliebenen Konten werden genutzt, werden üersistiert und kommen in den Context
 				app.getContext().set(GlobalValues.ACCOUNTS, accounts);
 				
 				//service.persistAccounts(accounts);
