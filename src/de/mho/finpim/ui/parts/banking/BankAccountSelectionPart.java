@@ -63,7 +63,7 @@ public class BankAccountSelectionPart
 		int bankAktiv = (int) app.getContext().get(GlobalValues.BANK_AKTIV);
 		banks = (ArrayList) app.getContext().get(GlobalValues.USER_BANKS);
 		activeBank = (Bank) banks.get(bankAktiv);
-		accounts = service.connectBankInitial(activeBank);
+		accounts = service.fetchAccounts(activeBank);
 		
 		parent.setLayout(new GridLayout(8, false));
 		
