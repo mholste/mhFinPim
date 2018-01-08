@@ -1,10 +1,6 @@
 package de.mho.finpim.service;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.security.KeyStore.PasswordProtection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,31 +28,11 @@ public class FinPimBankingImpl implements IFinPimBanking
 	private HBCIHandler handle = null;
 	
 	@Override
-	public List connectBankInitial(Bank b)
+	public List fetchAccounts(Bank b)
 	{
 		HBCIPassport passport = initBanking(b);
 		handle = new HBCIHandler(VERSION.getId(),passport);
 		
-		/*
-		HBCIPassport passport   = null;
-        HBCIHandler  hbciHandle = null;             
-        Properties prop = new Properties();
-        URL url;
-        
-        try 
-        {
-            url = new URL("platform:/plugin/mhFinPim/files/hbci.properties");
-            InputStream inputStream = url.openConnection().getInputStream();
-            prop.load(inputStream);
-         
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        HBCIUtils.init(prop, new HBCICallbackFinPim(b));
-        passport=AbstractHBCIPassport.getInstance("PinTan", null);        
-        passport.setPort(443);
-        */
         Konto[] konten = passport.getAccounts();         
         List<Map<String, String>> listAccounts = new ArrayList<Map<String, String>>();
         for (Konto k : konten)
@@ -73,15 +49,6 @@ public class FinPimBankingImpl implements IFinPimBanking
         	account.put(GlobalValues.ACC_TYPE, k.type);
         	listAccounts.add(account);        	
         }
-        
-        String version=passport.getHBCIVersion();
-        //handle = new HBCIHandler((version.length() != 0) ? version : "plus", passport);
-        
-        HBCIJob auszug = handle.newJob("KUmsAll");
-        auszug.setParam("my",konten[2]);        
-        auszug.addToQueue();
-        HBCIExecStatus ret = handle.execute();
-        GVRKUms result = (GVRKUms)auszug.getJobResult();
         
         return listAccounts;                
 	}
