@@ -13,6 +13,7 @@ public interface GlobalValues
 	public static  String USER_BANKS = "banken";
 	//Index der aktiv genutzten Bank in der ArrayList USER_BANKS
 	public static final String BANK_AKTIV = "bank.aktiv";
+	// Kes für Bank-Objekt
 	public static final String BANK = "bank";
 	public static final String LOCATION = "location";
 	
