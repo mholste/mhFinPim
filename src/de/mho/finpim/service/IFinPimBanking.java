@@ -7,6 +7,6 @@ import de.mho.finpim.persistence.model.Bank;
 public interface IFinPimBanking 
 {
 
-	public List connectBankInitial(Bank b);
+	public List fetchAccounts(Bank b);
 
 }
