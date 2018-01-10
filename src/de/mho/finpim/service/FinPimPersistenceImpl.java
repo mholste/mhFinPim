@@ -116,7 +116,6 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		
 		Person p = (Person) em.createQuery("SELECT p FROM Person p WHERE p.uName=:arg")
 				.setParameter("arg", values.get(IServiceValues.USERNAME)).getSingleResult();
-		//Person p = persons.get(0);
 		
 		em.getTransaction().begin();
 		
@@ -146,15 +145,31 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 	}
 	
 	@Override
-	public boolean persistAccounts(List<HashMap> accounts)
+	public boolean persistAccounts(List<HashMap> accounts, Bank b)
 	{				
 		EntityManager em = Activator.getEntityManager();
-		em.getTransaction().begin();
 		
-		Account acc = new Account();
+		for (HashMap accInfo : accounts)
+		{
+			em.getTransaction().begin();
+			Account acc = new Account();
+			acc.setBank(b);
+			acc.setPerson(b.getPerson());
+			acc.setBic((String) accInfo.get(GlobalValues.ACC_BIC));
+			acc.setAccNo((String) accInfo.get(GlobalValues.ACC_NO));
+			acc.setBlz((String) accInfo.get(GlobalValues.ACC_BLZ));
+			acc.setCountry("DE");
+			acc.setCurrency((String) accInfo.get(GlobalValues.ACC_CURRENCY));
+			acc.setIban((String) accInfo.get(GlobalValues.ACC_IBAN));
+			acc.setType((String) accInfo.get(GlobalValues.ACC_TYPE));
+			em.persist(acc);
+			em.getTransaction().commit();
+			acc = null;
+		}
 		
-		
-		return false;
+		em.close();
+				
+		return true;
 	}
 
 	@Override
