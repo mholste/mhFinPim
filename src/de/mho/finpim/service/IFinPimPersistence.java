@@ -14,7 +14,7 @@ public interface IFinPimPersistence
 	
 	public Bank persistBank(HashMap values); 
 	
-	public boolean persistAccounts(List<HashMap> accounts);
+	public boolean persistAccounts(List<HashMap> accounts, Bank b);
 	
 	public List<Bank> getBanks(String user);
 	
