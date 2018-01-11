@@ -28,7 +28,7 @@ public class FinPimBankingImpl implements IFinPimBanking
 	private HBCIHandler handle = null;
 	
 	@Override
-	public List fetchAccounts(Bank b)
+	public ArrayList fetchAccounts(Bank b)
 	{
 		HBCIPassport passport = initBanking(b);
 		handle = new HBCIHandler(VERSION.getId(),passport);
@@ -50,7 +50,7 @@ public class FinPimBankingImpl implements IFinPimBanking
         	listAccounts.add(account);        	
         }
         
-        return listAccounts;                
+        return (ArrayList) listAccounts;                
 	}
 	
 	private HBCIPassport initBanking(Bank b)
