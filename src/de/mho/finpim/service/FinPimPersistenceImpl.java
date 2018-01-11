@@ -147,6 +147,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 	@Override
 	public boolean persistAccounts(List<HashMap> accounts, Bank b)
 	{				
+		Person p = b.getPerson();
 		EntityManager em = Activator.getEntityManager();
 		
 		for (HashMap accInfo : accounts)
@@ -154,7 +155,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 			em.getTransaction().begin();
 			Account acc = new Account();
 			acc.setBank(b);
-			acc.setPerson(b.getPerson());
+			acc.setPerson(p);
 			acc.setBic((String) accInfo.get(GlobalValues.ACC_BIC));
 			acc.setAccNo((String) accInfo.get(GlobalValues.ACC_NO));
 			acc.setBlz((String) accInfo.get(GlobalValues.ACC_BLZ));

@@ -1,12 +1,12 @@
 package de.mho.finpim.service;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import de.mho.finpim.persistence.model.Bank;
 
 public interface IFinPimBanking 
 {
 
-	public List fetchAccounts(Bank b);
+	public ArrayList fetchAccounts(Bank b);
 
 }
