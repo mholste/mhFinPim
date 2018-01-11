@@ -52,12 +52,13 @@ public class BankAccountSelectionPart
 	private Table table;
 	private TableViewer viewer;
 	private HashMap<String, Boolean> saveAccounts;
-	private List<HashMap> accounts;
+	private ArrayList<HashMap> accounts;
 	private ArrayList banks;
 	private Bank activeBank;
 	
 	@PostConstruct
-	public void createControls(Composite parent,  IFinPimBanking service)
+	public void createControls(Composite parent,  IFinPimBanking service, 
+			IFinPimPersistence persistence)
 	{
 		saveAccounts = new HashMap<String, Boolean>();
 		int bankAktiv = (int) app.getContext().get(GlobalValues.BANK_AKTIV);
@@ -213,31 +214,23 @@ public class BankAccountSelectionPart
 			@Override
 		    public void widgetSelected(SelectionEvent e) 
 			{
-				List<HashMap> removeAccounts = new ArrayList();
-				for (HashMap m : accounts)
+				System.out.println("ok");
+				System.out.println(accounts.toString());
+				ArrayList<HashMap> removeAccounts = (ArrayList<HashMap>) accounts.clone();
+				
+				for (HashMap m : removeAccounts)
 				{	
-					if (saveAccounts.containsKey(m.get(GlobalValues.ACC_NO))) 
+					if ((!saveAccounts.containsKey(m.get(GlobalValues.ACC_NO))) 
+							|| (!saveAccounts.get(m.get(GlobalValues.ACC_NO)))) 
 					{
-						Boolean value = saveAccounts.get(GlobalValues.ACC_NO) != null ? 
-								saveAccounts.get(GlobalValues.ACC_NO) : false;
-						// Wenn ein Konto in der HashMap ist und als false markiert, 
-						// soll es wohl nicht weiter genutzt werden 
-						if (value == false)
-						{
-							removeAccounts.add(m);
-						}
-					}
-					// Und wenn das Konto eh nicht in der HashMap ist, soll es auch nicht genutzt werden
-					else 
-					{
-						removeAccounts.add(m);
+						accounts.remove(m);
 					}
 				}
-				accounts.removeAll(removeAccounts);
-				// Die übtig gebliebenen Konten werden genutzt, werden üersistiert und kommen in den Context
+				
+				// Die übtig gebliebenen Konten werden genutzt, werden persistiert und kommen in den Context
 				app.getContext().set(GlobalValues.ACCOUNTS, accounts);
 				
-				//service.persistAccounts(accounts);
+				persistence.persistAccounts(accounts, activeBank);
 				
 				partService.showPart("mhfinpim.part.overview", PartState.ACTIVATE);
 				partService.showPart("mhfinpim.part.account_choice", PartState.VISIBLE);
