@@ -1,36 +1,15 @@
 package de.mho.finpim.service;
 
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 import javax.persistence.EntityManager;
-
-import org.kapott.hbci.GV.HBCIJob;
-import org.kapott.hbci.GV_Result.GVRKUms;
-import org.kapott.hbci.manager.HBCIHandler;
-import org.kapott.hbci.manager.HBCIUtils;
-import org.kapott.hbci.passport.AbstractHBCIPassport;
-import org.kapott.hbci.passport.HBCIPassport;
-import org.kapott.hbci.status.HBCIExecStatus;
-import org.kapott.hbci.structures.Konto;
 
 import de.mho.finpim.lifecycle.Activator;
 import de.mho.finpim.persistence.model.Account;
 import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.persistence.model.Person;
 import de.mho.finpim.util.GlobalValues;
-import de.mho.finpim.util.HBCICallbackFinPim;
 
 public class FinPimPersistenceImpl implements IFinPimPersistence 
 {
