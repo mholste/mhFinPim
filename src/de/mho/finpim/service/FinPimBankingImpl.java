@@ -9,6 +9,7 @@ import java.util.Properties;
 
 import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.GV_Result.GVRKUms;
+import org.kapott.hbci.GV_Result.GVRSaldoReq;
 import org.kapott.hbci.manager.BankInfo;
 import org.kapott.hbci.manager.HBCIHandler;
 import org.kapott.hbci.manager.HBCIUtils;
@@ -17,7 +18,9 @@ import org.kapott.hbci.passport.AbstractHBCIPassport;
 import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.status.HBCIExecStatus;
 import org.kapott.hbci.structures.Konto;
+import org.kapott.hbci.structures.Value;
 
+import de.mho.finpim.persistence.model.Account;
 import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.util.GlobalValues;
 import de.mho.finpim.util.HBCICallbackFinPim;
@@ -51,6 +54,59 @@ public class FinPimBankingImpl implements IFinPimBanking
         }
         
         return (ArrayList) listAccounts;                
+	}
+
+	@Override
+	public Object getAccountBalace(Account acc) 
+	{
+		Bank b = acc.getBank();
+		HBCIPassport passport = initBanking(b);
+		handle = new HBCIHandler(VERSION.getId(),passport);
+		
+		Konto k = passport.getAccount(acc.getAccNo());
+		HBCIJob balanceJob = handle.newJob("SaldoReq");
+		balanceJob.setParam("my", k);
+		balanceJob.addToQueue();
+		
+		HBCIExecStatus status = handle.execute();
+		
+		if (!status.isOK())
+		{
+		        //TODO Scheiße!!!
+		}
+		
+		GVRSaldoReq balanceResult = (GVRSaldoReq) balanceJob.getJobResult();
+		
+		Value s = balanceResult.getEntries()[0].ready.value;
+	    System.out.println(s.toString()); 
+		
+				
+		return null;
+	}
+	
+	@Override
+	public Object getAccountBalance(String accNo, Bank b) 
+	{
+		HBCIPassport passport = initBanking(b);
+		handle = new HBCIHandler(VERSION.getId(),passport);
+		
+		Konto k = passport.getAccount(accNo);
+		HBCIJob balanceJob = handle.newJob("SaldoReq");
+		balanceJob.setParam("my", k);
+		balanceJob.addToQueue();
+		
+		HBCIExecStatus status = handle.execute();
+		
+		if (!status.isOK())
+		{
+		        //TODO Scheiße!!!
+		}
+		
+		GVRSaldoReq balanceResult = (GVRSaldoReq) balanceJob.getJobResult();
+		
+		Value s = balanceResult.getEntries()[0].ready.value;
+	    System.out.println(s.toString()); 
+		return null;
 	}
 	
 	private HBCIPassport initBanking(Bank b)
