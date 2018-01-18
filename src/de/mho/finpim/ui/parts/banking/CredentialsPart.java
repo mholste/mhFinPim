@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Text;
 
 import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.service.IFinPimPersistence;
+import de.mho.finpim.service.IPlatformDataService;
 import de.mho.finpim.service.IServiceValues;
 import de.mho.finpim.util.GlobalValues;
 
@@ -53,8 +54,9 @@ public class CredentialsPart
 	MApplication app;
 
 	@PostConstruct
-	public void createControls(Composite parent,  IFinPimPersistence service)
-	{		
+	public void createControls(Composite parent,  IFinPimPersistence service, IPlatformDataService data)
+	{	
+		data.hello();
 		Map<String, String> l = app.getProperties(); //Werte aus Application.e4xmi
 		System.out.println(l.toString());
 		this.distributeBankValues();
