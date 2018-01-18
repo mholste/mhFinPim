@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="IPlatformDataService">
+   <implementation class="de.mho.finpim.service.PlatformDataServiceImpl"/>
+   <service>
+      <provide interface="de.mho.finpim.service.IPlatformDataService"/>
+   </service>
+</scr:component>

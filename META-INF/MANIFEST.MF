@@ -24,8 +24,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui;bundle-version="3.109.0",
  hbci4j-core;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Service-Component: OSGI-INF/persistence_component.xml,
- OSGI-INF/banking_component.xml
+Service-Component: OSGI-INF/persistence_component.xml,OSGI-INF/banking_component.xml,
+ OSGI-INF/data_component.xml
 Import-Package: javax.annotation;version="1.0.0";resolution:=optional,
  javax.inject;version="1.0.0",
  javax.persistence
