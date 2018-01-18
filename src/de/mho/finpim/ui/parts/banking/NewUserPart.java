@@ -14,7 +14,6 @@ import de.mho.finpim.util.GlobalValues;
 
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.e4.core.contexts.Active;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -27,8 +26,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.ModifyEvent;
 
 public class NewUserPart 
 {
@@ -52,7 +49,7 @@ public class NewUserPart
 	
 	@PostConstruct
 	public void createControls(Composite parent,  IFinPimPersistence service)
-	{		
+	{	
 		parent.setLayout(new GridLayout(6, false));
 		
 		// Zeile 1
