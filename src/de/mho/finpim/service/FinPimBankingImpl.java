@@ -1,6 +1,9 @@
 package de.mho.finpim.service;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +32,7 @@ public class FinPimBankingImpl implements IFinPimBanking
 {
 	private final static HBCIVersion VERSION = HBCIVersion.HBCI_300;
 	private HBCIHandler handle = null;
+	File passportFile;
 	
 	@Override
 	public ArrayList fetchAccounts(Bank b)
@@ -53,6 +57,7 @@ public class FinPimBankingImpl implements IFinPimBanking
         	listAccounts.add(account);        	
         }
         
+        closeBanking(handle);
         return (ArrayList) listAccounts;                
 	}
 
@@ -114,7 +119,7 @@ public class FinPimBankingImpl implements IFinPimBanking
 		Properties props = new Properties();
 		HBCIUtils.init(props, new HBCICallbackFinPim(b));
 		
-		final File passportFile = new File("tPP.dat");
+		passportFile = new File("/opt/FP/PP.dat");
 		HBCIUtils.setParam("client.passport.default","PinTan"); // Legt als Verfahren PIN/TAN fest.
 	    HBCIUtils.setParam("client.passport.PinTan.filename",passportFile.getAbsolutePath());
 	    HBCIUtils.setParam("client.passport.PinTan.init","1");
@@ -127,5 +132,20 @@ public class FinPimBankingImpl implements IFinPimBanking
 	    passport.setFilterType("Base64");
 	    
 	    return passport;	    
+	}
+	
+	private void closeBanking(HBCIHandler handle)
+	{
+		try 
+		{
+			Files.deleteIfExists(Paths.get(passportFile.getAbsolutePath()));
+		} 
+		catch (IOException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		handle.close();
+        HBCIUtils.doneThread();
 	}
 }
