@@ -2,8 +2,6 @@ package de.mho.finpim.ui.parts.banking;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -214,36 +212,28 @@ public class BankAccountSelectionPart
 			@Override
 		    public void widgetSelected(SelectionEvent e) 
 			{
-				System.out.println("ok");
-				System.out.println(accounts.toString());
-				ArrayList<HashMap> removeAccounts = (ArrayList<HashMap>) accounts.clone();
-				
-				for (HashMap m : removeAccounts)
-				{	
-					if ((!saveAccounts.containsKey(m.get(GlobalValues.ACC_NO))) 
-							|| (!saveAccounts.get(m.get(GlobalValues.ACC_NO)))) 
-					{
-						accounts.remove(m);
-					}
-				}
-				
-				// Die übtig gebliebenen Konten werden genutzt, werden persistiert und kommen in den Context
-				app.getContext().set(GlobalValues.ACCOUNTS, accounts);
-				
-				persistence.persistAccounts(accounts, activeBank);
+				persist(persistence);
 				
 				partService.showPart("mhfinpim.part.overview", PartState.ACTIVATE);
 				partService.showPart("mhfinpim.part.account_choice", PartState.VISIBLE);
-				partService.hidePart(part);
-				
-				//TODO reaktion
-				// Anzeige der Konten unten
-				// Anzeige �bersicht mit Kontost�nden (ggf. alt mit M�glichkeit zur Aktualisierung
+				partService.hidePart(part);				
 			}
 		});
 		new Label(parent, SWT.NONE);
 		Button btnProceed= new Button(parent, SWT.PUSH);
-		btnProceed.setText("Weiter >>");
+		btnProceed.setText("Weitere Bank anlegen");
+		btnProceed.addSelectionListener(new SelectionAdapter() 
+		{
+			@Override
+		    public void widgetSelected(SelectionEvent e) 
+			{
+				persist(persistence);
+				
+				partService.showPart("mhfinpim.part.newbank", PartState.ACTIVATE);
+				partService.showPart("mhfinpim.part.account_choice", PartState.VISIBLE);
+				partService.hidePart(part);				
+			}
+		});
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
@@ -280,10 +270,33 @@ public class BankAccountSelectionPart
 		return tableViewColumn;
 	}
 	
+	private void persist(IFinPimPersistence persistence)
+	{
+		ArrayList<HashMap> removeAccounts = (ArrayList<HashMap>) accounts.clone();
+		
+		for (HashMap m : removeAccounts)
+		{	
+			if ((!saveAccounts.containsKey(m.get(GlobalValues.ACC_NO))) 
+					|| (!saveAccounts.get(m.get(GlobalValues.ACC_NO)))) 
+			{
+				accounts.remove(m);
+			}
+		}
+		
+		// Die übtig gebliebenen Konten werden genutzt, werden persistiert und kommen in den Context
+		// muss ggf.noch geändertv werden
+		app.getContext().set(GlobalValues.ACCOUNTS, accounts);
+		
+		persistence.persistAccounts(accounts, activeBank);
+	}
+	
 	@PreDestroy
 	public void preDestroy()
 	{
 		saveAccounts = null;
+		accounts = null;
+		banks = null;
+		activeBank = null;
 	}
 
 }
