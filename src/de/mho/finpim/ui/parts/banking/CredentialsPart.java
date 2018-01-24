@@ -55,7 +55,6 @@ public class CredentialsPart
 	@PostConstruct
 	public void createControls(Composite parent,  IFinPimPersistence service, IPlatformDataService data)
 	{	
-		data.hello();
 		Map<String, String> l = app.getProperties(); //Werte aus Application.e4xmi
 		System.out.println(l.toString());
 		this.distributeBankValues(data);
@@ -160,8 +159,9 @@ public class CredentialsPart
 		        }
 		        if (warningMsg.equals(""))
 		        {	
-		        	data.initBanking(service.getBanks(user), service.getUser(user));
-		        	//TODO anzeige bestehende konten oder neuer user
+		        	data.setUser(service.getUser(user));
+		        	data.setActiveBank(service.getBanks(user).get(0));
+		        	
 		        	partService.showPart("mhfinpim.part.overview", PartState.ACTIVATE);		        	
 		        	partService.showPart("mhfinpim.part.left_top", PartState.VISIBLE);
 		        	partService.showPart("mhfinpim.part.account_choice", PartState.VISIBLE);

@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.service.IFinPimBanking;
 import de.mho.finpim.service.IFinPimPersistence;
+import de.mho.finpim.service.IPlatformDataService;
 import de.mho.finpim.util.GlobalValues;
 
 import org.eclipse.swt.layout.GridLayout;
@@ -51,17 +52,14 @@ public class BankAccountSelectionPart
 	private TableViewer viewer;
 	private HashMap<String, Boolean> saveAccounts;
 	private ArrayList<HashMap> accounts;
-	private ArrayList banks;
 	private Bank activeBank;
 	
 	@PostConstruct
 	public void createControls(Composite parent,  IFinPimBanking service, 
-			IFinPimPersistence persistence)
+			IFinPimPersistence persistence, IPlatformDataService data)
 	{
 		saveAccounts = new HashMap<String, Boolean>();
-		int bankAktiv = (int) app.getContext().get(GlobalValues.BANK_AKTIV);
-		banks = (ArrayList) app.getContext().get(GlobalValues.USER_BANKS);
-		activeBank = (Bank) banks.get(bankAktiv);
+		activeBank = data.getActiveBank(); 
 		accounts = service.fetchAccounts(activeBank);
 		
 		parent.setLayout(new GridLayout(8, false));
@@ -283,10 +281,6 @@ public class BankAccountSelectionPart
 			}
 		}
 		
-		// Die übtig gebliebenen Konten werden genutzt, werden persistiert und kommen in den Context
-		// muss ggf.noch geändertv werden
-		app.getContext().set(GlobalValues.ACCOUNTS, accounts);
-		
 		persistence.persistAccounts(accounts, activeBank);
 	}
 	
@@ -295,7 +289,6 @@ public class BankAccountSelectionPart
 	{
 		saveAccounts = null;
 		accounts = null;
-		banks = null;
 		activeBank = null;
 	}
 

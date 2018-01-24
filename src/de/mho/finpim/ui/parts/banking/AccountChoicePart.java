@@ -12,6 +12,7 @@ import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.swt.widgets.Composite;
 
 import de.mho.finpim.service.IFinPimBanking;
+import de.mho.finpim.service.IPlatformDataService;
 import de.mho.finpim.util.GlobalValues;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.SWT;
@@ -28,7 +29,7 @@ public class AccountChoicePart
 	private ArrayList<HashMap> accounts;
 	
 	@PostConstruct
-	public void createControls(Composite parent, IFinPimBanking service) 
+	public void createControls(Composite parent, IFinPimBanking service, IPlatformDataService data) 
 	{
 		parent.setLayout(new GridLayout(2, false));
 		
