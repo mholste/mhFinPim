@@ -18,5 +18,5 @@ public interface IFinPimPersistence
 	
 	public List<Bank> getBanks(String user);
 	
-	public void setPassportFile(String path);
+	public Person getUser(String username);
 }

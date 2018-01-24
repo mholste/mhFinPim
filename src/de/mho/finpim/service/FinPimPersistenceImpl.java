@@ -163,11 +163,15 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		
 		return persons.get(0).getBanks();
 	}
-	
+
 	@Override
-	public void setPassportFile(String path)
+	public Person getUser(String username) 
 	{
+		EntityManager em = Activator.getEntityManager();
 		
+		Person p = (Person) em.createQuery("SELECT p FROM Person p WHERE p.uName=:arg")
+				.setParameter("arg", username).getSingleResult();
+		return p;
 	}
-	
+
 }
