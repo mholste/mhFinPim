@@ -12,7 +12,7 @@ public class PlatformDataServiceImpl implements IPlatformDataService
 	/** Map mit allen Bankwerten, Key ist Bankname mit Sitz, Value eine Hashmap 
 	 * mit den Werten der Bank */
 	private HashMap<String, HashMap<String, String>> bankList;
-	/** Der aktuell angemeldete vNutzer */
+	/** Der aktuell angemeldete Nutzer */
 	private Person user;
 	
 	@Override
@@ -38,5 +38,17 @@ public class PlatformDataServiceImpl implements IPlatformDataService
 	public HashMap<String, HashMap<String, String>> getBankList() 
 	{
 		return this.bankList;
+	}
+
+	@Override
+	public Person getUser() 
+	{
+		return this.user;
+	}
+
+	@Override
+	public void setUser(Person p) 
+	{
+		this.user = p;
 	}
 }
