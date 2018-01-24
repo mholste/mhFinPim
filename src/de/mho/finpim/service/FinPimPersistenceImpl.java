@@ -1,5 +1,6 @@
 package de.mho.finpim.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -124,8 +125,9 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 	}
 	
 	@Override
-	public boolean persistAccounts(List<HashMap> accounts, Bank b)
+	public ArrayList<Account> persistAccounts(List<HashMap> accounts, Bank b)
 	{				
+		ArrayList<Account> bankAccounts = new ArrayList<Account>();
 		Person p = b.getPerson();
 		EntityManager em = Activator.getEntityManager();
 		
@@ -144,12 +146,13 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 			acc.setType((String) accInfo.get(GlobalValues.ACC_TYPE));
 			em.persist(acc);
 			em.getTransaction().commit();
+			bankAccounts.add(acc);
 			acc = null;
 		}
 		
 		em.close();
 				
-		return true;
+		return bankAccounts;
 	}
 
 	@Override
