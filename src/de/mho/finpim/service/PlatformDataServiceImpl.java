@@ -2,12 +2,18 @@ package de.mho.finpim.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+
+import de.mho.finpim.persistence.model.Person;
 
 public class PlatformDataServiceImpl implements IPlatformDataService 
 {
-	private ArrayList suggestion;
-	private HashMap bankList;
+	/** Vorschlagsliste aller Baken, bestehend aus Bankname und Sitz der Bank */
+	private ArrayList<String> suggestion;
+	/** Map mit allen Bankwerten, Key ist Bankname mit Sitz, Value eine Hashmap 
+	 * mit den Werten der Bank */
+	private HashMap<String, HashMap<String, String>> bankList;
+	/** Der aktuell angemeldete vNutzer */
+	private Person user;
 	
 	@Override
 	public void hello() 
@@ -16,7 +22,7 @@ public class PlatformDataServiceImpl implements IPlatformDataService
 	}
 
 	@Override
-	public void setBankingListValues(ArrayList<String> suggest, HashMap<String, Map> banks) 
+	public void setBankingListValues(ArrayList<String> suggest, HashMap<String, HashMap<String, String>> banks) 
 	{
 		this.suggestion = suggest;
 		this.bankList = banks;
@@ -29,7 +35,7 @@ public class PlatformDataServiceImpl implements IPlatformDataService
 	}
 
 	@Override
-	public HashMap<String, Map> getBankList() 
+	public HashMap<String, HashMap<String, String>> getBankList() 
 	{
 		return this.bankList;
 	}

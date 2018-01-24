@@ -64,7 +64,7 @@ public class NewBankPart
 	@PostConstruct
 	public void createControls(Composite parent,  IFinPimPersistence service,  IPlatformDataService data)
 	{
-		HashMap <String, Map> allValues = data.getBankList();
+		HashMap <String, HashMap<String, String>> allValues = data.getBankList();
 		ArrayList<String> suggest = data.getSuggestions();
 		String[] suggestArray = new String[suggest.size()];
 		suggestArray = suggest.toArray(suggestArray);

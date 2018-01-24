@@ -194,7 +194,7 @@ public class CredentialsPart
 		// ArraList mit den Vorschlägen, nur bestehend aus Bankname und Sitz der Bank 
 		ArrayList<String> suggestion = new ArrayList<>();
 		// Alle Werte für die Banken, Key ist der Name der Bank, Walue die Werte als HashMap
-        HashMap <String, Map> complete = new HashMap<>(); 
+        HashMap <String, HashMap<String, String>> complete = new HashMap<>(); 
         
 		try 
 		{
