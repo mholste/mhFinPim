@@ -160,7 +160,7 @@ public class CredentialsPart
 		        }
 		        if (warningMsg.equals(""))
 		        {		        	
-		        	app.getContext().set(GlobalValues.USER, retVal.get(GlobalValues.PERSON));
+		        	data.setUser(service.getUser(user));
 		        	//TODO anzeige bestehende konten oder neuer user
 		        	partService.showPart("mhfinpim.part.overview", PartState.ACTIVATE);		        	
 		        	partService.showPart("mhfinpim.part.left_top", PartState.VISIBLE);
