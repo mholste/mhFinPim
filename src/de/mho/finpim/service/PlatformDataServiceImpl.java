@@ -3,6 +3,7 @@ package de.mho.finpim.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.persistence.model.Person;
 
 public class PlatformDataServiceImpl implements IPlatformDataService 
@@ -14,6 +15,10 @@ public class PlatformDataServiceImpl implements IPlatformDataService
 	private HashMap<String, HashMap<String, String>> bankList;
 	/** Der aktuell angemeldete Nutzer */
 	private Person user;
+	/** Eine Liste der Banken des aktuellen Nutzers */
+	private ArrayList<Bank> userBanklist;
+	/** Die aktuell vedrwendete Bank des Nutzers */
+	private Bank activeBank;
 	
 	@Override
 	public void hello() 
@@ -50,5 +55,38 @@ public class PlatformDataServiceImpl implements IPlatformDataService
 	public void setUser(Person p) 
 	{
 		this.user = p;
+	}
+
+	@Override
+	public void initUserBanks() 
+	{
+		if (this.userBanklist == null)
+		{
+			userBanklist = new ArrayList<>();
+		}
+	}
+
+	@Override
+	public ArrayList<Bank> getUserBankList() 
+	{
+		return this.userBanklist;
+	}
+
+	@Override
+	public void addUserBank(Bank b) 
+	{
+		userBanklist.add(b);
+	}
+
+	@Override
+	public void setActiveBank(Bank b) 
+	{
+		this.activeBank = b;
+	}
+
+	@Override
+	public Bank getActiveBank() 
+	{
+		return this.activeBank;
 	}
 }

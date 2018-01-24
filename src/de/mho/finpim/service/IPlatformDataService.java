@@ -3,6 +3,7 @@ package de.mho.finpim.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.persistence.model.Person;
 
 public interface IPlatformDataService 
@@ -21,4 +22,16 @@ public interface IPlatformDataService
 	public Person getUser();
 	
 	public void setUser(Person p); 
+	
+	// Methoden run um die Banken des Users
+	
+	public void initUserBanks();
+	
+	public ArrayList<Bank> getUserBankList();
+	
+	public void addUserBank(Bank b);
+	
+	public void setActiveBank(Bank b);
+	
+	public Bank getActiveBank();
 }
