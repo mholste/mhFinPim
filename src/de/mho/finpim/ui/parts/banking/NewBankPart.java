@@ -2,7 +2,6 @@ package de.mho.finpim.ui.parts.banking;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -10,11 +9,9 @@ import javax.inject.Inject;
 import org.eclipse.swt.widgets.Composite;
 
 import de.mho.finpim.persistence.model.Bank;
-import de.mho.finpim.persistence.model.Person;
 import de.mho.finpim.service.IFinPimPersistence;
 import de.mho.finpim.service.IPlatformDataService;
 import de.mho.finpim.service.IServiceValues;
-import de.mho.finpim.util.GlobalValues;
 
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
@@ -32,8 +29,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.ModifyEvent;
 
@@ -209,7 +204,7 @@ public class NewBankPart
 			@Override
 			public void widgetSelected(SelectionEvent e) 
 			{
-				String user = ((Person) app.getContext().get(GlobalValues.USER)).getUName();
+				String user = data.getUser().getUName();
 				bankValues = new HashMap<String, String>();
 				bankValues.put(IServiceValues.BANK, txtBank.getText());
 				bankValues.put(IServiceValues.LOCATION, txtLoc.getText());
@@ -220,13 +215,9 @@ public class NewBankPart
 				bankValues.put(IServiceValues.PIN, txtPIN.getText());
 				bankValues.put(IServiceValues.USERNAME, user);
 				bankValues.put(IServiceValues.CUST_ID, txtCust.getText());
-				
 				Bank bank = service.persistBank(bankValues);
-				ArrayList banks = (ArrayList) app.getContext().get(GlobalValues.USER_BANKS);
-				banks.add(bank);
-				int bankIndex = banks.indexOf(bank);
-				app.getContext().set(GlobalValues.USER_BANKS, banks);
-				app.getContext().set(GlobalValues.BANK_AKTIV, bankIndex);
+				data.addUserBank(bank);
+				data.setActiveBank(bank);
 				MessageDialog.openInformation( parent.getShell(), "Info", "Die Bankverbindung wurde "
 						+ "angelegt");
 				
