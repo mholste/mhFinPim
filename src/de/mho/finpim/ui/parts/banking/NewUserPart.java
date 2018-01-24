@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import de.mho.finpim.persistence.model.Person;
 import de.mho.finpim.service.IFinPimPersistence;
+import de.mho.finpim.service.IPlatformDataService;
 import de.mho.finpim.service.IServiceValues;
 import de.mho.finpim.util.GlobalValues;
 
@@ -48,7 +49,7 @@ public class NewUserPart
 	MApplication app;
 	
 	@PostConstruct
-	public void createControls(Composite parent,  IFinPimPersistence service)
+	public void createControls(Composite parent,  IFinPimPersistence service, IPlatformDataService data)
 	{	
 		parent.setLayout(new GridLayout(6, false));
 		
@@ -200,7 +201,7 @@ public class NewUserPart
 					
 					Person p = service.persistPerson(userValues);
 					
-					app.getContext().set(GlobalValues.USER, p);
+					data.setUser(p);
 					
 					MessageDialog.openInformation( parent.getShell(), "Info", "Der Nutzer " + txtUsername.getText() +" wurde angelegt");
 					
