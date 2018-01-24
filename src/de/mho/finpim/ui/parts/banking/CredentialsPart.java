@@ -196,11 +196,6 @@ public class CredentialsPart
 		// Alle Werte für die Banken, Key ist der Name der Bank, Walue die Werte als HashMap
         HashMap <String, Map> complete = new HashMap<>(); 
         
-        
-        // Leere ArrayList als Platzhalter in den Context
-        banks = new ArrayList<>();
-        app.getContext().set(GlobalValues.USER_BANKS, banks);
-        
 		try 
 		{
 			url = new URL("platform:/plugin/mhFinPim/files/blz.properties");
