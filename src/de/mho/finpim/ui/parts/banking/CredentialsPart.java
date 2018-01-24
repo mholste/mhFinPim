@@ -227,5 +227,6 @@ public class CredentialsPart
 		}
 		
 		data.setBankingListValues(suggestion, complete);
+		data.initUserBanks();
 	}
 }
