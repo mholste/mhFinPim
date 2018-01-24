@@ -40,7 +40,6 @@ public class CredentialsPart
 {
 	private String user;	
 	private String pwd;
-	private String workDirectory = "";
 	private ArrayList<Bank> banks;
 
 	@Inject 
@@ -59,7 +58,7 @@ public class CredentialsPart
 		data.hello();
 		Map<String, String> l = app.getProperties(); //Werte aus Application.e4xmi
 		System.out.println(l.toString());
-		this.distributeBankValues();
+		this.distributeBankValues(data);
 		
 		// Layout
 		GridLayout layout = new GridLayout(3, false);
@@ -188,11 +187,13 @@ public class CredentialsPart
 	/**
 	 * Werte aus blz.properties in Liste für Vorschläge in kommender Maske eingefuegt.
 	 */
-	public void distributeBankValues()
+	public void distributeBankValues(IPlatformDataService data)
 	{
 		URL url;
 		String line;
+		// ArraList mit den Vorschlägen, nur bestehend aus Bankname und Sitz der Bank 
 		ArrayList<String> suggestion = new ArrayList<>();
+		// Alle Werte für die Banken, Key ist der Name der Bank, Walue die Werte als HashMap
         HashMap <String, Map> complete = new HashMap<>(); 
         
         
@@ -230,7 +231,6 @@ public class CredentialsPart
 		    e.printStackTrace();
 		}
 		
-		app.getContext().set(GlobalValues.SUGGESTION, suggestion);
-		app.getContext().set(GlobalValues.BANK_LIST, complete);
+		data.setBankingListValues(suggestion, complete);
 	}
 }

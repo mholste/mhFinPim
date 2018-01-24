@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.persistence.model.Person;
 import de.mho.finpim.service.IFinPimPersistence;
+import de.mho.finpim.service.IPlatformDataService;
 import de.mho.finpim.service.IServiceValues;
 import de.mho.finpim.util.GlobalValues;
 
@@ -61,10 +62,10 @@ public class NewBankPart
 	MApplication app;
 	
 	@PostConstruct
-	public void createControls(Composite parent,  IFinPimPersistence service)
+	public void createControls(Composite parent,  IFinPimPersistence service,  IPlatformDataService data)
 	{
-		HashMap <String, Map> allValues = (HashMap<String, Map>) app.getContext().get(GlobalValues.BANK_LIST);
-		ArrayList<String> suggest = (ArrayList<String>) app.getContext().get(GlobalValues.SUGGESTION);
+		HashMap <String, Map> allValues = data.getBankList();
+		ArrayList<String> suggest = data.getSuggestions();
 		String[] suggestArray = new String[suggest.size()];
 		suggestArray = suggest.toArray(suggestArray);
 		
