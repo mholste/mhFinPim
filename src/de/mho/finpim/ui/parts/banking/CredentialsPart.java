@@ -159,8 +159,8 @@ public class CredentialsPart
 		        		warningMsg = "Das Passwort ist nicht korrekt.";
 		        }
 		        if (warningMsg.equals(""))
-		        {		        	
-		        	data.setUser(service.getUser(user));
+		        {	
+		        	data.initBanking(service.getBanks(user), service.getUser(user));
 		        	//TODO anzeige bestehende konten oder neuer user
 		        	partService.showPart("mhfinpim.part.overview", PartState.ACTIVATE);		        	
 		        	partService.showPart("mhfinpim.part.left_top", PartState.VISIBLE);
@@ -227,6 +227,5 @@ public class CredentialsPart
 		}
 		
 		data.setBankingListValues(suggestion, complete);
-		data.initUserBanks();
 	}
 }
