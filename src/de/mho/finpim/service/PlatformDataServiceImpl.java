@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.mho.finpim.persistence.model.Account;
 import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.persistence.model.Person;
 
@@ -20,6 +21,8 @@ public class PlatformDataServiceImpl implements IPlatformDataService
 	private ArrayList<Bank> userBanklist;
 	/** Die aktuell vedrwendete Bank des Nutzers */
 	private Bank activeBank;
+	/** Liste der Konten des Nutzers */
+	private ArrayList<Account> userAccounts;
 	
 	@Override
 	public void hello() 
@@ -91,7 +94,11 @@ public class PlatformDataServiceImpl implements IPlatformDataService
 	{
 		if (this.userBanklist == null)
 		{
-			userBanklist = new ArrayList<>();
+			userBanklist = new ArrayList<Bank>();
+		}
+		if (this.userAccounts == null)
+		{
+			userAccounts = new ArrayList<Account>();
 		}
 		this.user = user;
 		this.userBanklist = (ArrayList<Bank>) bank;
