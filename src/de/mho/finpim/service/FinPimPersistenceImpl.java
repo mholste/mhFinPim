@@ -125,10 +125,21 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 	}
 	
 	@Override
+	public List<Bank> getBanks(String user) 
+	{
+		EntityManager em = Activator.getEntityManager();
+		
+		List<Person> persons = (List<Person>) em.createQuery("SELECT p FROM Person p WHERE p.uName=:arg")
+				.setParameter("arg", user).getResultList();
+		em.close();		
+		
+		return persons.get(0).getBanks();
+	}
+
+	@Override
 	public ArrayList<Account> persistAccounts(List<HashMap> accounts, Bank b)
 	{				
 		ArrayList<Account> bankAccounts = new ArrayList<Account>();
-		Person p = b.getPerson();
 		EntityManager em = Activator.getEntityManager();
 		
 		for (HashMap accInfo : accounts)
@@ -136,7 +147,6 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 			em.getTransaction().begin();
 			Account acc = new Account();
 			acc.setBank(b);
-			acc.setPerson(p);
 			acc.setBic((String) accInfo.get(GlobalValues.ACC_BIC));
 			acc.setAccNo((String) accInfo.get(GlobalValues.ACC_NO));
 			acc.setBlz((String) accInfo.get(GlobalValues.ACC_BLZ));
@@ -156,18 +166,6 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 	}
 
 	@Override
-	public List<Bank> getBanks(String user) 
-	{
-		EntityManager em = Activator.getEntityManager();
-		
-		List<Person> persons = (List<Person>) em.createQuery("SELECT p FROM Person p WHERE p.uName=:arg")
-				.setParameter("arg", user).getResultList();
-		em.close();		
-		
-		return persons.get(0).getBanks();
-	}
-
-	@Override
 	public Person getUser(String username) 
 	{
 		EntityManager em = Activator.getEntityManager();
@@ -176,5 +174,16 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 				.setParameter("arg", username).getSingleResult();
 		return p;
 	}
+	
 
+	@Override
+	public ArrayList<Account> getAccounts(Person person) 
+	{
+		EntityManager em = Activator.getEntityManager();
+		
+		List l = em.createQuery("SELECT a FROM Account a WHERE a.person=:arg").
+		setParameter("arg", person).getResultList();
+		
+		return (ArrayList<Account>) l;
+	}
 }

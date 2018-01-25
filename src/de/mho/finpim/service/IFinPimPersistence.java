@@ -21,4 +21,6 @@ public interface IFinPimPersistence
 	public List<Bank> getBanks(String user);
 	
 	public Person getUser(String username);
+	
+	public ArrayList<Account> getAccounts(Person person);
 }
