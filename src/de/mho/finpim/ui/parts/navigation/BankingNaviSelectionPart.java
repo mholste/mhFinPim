@@ -13,6 +13,7 @@ import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.persistence.model.Person;
 import de.mho.finpim.service.IFinPimPersistence;
 import de.mho.finpim.service.IServiceValues;
+import de.mho.finpim.service.PlatformDataServiceImpl;
 import de.mho.finpim.util.GlobalValues;
 
 import org.eclipse.swt.layout.RowLayout;
@@ -48,7 +49,9 @@ public class BankingNaviSelectionPart
 			@Override
 			public void widgetSelected(SelectionEvent e) 
 			{	
-				List<Bank> banks = service.getBanks(user.getUName());
+				/*
+				Person p = 
+				List<Bank> banks = service.getCustomerRelations(user.getUName());
 				if (banks.size() == 0)
 				{
 					MessageDialog.openWarning( parent.getShell(), "Achtung", "Bitte zunächst eine Bankverbindung anlegen.");
@@ -59,6 +62,7 @@ public class BankingNaviSelectionPart
 					app.getContext().set(GlobalValues.USER_BANKS, bankList);
 					app.getContext().set(GlobalValues.BANK_AKTIV, 0);
 				}
+				*/
 				partService.showPart("mhfinpim.part.bankaccselection", PartState.ACTIVATE);	
 			}
 		});

@@ -160,7 +160,7 @@ public class CredentialsPart
 		        if (warningMsg.equals(""))
 		        {	
 		        	data.setUser(service.getUser(user));
-		        	data.setActiveBank(service.getBanks(user).get(0));
+		        	//data.setActiveRelation(service.getCustomerRelations(user).get(0));
 		        	
 		        	partService.showPart("mhfinpim.part.overview", PartState.ACTIVATE);		        	
 		        	partService.showPart("mhfinpim.part.left_top", PartState.VISIBLE);

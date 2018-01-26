@@ -10,11 +10,13 @@ import org.kapott.hbci.manager.HBCIUtilsInternal;
 import org.kapott.hbci.passport.HBCIPassport;
 
 import de.mho.finpim.persistence.model.Bank;
+import de.mho.finpim.persistence.model.CustomerRelation;
 
 public class HBCICallbackFinPim extends HBCICallbackConsole 
 {
 	protected Hashtable<HBCIPassport, Hashtable<String, Object>> passports;
 	private Bank bank;
+	private CustomerRelation cr;
     
     public HBCICallbackFinPim()
     {
@@ -22,11 +24,12 @@ public class HBCICallbackFinPim extends HBCICallbackConsole
         this.passports = new Hashtable<HBCIPassport, Hashtable<String, Object>>();
     }
     
-    public HBCICallbackFinPim(Bank bank)
+    public HBCICallbackFinPim(CustomerRelation cr)
     {
         super();
         this.passports = new Hashtable<HBCIPassport, Hashtable<String, Object>>();
-        this.bank = bank;
+        this.bank = cr.getBank();
+        this.cr = cr;
     }
     
 	public void callback(final HBCIPassport passport, int reason, String msg, int datatype, StringBuffer retData)
@@ -75,18 +78,19 @@ public class HBCICallbackFinPim extends HBCICallbackConsole
                  retData.replace(0, retData.length(), bank.getAccessCode());
                  break;
         	 case NEED_CUSTOMERID:
-                 retData.replace(0, retData.length(), bank.getCustomerId());
+        		 //TODO kundennummer setzen
+                 retData.replace(0, retData.length(), cr.getCustomerId());
                  break;
         	case NEED_PASSPHRASE_LOAD:
-        		retData.replace(0,retData.length(),bank.getPIN());
+        		retData.replace(0,retData.length(), cr.getPIN());
         	case NEED_PASSPHRASE_SAVE:
-        		retData.replace(0,retData.length(),bank.getPIN());
+        		retData.replace(0,retData.length(),cr.getPIN());
         		break;
         	case NEED_COUNTRY:
         		retData.replace(0,retData.length(), "DE");                
                 break;
         	case NEED_PT_PIN:
-        		if (bank.getPIN() == null || bank.getPIN().equals(""))
+        		if (bank.getPIN() == null || cr.getPIN().equals(""))
         		{     		
         			InputDialog id = new InputDialog(Display.getCurrent().getActiveShell(), 
         					"PIN", "Bitte PIN eingeben", "", null);
@@ -97,7 +101,7 @@ public class HBCICallbackFinPim extends HBCICallbackConsole
         		}
         		else
         		{
-        			retData.replace(0,retData.length(), bank.getPIN());
+        			retData.replace(0,retData.length(), cr.getPIN());
         		}
         		break;
         	case NEED_FILTER:

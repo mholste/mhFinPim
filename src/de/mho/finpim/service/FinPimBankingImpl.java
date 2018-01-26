@@ -25,6 +25,7 @@ import org.kapott.hbci.structures.Value;
 
 import de.mho.finpim.persistence.model.Account;
 import de.mho.finpim.persistence.model.Bank;
+import de.mho.finpim.persistence.model.CustomerRelation;
 import de.mho.finpim.util.GlobalValues;
 import de.mho.finpim.util.HBCICallbackFinPim;
 
@@ -35,9 +36,9 @@ public class FinPimBankingImpl implements IFinPimBanking
 	File passportFile;
 	
 	@Override
-	public ArrayList fetchAccounts(Bank b)
+	public ArrayList fetchAccounts(CustomerRelation cr)
 	{
-		HBCIPassport passport = initBanking(b);
+		HBCIPassport passport = initBanking(cr);
 		handle = new HBCIHandler(VERSION.getId(),passport);
 		
         Konto[] konten = passport.getAccounts();         
@@ -65,7 +66,7 @@ public class FinPimBankingImpl implements IFinPimBanking
 	public Object getAccountBalace(Account acc) 
 	{
 		Bank b = acc.getBank();
-		HBCIPassport passport = initBanking(b);
+		HBCIPassport passport = initBanking(null);
 		handle = new HBCIHandler(VERSION.getId(),passport);
 		
 		Konto k = passport.getAccount(acc.getAccNo());
@@ -92,7 +93,7 @@ public class FinPimBankingImpl implements IFinPimBanking
 	@Override
 	public Object getAccountBalance(String accNo, Bank b) 
 	{
-		HBCIPassport passport = initBanking(b);
+		HBCIPassport passport = initBanking(null);
 		handle = new HBCIHandler(VERSION.getId(),passport);
 		
 		Konto k = passport.getAccount(accNo);
@@ -114,10 +115,10 @@ public class FinPimBankingImpl implements IFinPimBanking
 		return null;
 	}
 	
-	private HBCIPassport initBanking(Bank b)
+	private HBCIPassport initBanking(CustomerRelation cr)
 	{
 		Properties props = new Properties();
-		HBCIUtils.init(props, new HBCICallbackFinPim(b));
+		HBCIUtils.init(props, new HBCICallbackFinPim(cr));
 		
 		passportFile = new File("/opt/FP/PP.dat");
 		HBCIUtils.setParam("client.passport.default","PinTan"); // Legt als Verfahren PIN/TAN fest.
@@ -126,7 +127,7 @@ public class FinPimBankingImpl implements IFinPimBanking
 	    
 	    HBCIPassport passport = AbstractHBCIPassport.getInstance();
 	    passport.setCountry("DE");
-	    BankInfo info = HBCIUtils.getBankInfo(b.getBlz());
+	    BankInfo info = HBCIUtils.getBankInfo(cr.getBank().getBlz());
 	    passport.setHost(info.getPinTanAddress());
 	    passport.setPort(443);
 	    passport.setFilterType("Base64");

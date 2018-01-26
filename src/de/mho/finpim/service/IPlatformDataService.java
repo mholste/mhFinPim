@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import de.mho.finpim.persistence.model.Bank;
+import de.mho.finpim.persistence.model.CustomerRelation;
 import de.mho.finpim.persistence.model.Person;
 
 public interface IPlatformDataService 
@@ -33,7 +34,7 @@ public interface IPlatformDataService
 	
 	public void addUserBank(Bank b);
 	
-	public void setActiveBank(Bank b);
+	public void setActiveRelation(Bank b);
 	
-	public Bank getActiveBank();
+	public CustomerRelation getActiveRelation();
 }

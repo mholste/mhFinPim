@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import de.mho.finpim.lifecycle.Activator;
 import de.mho.finpim.persistence.model.Account;
 import de.mho.finpim.persistence.model.Bank;
+import de.mho.finpim.persistence.model.CustomerRelation;
 import de.mho.finpim.persistence.model.Person;
 import de.mho.finpim.util.GlobalValues;
 
@@ -104,18 +105,28 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		b.setLocation((String)values.get(IServiceValues.LOCATION));
 		b.setBlz((String)values.get(IServiceValues.BLZ));
 		b.setBic((String)values.get(IServiceValues.BIC));
-		b.setAccessCode((String)values.get(IServiceValues.ACCESS));
-		b.setPIN((String)values.get(IServiceValues.PIN));
+		//b.setAccessCode((String)values.get(IServiceValues.ACCESS));
+		//b.setPIN((String)values.get(IServiceValues.PIN));
 		b.setHost((String)values.get(IServiceValues.URL));
-		b.setCustomerId((String)values.get(IServiceValues.CUST_ID));
-		b.setPerson(p);
+		//b.setCustomerId((String)values.get(IServiceValues.CUST_ID));
+		//b.setPerson(p);
 		
 		em.persist(b);
-		em.getTransaction().commit();				
+		em.getTransaction().commit();	
 		
 		em.getTransaction().begin();
-		p.addBank(b);
-		em.persist(b);
+		CustomerRelation cr = new CustomerRelation();
+		cr.setCustomerId((String)values.get(IServiceValues.CUST_ID));
+		cr.setAccessCode((String)values.get(IServiceValues.ACCESS));
+		cr.setPIN((String)values.get(IServiceValues.PIN));
+		cr.setPerson(p);
+		cr.setBank(b);
+		em.persist(cr);
+		em.getTransaction().commit();	
+		
+		em.getTransaction().begin();
+		p.addCustomerRelation(cr);
+		em.persist(p);
 		em.getTransaction().commit();
 		
 		em.close();
@@ -125,7 +136,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 	}
 	
 	@Override
-	public List<Bank> getBanks(String user) 
+	public List<CustomerRelation> getCustomerRelations(String user) 
 	{
 		EntityManager em = Activator.getEntityManager();
 		
@@ -133,20 +144,21 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 				.setParameter("arg", user).getResultList();
 		em.close();		
 		
-		return persons.get(0).getBanks();
+		return persons.get(0).getCustomerRelations();
 	}
 
 	@Override
-	public ArrayList<Account> persistAccounts(List<HashMap> accounts, Bank b)
-	{				
+	public ArrayList<Account> persistAccounts(List<HashMap> accounts, CustomerRelation cr)
+	{		
 		ArrayList<Account> bankAccounts = new ArrayList<Account>();
+		Person p= cr.getPerson();
 		EntityManager em = Activator.getEntityManager();
 		
 		for (HashMap accInfo : accounts)
 		{
 			em.getTransaction().begin();
 			Account acc = new Account();
-			acc.setBank(b);
+			acc.setBank(cr.getBank());
 			acc.setBic((String) accInfo.get(GlobalValues.ACC_BIC));
 			acc.setAccNo((String) accInfo.get(GlobalValues.ACC_NO));
 			acc.setBlz((String) accInfo.get(GlobalValues.ACC_BLZ));
@@ -157,8 +169,14 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 			em.persist(acc);
 			em.getTransaction().commit();
 			bankAccounts.add(acc);
+			em.getTransaction().begin();
+			p.addAccount(acc);
+			em.persist(p);
+			em.getTransaction().commit();
 			acc = null;
 		}
+		
+		
 		
 		em.close();
 				
@@ -181,9 +199,9 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 	{
 		EntityManager em = Activator.getEntityManager();
 		
-		List l = em.createQuery("SELECT a FROM Account a WHERE a.person=:arg").
-		setParameter("arg", person).getResultList();
+		ArrayList l = new ArrayList<Account> (em.createQuery("SELECT a FROM Account a WHERE a.person=:arg").
+		setParameter("arg", person).getResultList());
 		
-		return (ArrayList<Account>) l;
+		return l;
 	}
 }

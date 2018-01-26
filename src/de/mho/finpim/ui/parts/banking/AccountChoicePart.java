@@ -35,7 +35,7 @@ public class AccountChoicePart
 			IFinPimPersistence persistence, IPlatformDataService data) 
 	{
 		Person user = data.getUser();
-		List l = user.getBanks();
+		//List l = user.getBanks();
 		accounts = persistence.getAccounts(user);
 		parent.setLayout(new GridLayout(2, false));
 		

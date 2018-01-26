@@ -216,7 +216,7 @@ public class NewBankPart
 				bankValues.put(IServiceValues.USERNAME, user);
 				bankValues.put(IServiceValues.CUST_ID, txtCust.getText());
 				Bank bank = service.persistBank(bankValues);
-				data.setActiveBank(bank);
+				data.setActiveRelation(bank);
 				
 				MessageDialog.openInformation( parent.getShell(), "Info", "Die Bankverbindung wurde "
 						+ "angelegt");

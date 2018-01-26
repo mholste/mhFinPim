@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import de.mho.finpim.persistence.model.Bank;
+import de.mho.finpim.persistence.model.CustomerRelation;
 import de.mho.finpim.service.IFinPimBanking;
 import de.mho.finpim.service.IFinPimPersistence;
 import de.mho.finpim.service.IPlatformDataService;
@@ -52,15 +53,15 @@ public class BankAccountSelectionPart
 	private TableViewer viewer;
 	private HashMap<String, Boolean> saveAccounts;
 	private ArrayList<HashMap> accounts;
-	private Bank activeBank;
+	private CustomerRelation activeRelation;
 	
 	@PostConstruct
 	public void createControls(Composite parent,  IFinPimBanking service, 
 			IFinPimPersistence persistence, IPlatformDataService data)
 	{
 		saveAccounts = new HashMap<String, Boolean>();
-		activeBank = data.getActiveBank(); 
-		accounts = service.fetchAccounts(activeBank);
+		activeRelation = data.getActiveRelation(); 
+		accounts = service.fetchAccounts(activeRelation);
 		
 		parent.setLayout(new GridLayout(8, false));
 		
@@ -281,7 +282,7 @@ public class BankAccountSelectionPart
 			}
 		}
 		
-		persistence.persistAccounts(accounts, activeBank);
+		persistence.persistAccounts(accounts, activeRelation);
 	}
 	
 	@PreDestroy
@@ -289,7 +290,7 @@ public class BankAccountSelectionPart
 	{
 		saveAccounts = null;
 		accounts = null;
-		activeBank = null;
+		activeRelation = null;
 	}
 
 }

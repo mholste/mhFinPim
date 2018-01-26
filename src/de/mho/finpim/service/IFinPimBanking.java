@@ -4,11 +4,12 @@ import java.util.ArrayList;
 
 import de.mho.finpim.persistence.model.Account;
 import de.mho.finpim.persistence.model.Bank;
+import de.mho.finpim.persistence.model.CustomerRelation;
 
 public interface IFinPimBanking 
 {
 
-	public ArrayList fetchAccounts(Bank b);
+	public ArrayList fetchAccounts(CustomerRelation cr);
 	
 	public Object getAccountBalace(Account acc);
 	

@@ -6,6 +6,7 @@ import java.util.List;
 
 import de.mho.finpim.persistence.model.Account;
 import de.mho.finpim.persistence.model.Bank;
+import de.mho.finpim.persistence.model.CustomerRelation;
 import de.mho.finpim.persistence.model.Person;
 
 public class PlatformDataServiceImpl implements IPlatformDataService 
@@ -19,8 +20,9 @@ public class PlatformDataServiceImpl implements IPlatformDataService
 	private Person user;
 	/** Eine Liste der Banken des aktuellen Nutzers */
 	private ArrayList<Bank> userBanklist;
-	/** Die aktuell vedrwendete Bank des Nutzers */
-	private Bank activeBank;
+	/** Die aktuell vedwendete Kundenbeziehung des Nutzers */
+	private CustomerRelation activeRelation;
+	//private Bank activeBank;
 	/** Liste der Konten des Nutzers */
 	private ArrayList<Account> userAccounts;
 	
@@ -78,15 +80,15 @@ public class PlatformDataServiceImpl implements IPlatformDataService
 	}
 
 	@Override
-	public void setActiveBank(Bank b) 
+	public void setActiveRelation(Bank b) 
 	{
-		this.activeBank = b;
+		this.activeRelation = user.getCustomerRelation(b);
 	}
 
 	@Override
-	public Bank getActiveBank() 
+	public CustomerRelation getActiveRelation() 
 	{
-		return this.activeBank;
+		return this.activeRelation;
 	}
 
 	@Override
@@ -102,6 +104,6 @@ public class PlatformDataServiceImpl implements IPlatformDataService
 		}
 		this.user = user;
 		this.userBanklist = (ArrayList<Bank>) bank;
-		this.activeBank = bank.get(0);
+		//this.activeBank = bank.get(0);
 	}
 }
