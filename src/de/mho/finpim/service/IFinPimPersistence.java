@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import de.mho.finpim.persistence.model.Account;
-import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.persistence.model.CustomerRelation;
 import de.mho.finpim.persistence.model.Person;
 
@@ -15,7 +14,7 @@ public interface IFinPimPersistence
 	
 	public Person persistPerson(HashMap values);	
 	
-	public Bank persistBank(HashMap values); 
+	public HashMap<String, Object> persistBank(HashMap values); 
 	
 	public ArrayList<Account> persistAccounts(List<HashMap> accounts, CustomerRelation cr);
 	

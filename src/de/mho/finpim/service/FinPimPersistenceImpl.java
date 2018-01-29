@@ -91,7 +91,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 	}
 	
 	@Override
-	public Bank persistBank(HashMap values)
+	public HashMap<String, Object> persistBank(HashMap values)
 	{
 		EntityManager em = Activator.getEntityManager();
 		
@@ -112,9 +112,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		//b.setPerson(p);
 		
 		em.persist(b);
-		em.getTransaction().commit();	
 		
-		em.getTransaction().begin();
 		CustomerRelation cr = new CustomerRelation();
 		cr.setCustomerId((String)values.get(IServiceValues.CUST_ID));
 		cr.setAccessCode((String)values.get(IServiceValues.ACCESS));
@@ -122,17 +120,19 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		cr.setPerson(p);
 		cr.setBank(b);
 		em.persist(cr);
-		em.getTransaction().commit();	
+		em.flush();
+		//p.addCustomerRelation(cr);
+		//em.createQuery("UPDATE Person p SET p.)
 		
-		em.getTransaction().begin();
-		p.addCustomerRelation(cr);
-		em.persist(p);
 		em.getTransaction().commit();
 		
 		em.close();
 		
+		HashMap<String, Object> returnMap = new HashMap<>();
+		returnMap.put("Bank", b);
+		returnMap.put("Relation", cr);
 		
-		return b;
+		return returnMap;
 	}
 	
 	@Override
@@ -151,7 +151,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 	public ArrayList<Account> persistAccounts(List<HashMap> accounts, CustomerRelation cr)
 	{		
 		ArrayList<Account> bankAccounts = new ArrayList<Account>();
-		Person p= cr.getPerson();
+		Person p = cr.getPerson();
 		EntityManager em = Activator.getEntityManager();
 		
 		for (HashMap accInfo : accounts)
@@ -166,12 +166,13 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 			acc.setCurrency((String) accInfo.get(GlobalValues.ACC_CURRENCY));
 			acc.setIban((String) accInfo.get(GlobalValues.ACC_IBAN));
 			acc.setType((String) accInfo.get(GlobalValues.ACC_TYPE));
+			acc.setPerson(p);
 			em.persist(acc);
-			em.getTransaction().commit();
+			
 			bankAccounts.add(acc);
-			em.getTransaction().begin();
-			p.addAccount(acc);
-			em.persist(p);
+			
+			//p.addAccount(acc);
+			em.flush();
 			em.getTransaction().commit();
 			acc = null;
 		}

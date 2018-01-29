@@ -34,7 +34,7 @@ public interface IPlatformDataService
 	
 	public void addUserBank(Bank b);
 	
-	public void setActiveRelation(Bank b);
+	public void setActiveRelation(CustomerRelation cr);
 	
 	public CustomerRelation getActiveRelation();
 }

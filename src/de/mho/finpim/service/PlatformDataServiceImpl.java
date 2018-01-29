@@ -80,9 +80,9 @@ public class PlatformDataServiceImpl implements IPlatformDataService
 	}
 
 	@Override
-	public void setActiveRelation(Bank b) 
+	public void setActiveRelation(CustomerRelation cr) 
 	{
-		this.activeRelation = user.getCustomerRelation(b);
+		this.activeRelation = cr;
 	}
 
 	@Override

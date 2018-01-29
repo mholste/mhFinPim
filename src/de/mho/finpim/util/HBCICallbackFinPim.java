@@ -75,7 +75,7 @@ public class HBCICallbackFinPim extends HBCICallbackConsole
                  retData.replace(0, retData.length(), "3000");
                  break;
         	 case NEED_USERID:
-                 retData.replace(0, retData.length(), bank.getAccessCode());
+                 retData.replace(0, retData.length(), cr.getAccessCode());
                  break;
         	 case NEED_CUSTOMERID:
         		 //TODO kundennummer setzen
@@ -90,7 +90,7 @@ public class HBCICallbackFinPim extends HBCICallbackConsole
         		retData.replace(0,retData.length(), "DE");                
                 break;
         	case NEED_PT_PIN:
-        		if (bank.getPIN() == null || cr.getPIN().equals(""))
+        		if (cr.getPIN() == null || cr.getPIN().equals(""))
         		{     		
         			InputDialog id = new InputDialog(Display.getCurrent().getActiveShell(), 
         					"PIN", "Bitte PIN eingeben", "", null);

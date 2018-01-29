@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import org.eclipse.swt.widgets.Composite;
 
 import de.mho.finpim.persistence.model.Bank;
+import de.mho.finpim.persistence.model.CustomerRelation;
 import de.mho.finpim.service.IFinPimPersistence;
 import de.mho.finpim.service.IPlatformDataService;
 import de.mho.finpim.service.IServiceValues;
@@ -215,8 +216,8 @@ public class NewBankPart
 				bankValues.put(IServiceValues.PIN, txtPIN.getText());
 				bankValues.put(IServiceValues.USERNAME, user);
 				bankValues.put(IServiceValues.CUST_ID, txtCust.getText());
-				Bank bank = service.persistBank(bankValues);
-				data.setActiveRelation(bank);
+				HashMap<String, Object> bankRelation = service.persistBank(bankValues);
+				data.setActiveRelation((CustomerRelation) bankRelation.get("Relation"));
 				
 				MessageDialog.openInformation( parent.getShell(), "Info", "Die Bankverbindung wurde "
 						+ "angelegt");
