@@ -6,12 +6,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
 import org.kapott.hbci.GV.HBCIJob;
-import org.kapott.hbci.GV_Result.GVRKUms;
 import org.kapott.hbci.GV_Result.GVRSaldoReq;
 import org.kapott.hbci.manager.BankInfo;
 import org.kapott.hbci.manager.HBCIHandler;
@@ -36,16 +34,16 @@ public class FinPimBankingImpl implements IFinPimBanking
 	File passportFile;
 	
 	@Override
-	public ArrayList fetchAccounts(CustomerRelation cr)
+	public ArrayList<HashMap<String, String>> fetchAccounts(CustomerRelation cr)
 	{
 		HBCIPassport passport = initBanking(cr);
 		handle = new HBCIHandler(VERSION.getId(),passport);
 		
         Konto[] konten = passport.getAccounts();         
-        List<Map<String, String>> listAccounts = new ArrayList<Map<String, String>>();
+        ArrayList<HashMap<String, String>> listAccounts = new ArrayList<HashMap<String, String>>();
         for (Konto k : konten)
         {
-        	Map<String, String> account = new HashMap<>();
+        	Map<String, String> account = new HashMap<String, String>();
         	account.put(GlobalValues.ACC_BIC, k.bic);
         	account.put(GlobalValues.ACC_BLZ, k.blz);
         	account.put(GlobalValues.ACC_COUNTRY, k.country);
@@ -55,17 +53,16 @@ public class FinPimBankingImpl implements IFinPimBanking
         	account.put(GlobalValues.ACC__NAME, k.name);
         	account.put(GlobalValues.ACC_NO, k.number);
         	account.put(GlobalValues.ACC_TYPE, k.type);
-        	listAccounts.add(account);        	
+        	listAccounts.add((HashMap<String, String>) account);        	
         }
         
         closeBanking(handle);
-        return (ArrayList) listAccounts;                
+        return listAccounts;                
 	}
 
 	@Override
 	public Object getAccountBalace(Account acc) 
 	{
-		Bank b = acc.getBank();
 		HBCIPassport passport = initBanking(null);
 		handle = new HBCIHandler(VERSION.getId(),passport);
 		
