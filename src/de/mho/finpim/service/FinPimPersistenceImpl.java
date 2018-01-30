@@ -36,7 +36,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public HashMap checkCedentials(String user, String pwd) 
+	public HashMap<String, Object> checkCedentials(String user, String pwd) 
 	{	
 		int checkCredential;
 		HashMap<String,Object> retVal= new HashMap<String, Object>();
@@ -72,7 +72,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 	}
 
 	@Override
-	public Person persistPerson(HashMap values) 
+	public Person persistPerson(HashMap<String, String> values) 
 	{				
 		EntityManager em = Activator.getEntityManager();
 		em.getTransaction().begin();
@@ -91,7 +91,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 	}
 	
 	@Override
-	public HashMap<String, Object> persistBank(HashMap values)
+	public HashMap<String, Object> persistBank(HashMap<String, String> values)
 	{
 		EntityManager em = Activator.getEntityManager();
 		
@@ -148,13 +148,13 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 	}
 
 	@Override
-	public ArrayList<Account> persistAccounts(List<HashMap> accounts, CustomerRelation cr)
+	public ArrayList<Account> persistAccounts(List<HashMap<String, String>> accounts, CustomerRelation cr)
 	{		
 		ArrayList<Account> bankAccounts = new ArrayList<Account>();
 		Person p = cr.getPerson();
 		EntityManager em = Activator.getEntityManager();
 		
-		for (HashMap accInfo : accounts)
+		for (HashMap<String, String> accInfo : accounts)
 		{
 			em.getTransaction().begin();
 			Account acc = new Account();
@@ -200,7 +200,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 	{
 		EntityManager em = Activator.getEntityManager();
 		
-		ArrayList l = new ArrayList<Account> (em.createQuery("SELECT a FROM Account a WHERE a.person=:arg").
+		ArrayList<Account> l = new ArrayList<Account> (em.createQuery("SELECT a FROM Account a WHERE a.person=:arg").
 		setParameter("arg", person).getResultList());
 		
 		return l;

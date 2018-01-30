@@ -10,13 +10,13 @@ import de.mho.finpim.persistence.model.Person;
 
 public interface IFinPimPersistence 
 {
-	public HashMap checkCedentials(String user, String pwd);
+	public HashMap<String, Object> checkCedentials(String user, String pwd);
 	
-	public Person persistPerson(HashMap values);	
+	public Person persistPerson(HashMap<String, String> values);	
 	
-	public HashMap<String, Object> persistBank(HashMap values); 
+	public HashMap<String, Object> persistBank(HashMap<String, String> values); 
 	
-	public ArrayList<Account> persistAccounts(List<HashMap> accounts, CustomerRelation cr);
+	public ArrayList<Account> persistAccounts(List<HashMap<String, String>> accounts, CustomerRelation cr);
 	
 	public List<CustomerRelation> getCustomerRelations(String user);
 	
