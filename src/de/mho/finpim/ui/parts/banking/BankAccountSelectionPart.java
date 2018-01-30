@@ -52,7 +52,7 @@ public class BankAccountSelectionPart
 	private Table table;
 	private TableViewer viewer;
 	private HashMap<String, Boolean> saveAccounts;
-	private ArrayList<HashMap> accounts;
+	private ArrayList<HashMap<String, String>> accounts;
 	private CustomerRelation activeRelation;
 	
 	@PostConstruct
@@ -271,9 +271,9 @@ public class BankAccountSelectionPart
 	
 	private void persist(IFinPimPersistence persistence)
 	{
-		ArrayList<HashMap> removeAccounts = (ArrayList<HashMap>) accounts.clone();
+		ArrayList<HashMap<String, String>> removeAccounts = (ArrayList<HashMap<String, String>>) accounts.clone();
 		
-		for (HashMap m : removeAccounts)
+		for (HashMap<String, String> m : removeAccounts)
 		{	
 			if ((!saveAccounts.containsKey(m.get(GlobalValues.ACC_NO))) 
 					|| (!saveAccounts.get(m.get(GlobalValues.ACC_NO)))) 

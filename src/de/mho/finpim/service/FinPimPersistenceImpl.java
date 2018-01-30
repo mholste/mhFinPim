@@ -149,7 +149,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 	}
 
 	@Override
-	public ArrayList<Account> persistAccounts(List<HashMap<String, String>> accounts, CustomerRelation cr)
+	public ArrayList<Account> persistAccounts(ArrayList<HashMap<String, String>> accounts, CustomerRelation cr)
 	{		
 		ArrayList<Account> bankAccounts = new ArrayList<Account>();
 		Person p = cr.getPerson();

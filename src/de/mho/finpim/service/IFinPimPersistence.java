@@ -16,7 +16,7 @@ public interface IFinPimPersistence
 	
 	public HashMap<String, Object> persistBank(HashMap<String, String> values); 
 	
-	public ArrayList<Account> persistAccounts(List<HashMap<String, String>> accounts, CustomerRelation cr);
+	public ArrayList<Account> persistAccounts(ArrayList<HashMap<String, String>> accounts, CustomerRelation cr);
 	
 	public List<CustomerRelation> getCustomerRelations(String user);
 	
