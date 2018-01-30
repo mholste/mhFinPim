@@ -135,6 +135,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		return returnMap;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<CustomerRelation> getCustomerRelations(String user) 
 	{
@@ -195,6 +196,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 	}
 	
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public ArrayList<Account> getAccounts(Person person) 
 	{
