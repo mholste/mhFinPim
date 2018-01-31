@@ -16,6 +16,8 @@ import de.mho.finpim.persistence.model.Person;
 import de.mho.finpim.service.IFinPimBanking;
 import de.mho.finpim.service.IFinPimPersistence;
 import de.mho.finpim.service.IPlatformDataService;
+import de.mho.finpim.ui.parts.navigation.BankingNaviSelectionPart;
+
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -37,34 +39,61 @@ public class AccountChoicePart
 		Person user = data.getUser();
 		//List l = user.getBanks();
 		accounts = persistence.getAccounts(user);
-		parent.setLayout(new GridLayout(2, false));
+		parent.setLayout(new GridLayout(8, false));
+		String bankBuffer = "";		
 		
-		Label lblNewLabel = new Label(parent, SWT.NONE);
-		lblNewLabel.setText("New Label");
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
+		for (int i = 0; i < 8; i++)
+		{
+			if (accounts.size() <= i)
+			{
+				new Label(parent, SWT.NONE);
+				continue;
+			}
+			if (bankBuffer.equalsIgnoreCase(accounts.get(i).getBank().getBankName()))
+			{
+				new Label(parent, SWT.NONE);
+			}
+			else
+			{
+				setBankLabel(parent, accounts.get(i).getBank().getBankName());
+				bankBuffer = accounts.get(i).getBank().getBankName();
+			}
+		}
 		
-		Group group = new Group(parent, SWT.NONE);
-		group.setLayout(new GridLayout(2, false));
+		for (Account acc : accounts) 
+		{
+			createGroup(parent, acc);
+		}
 		
-		Label lblNewLabel_1 = new Label(group, SWT.NONE);
-		lblNewLabel_1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		lblNewLabel_1.setText("Nummer");
-		new Label(group, SWT.NONE);
-		
-		Label lblNewLabel_2 = new Label(group, SWT.NONE);
-		lblNewLabel_2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		lblNewLabel_2.setText("Name");
-		new Label(group, SWT.NONE);
-		
-		Label lblNewLabel_3 = new Label(group, SWT.NONE);
+	}
+	
+	private void setBankLabel(Composite parent, String name)
+	{
+		Label bankLabel = new Label(parent, SWT.NONE);
+		bankLabel.setText(name);
+	}
+	
+	private void createGroup(Composite parent, Account account)
+	{
+		Group accGroup = new Group(parent, SWT.NONE);
+		accGroup.setLayout(new GridLayout(2, false));
+		Label lblAccNo = new Label(accGroup, SWT.NONE);
+		lblAccNo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblAccNo.setText(account.getAccNo());
+		new Label(accGroup, SWT.NONE);
+		Label lblName = new Label(accGroup, SWT.NONE);
+		lblName.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		//lblName.setText(account.getName());
+		lblName.setText("name");
+		new Label(accGroup, SWT.NONE);		
+		Label lblType = new Label(accGroup, SWT.NONE);
+		lblType.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblType.setText(account.getType());
+		new Label(accGroup, SWT.NONE);		
+		Label lblNewLabel_3 = new Label(accGroup, SWT.NONE);
 		lblNewLabel_3.setText("Saldo");
-		
-		Label lblNewLabel_4 = new Label(group, SWT.NONE);
+		Label lblNewLabel_4 = new Label(accGroup, SWT.NONE);
 		lblNewLabel_4.setText("123");
-		
 	}
 
 	@PreDestroy
