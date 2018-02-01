@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
+import org.omg.PortableServer.Servant;
 import org.eclipse.swt.layout.GridData;
 
 public class AccountChoicePart 
@@ -62,18 +63,20 @@ public class AccountChoicePart
 		
 		for (Account acc : accounts) 
 		{
-			createGroup(parent, acc);
+			createGroup(parent, acc, service);
 		}
 		
 	}
 	
 	private void setBankLabel(Composite parent, String name)
 	{
+		GridData gridData = new GridData(SWT.LEFT, SWT.BOTTOM, false, false, 2, 1);
 		Label bankLabel = new Label(parent, SWT.NONE);
+		bankLabel.setLayoutData(gridData);
 		bankLabel.setText(name);
 	}
 	
-	private void createGroup(Composite parent, Account account)
+	private void createGroup(Composite parent, Account account, IFinPimBanking service)
 	{
 		Group accGroup = new Group(parent, SWT.NONE);
 		accGroup.setLayout(new GridLayout(2, false));
@@ -93,7 +96,8 @@ public class AccountChoicePart
 		Label lblNewLabel_3 = new Label(accGroup, SWT.NONE);
 		lblNewLabel_3.setText("Saldo");
 		Label lblNewLabel_4 = new Label(accGroup, SWT.NONE);
-		lblNewLabel_4.setText("123");
+		Object o = service.getAccountBalace(account);
+		lblNewLabel_4.setText(o.toString());
 	}
 
 	@PreDestroy

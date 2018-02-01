@@ -84,7 +84,7 @@ public class FinPimBankingImpl implements IFinPimBanking
 	    System.out.println(s.toString()); 
 		
 				
-		return null;
+		return s;
 	}
 	
 	@Override
