@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.mho.finpim.persistence.model.Account;
 import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.persistence.model.CustomerRelation;
 import de.mho.finpim.persistence.model.Person;
 
 public interface IPlatformDataService 
 {
-	public void hello();
-	
 	// Methoden für die VerwaLtung der Bankvorschläge im UI
 	
 	public void setBankingListValues(ArrayList<String> suggest, HashMap<String, HashMap<String, String>> banks);
@@ -32,9 +31,14 @@ public interface IPlatformDataService
 	
 	public ArrayList<Bank> getUserBankList();
 	
-	public void addUserBank(Bank b);
-	
+	// Und die aktuelle Kundenbeziehung
 	public void setActiveRelation(CustomerRelation cr);
 	
 	public CustomerRelation getActiveRelation();
+	
+	// Methoden für das aktulle Konto
+	public void setActiveAccount(Account acc);
+	
+	public Account getActiveAccount();
+	
 }

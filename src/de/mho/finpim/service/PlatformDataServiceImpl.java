@@ -22,16 +22,11 @@ public class PlatformDataServiceImpl implements IPlatformDataService
 	private ArrayList<Bank> userBanklist;
 	/** Die aktuell vedwendete Kundenbeziehung des Nutzers */
 	private CustomerRelation activeRelation;
-	//private Bank activeBank;
 	/** Liste der Konten des Nutzers */
 	private ArrayList<Account> userAccounts;
+	/** Das aktuell genutzte Konto */
+	private Account activeAccount;
 	
-	@Override
-	public void hello() 
-	{
-		System.out.println("test it");
-	}
-
 	@Override
 	public void setBankingListValues(ArrayList<String> suggest, HashMap<String, HashMap<String, String>> banks) 
 	{
@@ -70,16 +65,6 @@ public class PlatformDataServiceImpl implements IPlatformDataService
 	}
 
 	@Override
-	public void addUserBank(Bank b) 
-	{
-		if (this.userBanklist == null)
-		{
-			this.userBanklist = new ArrayList<>();
-		}
-		this.userBanklist.add(b);
-	}
-
-	@Override
 	public void setActiveRelation(CustomerRelation cr) 
 	{
 		this.activeRelation = cr;
@@ -105,5 +90,17 @@ public class PlatformDataServiceImpl implements IPlatformDataService
 		this.user = user;
 		this.userBanklist = (ArrayList<Bank>) bank;
 		//this.activeBank = bank.get(0);
+	}
+
+	@Override
+	public void setActiveAccount(Account acc) 
+	{
+		this.activeAccount = acc;
+	}
+
+	@Override
+	public Account getActiveAccount() 
+	{
+		return this.activeAccount;
 	}
 }
