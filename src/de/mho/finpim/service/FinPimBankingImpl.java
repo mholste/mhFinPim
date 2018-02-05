@@ -61,9 +61,11 @@ public class FinPimBankingImpl implements IFinPimBanking
 	}
 
 	@Override
-	public Object getAccountBalace(Account acc) 
+	public String getAccountBalace(Account acc) 
 	{
-		HBCIPassport passport = initBanking(null);
+		Bank b = acc.getBank();
+		CustomerRelation cr = acc.getPerson().getCustomerRelation(b);
+		HBCIPassport passport = initBanking(cr);
 		handle = new HBCIHandler(VERSION.getId(),passport);
 		
 		Konto k = passport.getAccount(acc.getAccNo());
@@ -81,35 +83,9 @@ public class FinPimBankingImpl implements IFinPimBanking
 		GVRSaldoReq balanceResult = (GVRSaldoReq) balanceJob.getJobResult();
 		
 		Value s = balanceResult.getEntries()[0].ready.value;
-	    System.out.println(s.toString()); 
 		
-				
-		return s;
-	}
-	
-	@Override
-	public Object getAccountBalance(String accNo, Bank b) 
-	{
-		HBCIPassport passport = initBanking(null);
-		handle = new HBCIHandler(VERSION.getId(),passport);
-		
-		Konto k = passport.getAccount(accNo);
-		HBCIJob balanceJob = handle.newJob("SaldoReq");
-		balanceJob.setParam("my", k);
-		balanceJob.addToQueue();
-		
-		HBCIExecStatus status = handle.execute();
-		
-		if (!status.isOK())
-		{
-		        //TODO Scheiße!!!
-		}
-		
-		GVRSaldoReq balanceResult = (GVRSaldoReq) balanceJob.getJobResult();
-		
-		Value s = balanceResult.getEntries()[0].ready.value;
-	    System.out.println(s.toString()); 
-		return null;
+		closeBanking(handle);		
+		return s.toString();
 	}
 	
 	private HBCIPassport initBanking(CustomerRelation cr)

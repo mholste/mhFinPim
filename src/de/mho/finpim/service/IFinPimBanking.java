@@ -12,8 +12,5 @@ public interface IFinPimBanking
 
 	public ArrayList<HashMap<String, String>> fetchAccounts(CustomerRelation cr);
 	
-	public Object getAccountBalace(Account acc);
-	
-	public Object getAccountBalance(String accNo, Bank b);
-
+	public String getAccountBalace(Account acc);
 }
