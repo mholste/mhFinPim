@@ -32,4 +32,18 @@ public interface GlobalValues
 	public static final String ACC_NO = "no";
 	public static final String ACC_TYPE = "typ";
 	public static final String ACCOUNTS = "konten";
+	
+	//Werte für HashMap bei Übernahme der Buchungsdaten
+	public static final String BOOKING_DATE = "BookingDate";
+	public static final String CUST_REF = "CustomerRef";
+	// Kontostand nach der Buchung
+	public static final String BALANCE = "Balance";
+	public static final String VALUE = "Value";
+	public static final String BANK_REF = "BankRef";
+	public static final String USAGE = "Usage";
+	public static final String BANK_CODE = "BankCode";
+	public static final String OPP_ACCOUNT = "OppAccount";
+	public static final String CHARGE = "Charge";
+	public static final String VALUE_DATE = "ValueDate";
+	public static final String ORG_VAL = "OrgVal";
 }
