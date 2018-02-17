@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+
 import de.mho.finpim.persistence.model.Account;
 import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.persistence.model.CustomerRelation;
@@ -40,5 +43,10 @@ public interface IPlatformDataService
 	public void setActiveAccount(Account acc);
 	
 	public Account getActiveAccount();
+	
+	// Rund um die Anzeige des Kontostands
+	public Label addLabel(Account acc, Composite parent);
+	
+	public void setAccLabelText(Account acc, String txt);
 	
 }

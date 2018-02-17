@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+
 import de.mho.finpim.persistence.model.Account;
 import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.persistence.model.CustomerRelation;
@@ -26,6 +30,8 @@ public class PlatformDataServiceImpl implements IPlatformDataService
 	private ArrayList<Account> userAccounts;
 	/** Das aktuell genutzte Konto */
 	private Account activeAccount;
+	/** Die gesammelten Labels der Kontostände */
+	private HashMap<Account, Label> labelStore;
 	
 	@Override
 	public void setBankingListValues(ArrayList<String> suggest, HashMap<String, HashMap<String, String>> banks) 
@@ -102,5 +108,25 @@ public class PlatformDataServiceImpl implements IPlatformDataService
 	public Account getActiveAccount() 
 	{
 		return this.activeAccount;
+	}
+
+	@Override
+	public Label addLabel(Account acc, Composite parent) 
+	{
+		if (labelStore == null)
+		{
+			this.labelStore = new HashMap<>(10, 1);
+		}
+		Label l = new Label (parent, SWT.NONE);
+		labelStore.put(acc, l);
+		
+		return l;
+	}
+
+	@Override
+	public void setAccLabelText(Account acc, String txt) 
+	{
+		labelStore.get(acc).setText(txt);
+		
 	}
 }
