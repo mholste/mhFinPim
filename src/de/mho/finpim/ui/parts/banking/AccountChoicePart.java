@@ -7,6 +7,9 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.core.runtime.ICoreRunnable;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.swt.widgets.Composite;
 
@@ -30,12 +33,17 @@ public class AccountChoicePart
 	@Inject
 	MApplication app;
 	
+	@Inject IPlatformDataService data;
+	
+	@Inject
+	UISynchronize sync;
+	
 	private ArrayList<Account> accounts;
 	private ArrayList<Bank> banks;
 	
 	@PostConstruct
 	public void createControls(Composite parent, IFinPimBanking service, 
-			IFinPimPersistence persistence, IPlatformDataService data) 
+			IFinPimPersistence persistence) 
 	{
 		Person user = data.getUser();
 		//List l = user.getBanks();
@@ -63,9 +71,11 @@ public class AccountChoicePart
 		
 		for (Account acc : accounts) 
 		{
-			createGroup(parent, acc, service);
+			//createGroup(parent, acc, service);
 		}
-		
+		Job balanceJob = Job.create("BalanceUpdate", (ICoreRunnable) monitor -> {
+			
+		});
 	}
 	
 	private void setBankLabel(Composite parent, String name)
@@ -80,24 +90,28 @@ public class AccountChoicePart
 	{
 		Group accGroup = new Group(parent, SWT.NONE);
 		accGroup.setLayout(new GridLayout(2, false));
+		
 		Label lblAccNo = new Label(accGroup, SWT.NONE);
 		lblAccNo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblAccNo.setText(account.getAccNo());
 		new Label(accGroup, SWT.NONE);
+		
 		Label lblName = new Label(accGroup, SWT.NONE);
 		lblName.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		//lblName.setText(account.getName());
 		lblName.setText("name");
-		new Label(accGroup, SWT.NONE);		
+		new Label(accGroup, SWT.NONE);
+		
 		Label lblType = new Label(accGroup, SWT.NONE);
 		lblType.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblType.setText(account.getType());
-		new Label(accGroup, SWT.NONE);		
-		Label lblNewLabel_3 = new Label(accGroup, SWT.NONE);
-		lblNewLabel_3.setText("Saldo");
-		Label lblNewLabel_4 = new Label(accGroup, SWT.NONE);
+		new Label(accGroup, SWT.NONE);
+		
+		Label lblBalance = new Label(accGroup, SWT.NONE);
+		lblBalance.setText("Saldo");
+		Label lblBalanceVal = data.addLabel(account, parent);
 		Object o = service.getAccountBalace(account);
-		lblNewLabel_4.setText(o.toString());
+		lblBalanceVal.setText(o.toString());
 	}
 
 	@PreDestroy
