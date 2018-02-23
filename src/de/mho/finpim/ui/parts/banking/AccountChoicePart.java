@@ -80,8 +80,8 @@ public class AccountChoicePart
 				
 				sync.asyncExec(() -> {
 					System.out.println("---------------UPDATE-----------------------");
-					Object o = service.getAccountBalace(acc); 
-					data.setAccLabelText(acc, o.toString());
+					String balance = service.getAccountBalace(acc); 
+					data.setAccLabelText(acc, balance);
 				});
 			});
 			balanceJob.schedule();
