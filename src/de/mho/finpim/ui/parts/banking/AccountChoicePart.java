@@ -71,11 +71,21 @@ public class AccountChoicePart
 		
 		for (Account acc : accounts) 
 		{
-			//createGroup(parent, acc, service);
+			createGroup(parent, acc, service);
 		}
-		Job balanceJob = Job.create("BalanceUpdate", (ICoreRunnable) monitor -> {
-			
-		});
+		
+		for (Account acc : accounts) 
+		{
+			Job balanceJob = Job.create("BalanceUpdate", (ICoreRunnable) monitor -> {
+				
+				sync.asyncExec(() -> {
+					System.out.println("---------------UPDATE-----------------------");
+					Object o = service.getAccountBalace(acc); 
+					data.setAccLabelText(acc, o.toString());
+				});
+			});
+			balanceJob.schedule();
+		}
 	}
 	
 	private void setBankLabel(Composite parent, String name)
@@ -107,11 +117,27 @@ public class AccountChoicePart
 		lblType.setText(account.getType());
 		new Label(accGroup, SWT.NONE);
 		
-		Label lblBalance = new Label(accGroup, SWT.NONE);
-		lblBalance.setText("Saldo");
-		Label lblBalanceVal = data.addLabel(account, parent);
-		Object o = service.getAccountBalace(account);
-		lblBalanceVal.setText(o.toString());
+		Label lblBalanceVal = data.addLabel(account, accGroup);
+		lblBalanceVal.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));		
+		lblBalanceVal.setText("123");
+		
+		/*
+		accGroup.addMouseListener(new MouseListener() 
+		{	
+			@Override
+			public void mouseUp(MouseEvent e) {	}
+			
+			@Override
+			public void mouseDown(MouseEvent e) { }
+		
+			@Override
+			public void mouseDoubleClick(MouseEvent e) 
+			{
+				AccountChoicePart.this.data.setActiveAccount(account);
+				service.getStatementList(account);
+			}
+		});
+		*/
 	}
 
 	@PreDestroy
