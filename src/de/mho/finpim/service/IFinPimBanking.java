@@ -13,4 +13,6 @@ public interface IFinPimBanking
 	public ArrayList<HashMap<String, String>> fetchAccounts(CustomerRelation cr);
 	
 	public String getAccountBalace(Account acc);
+	
+	public ArrayList<HashMap<String, String>> getBalanceValues(Account acc);
 }

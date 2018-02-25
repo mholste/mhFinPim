@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.kapott.hbci.GV.HBCIJob;
+import org.kapott.hbci.GV_Result.GVRKUms;
 import org.kapott.hbci.GV_Result.GVRSaldoReq;
 import org.kapott.hbci.manager.BankInfo;
 import org.kapott.hbci.manager.HBCIHandler;
@@ -86,6 +87,32 @@ public class FinPimBankingImpl implements IFinPimBanking
 		
 		closeBanking(handle);		
 		return s.toString();
+	}
+	
+	@Override
+	public ArrayList<HashMap<String, String>> getBalanceValues(Account acc) 
+	{
+		Bank b = acc.getBank();
+		CustomerRelation cr = acc.getPerson().getCustomerRelation(b);
+		HBCIPassport passport = initBanking(cr);
+		handle = new HBCIHandler(VERSION.getId(),passport);
+		
+		Konto k = passport.getAccount(acc.getAccNo());
+		HBCIJob valueJob = handle.newJob("KUmsAll");
+		valueJob.setParam("my", k);
+		valueJob.addToQueue();
+		
+		HBCIExecStatus status = handle.execute();
+		
+		if (!status.isOK())
+		{
+		        //TODO Scheiße!!!
+		}
+		
+		GVRKUms valueResult = (GVRKUms) valueJob.getJobResult();
+		valueResult.getFlatData().
+		closeBanking(handle);
+		return null;
 	}
 	
 	private HBCIPassport initBanking(CustomerRelation cr)
