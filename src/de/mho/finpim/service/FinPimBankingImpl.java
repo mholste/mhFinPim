@@ -6,11 +6,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
 import org.kapott.hbci.GV.HBCIJob;
 import org.kapott.hbci.GV_Result.GVRKUms;
+import org.kapott.hbci.GV_Result.GVRKUms.UmsLine;
 import org.kapott.hbci.GV_Result.GVRSaldoReq;
 import org.kapott.hbci.manager.BankInfo;
 import org.kapott.hbci.manager.HBCIHandler;
@@ -90,7 +92,7 @@ public class FinPimBankingImpl implements IFinPimBanking
 	}
 	
 	@Override
-	public ArrayList<HashMap<String, String>> getBalanceValues(Account acc) 
+	public ArrayList<HashMap<String, Object>> getBalanceValues(Account acc) 
 	{
 		Bank b = acc.getBank();
 		CustomerRelation cr = acc.getPerson().getCustomerRelation(b);
@@ -110,9 +112,21 @@ public class FinPimBankingImpl implements IFinPimBanking
 		}
 		
 		GVRKUms valueResult = (GVRKUms) valueJob.getJobResult();
-		valueResult.getFlatData().
+		List<UmsLine> statementList = valueResult.getFlatData(); 
+		ArrayList<HashMap<String, Object>> statements = new ArrayList<HashMap<String, Object>>();
+		for (UmsLine ul : statementList)
+		{
+			Map<String, Object> booking = new HashMap<String, Object>();
+			booking.put(GlobalValues.BOOKING_DATE, ul.bdate);
+			booking.put(GlobalValues.BOOKING_BALANCE, ul.saldo.value.toString());
+			booking.put(GlobalValues.BOOKING_USAGE, ul.usage);
+			booking.put(GlobalValues.BOOKING_VALUE, ul.value.toString());
+			booking.put(GlobalValues.BOOKING_VALUTA, ul.valuta);
+			statements.add((HashMap<String, Object>) booking);  
+		}
+		
 		closeBanking(handle);
-		return null;
+		return statements;
 	}
 	
 	private HBCIPassport initBanking(CustomerRelation cr)
