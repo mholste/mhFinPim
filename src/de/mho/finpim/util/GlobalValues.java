@@ -46,4 +46,10 @@ public interface GlobalValues
 	public static final String CHARGE = "Charge";
 	public static final String VALUE_DATE = "ValueDate";
 	public static final String ORG_VAL = "OrgVal";
+	
+	//Werte für eine Buchung
+	public static final String BOOKING_BALANCE = "Saldo nach Buchung";
+	public static final String BOOKING_USAGE = "Verwendungszweck";
+	public static final String BOOKING_VALUE = "Buchungsbetrag";
+	public static final String BOOKING_VALUTA = "BuchungWertstellung";
 }
