@@ -1,6 +1,10 @@
 package de.mho.finpim.ui.parts.banking;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -83,15 +87,25 @@ public class AccountChoicePart
 		
 		for (Account acc : accounts) 
 		{
-			Job balanceJob = Job.create("BalanceUpdate", (ICoreRunnable) monitor -> {
-				
-				sync.asyncExec(() -> {
-					System.out.println("---------------UPDATE-----------------------");
-					String balance = service.getAccountBalace(acc); 
-					data.setAccLabelText(acc, balance);
-				});
-			});
-			balanceJob.schedule();
+			LocalDateTime reqTime = acc.getRequestTime();
+			Duration duration = Duration.between(LocalDateTime.now(), reqTime);
+		    if (Math.abs(duration.toHours()) > 2)
+		    {
+		    	Job balanceJob = Job.create("BalanceUpdate", (ICoreRunnable) monitor -> {
+
+		    		sync.asyncExec(() -> {
+		    			String balance = service.getAccountBalace(acc); 
+		    			data.setAccLabelText(acc, balance);					
+		    			persistence.setRequestTime(acc, LocalDateTime.now());
+		    			persistence.setBalance(acc, balance);
+		    		});
+		    	});
+		    	balanceJob.schedule();
+		    }
+		    else
+		    {
+		    	data.setAccLabelText(acc, acc.getBalance());
+		    }
 		}
 	}
 	
