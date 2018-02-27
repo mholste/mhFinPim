@@ -1,7 +1,6 @@
 package de.mho.finpim.ui.parts.banking;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -11,21 +10,22 @@ import org.eclipse.core.runtime.ICoreRunnable;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.swt.widgets.Composite;
 
 import de.mho.finpim.persistence.model.Account;
-import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.persistence.model.Person;
 import de.mho.finpim.service.IFinPimBanking;
 import de.mho.finpim.service.IFinPimPersistence;
 import de.mho.finpim.service.IPlatformDataService;
-import de.mho.finpim.ui.parts.navigation.BankingNaviSelectionPart;
 
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
-import org.omg.PortableServer.Servant;
 import org.eclipse.swt.layout.GridData;
 
 public class AccountChoicePart 
@@ -33,20 +33,27 @@ public class AccountChoicePart
 	@Inject
 	MApplication app;
 	
-	@Inject IPlatformDataService data;
+	@Inject 
+	IPlatformDataService data;
+	
+	@Inject
+	IFinPimBanking service;
+	
+	@Inject
+	IFinPimPersistence persistence;
 	
 	@Inject
 	UISynchronize sync;
 	
+	@Inject 
+	EPartService partService;
+	
 	private ArrayList<Account> accounts;
-	private ArrayList<Bank> banks;
 	
 	@PostConstruct
-	public void createControls(Composite parent, IFinPimBanking service, 
-			IFinPimPersistence persistence) 
+	public void createControls(Composite parent) 
 	{
 		Person user = data.getUser();
-		//List l = user.getBanks();
 		accounts = persistence.getAccounts(user);
 		parent.setLayout(new GridLayout(8, false));
 		String bankBuffer = "";		
@@ -121,7 +128,6 @@ public class AccountChoicePart
 		lblBalanceVal.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));		
 		lblBalanceVal.setText("123");
 		
-		/*
 		accGroup.addMouseListener(new MouseListener() 
 		{	
 			@Override
@@ -134,10 +140,9 @@ public class AccountChoicePart
 			public void mouseDoubleClick(MouseEvent e) 
 			{
 				AccountChoicePart.this.data.setActiveAccount(account);
-				service.getStatementList(account);
+				partService.showPart("mhfinpim.part.acc.balance", PartState.ACTIVATE);
 			}
 		});
-		*/
 	}
 
 	@PreDestroy
