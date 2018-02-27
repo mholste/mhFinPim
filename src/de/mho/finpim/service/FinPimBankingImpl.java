@@ -92,7 +92,7 @@ public class FinPimBankingImpl implements IFinPimBanking
 	}
 	
 	@Override
-	public ArrayList<HashMap<String, Object>> getBalanceValues(Account acc) 
+	public ArrayList<HashMap<String, Object>> getStatementList(Account acc) 
 	{
 		Bank b = acc.getBank();
 		CustomerRelation cr = acc.getPerson().getCustomerRelation(b);
@@ -122,6 +122,12 @@ public class FinPimBankingImpl implements IFinPimBanking
 			booking.put(GlobalValues.BOOKING_USAGE, ul.usage);
 			booking.put(GlobalValues.BOOKING_VALUE, ul.value.toString());
 			booking.put(GlobalValues.BOOKING_VALUTA, ul.valuta);
+			booking.put(GlobalValues.BOOKING_CHARGE, ul.charge_value);
+			booking.put(GlobalValues.BOOKING_CUST_REF, ul.customerref);
+			booking.put(GlobalValues.BOOKING_INST_REF, ul.instref);
+			booking.put(GlobalValues.BOOKING_ORG_VALUE, ul.orig_value);
+			booking.put(GlobalValues.BOOKING_OTHER_ACC, ul.other.number);
+			booking.put(GlobalValues.BOOKING_OTHER_ACC_OWNER, ul.other.name);
 			statements.add((HashMap<String, Object>) booking);  
 		}
 		
