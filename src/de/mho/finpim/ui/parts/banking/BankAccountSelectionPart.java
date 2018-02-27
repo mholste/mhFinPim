@@ -78,7 +78,7 @@ public class BankAccountSelectionPart
 		// Zeile 2			
 		Label lblHeadline = new Label(parent, SWT.NONE);
 		lblHeadline.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		lblHeadline.setText("Konto�bersicht");
+		lblHeadline.setText("Kontoübersicht");
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
 		new Label(parent, SWT.NONE);
