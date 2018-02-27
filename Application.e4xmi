@@ -19,6 +19,7 @@
               <children xsi:type="basic:Part" xmi:id="_vs6CMI8GEeeicOIo9EvMcA" elementId="mhfinpim.part.newbank" toBeRendered="false" contributionURI="bundleclass://mhFinPim/de.mho.finpim.ui.parts.banking.NewBankPart" label="Neue Bankverbindung" closeable="true"/>
               <children xsi:type="basic:Part" xmi:id="_rKYtMJK_EeeaOfoJmndxbw" elementId="mhfinpim.part.bankaccselection" toBeRendered="false" contributionURI="bundleclass://mhFinPim/de.mho.finpim.ui.parts.banking.BankAccountSelectionPart" label="Neue Bankverbindung: Konten" closeable="true"/>
               <children xsi:type="basic:Part" xmi:id="_mcsC8J3LEeeXb-oTwkHiXw" elementId="mhfinpim.part.overview" toBeRendered="false" contributionURI="bundleclass://mhFinPim/de.mho.finpim.ui.parts.banking.OverviewPart" label="&#xdc;bersicht"/>
+              <children xsi:type="basic:Part" xmi:id="_4EhBgBucEeiRso0cN39pgQ" elementId="mhfinpim.part.acc.balance" toBeRendered="false" contributionURI="bundleclass://mhFinPim/de.mho.finpim.ui.parts.banking.AccountBalancePart" label="Kontostand"/>
             </children>
             <children xsi:type="basic:PartStack" xmi:id="_jQz7wHeKEeeei8tEDdR7hg" elementId="mhfinpim.partstack.1" containerData="25">
               <children xsi:type="basic:Part" xmi:id="_nMr7cHeKEeeei8tEDdR7hg" elementId="mhfinpim.part.account_choice" toBeRendered="false" containerData="50" contributionURI="bundleclass://mhFinPim/de.mho.finpim.ui.parts.banking.AccountChoicePart" label="Konten"/>
