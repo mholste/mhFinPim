@@ -1,6 +1,8 @@
 package de.mho.finpim.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,4 +25,8 @@ public interface IFinPimPersistence
 	public Person getUser(String username);
 	
 	public ArrayList<Account> getAccounts(Person person);
+	
+	public void setBalance(Account acc, String balance);
+	
+	public void setRequestTime(Account acc, LocalDateTime request);
 }

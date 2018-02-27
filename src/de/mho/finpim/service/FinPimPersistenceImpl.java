@@ -1,6 +1,8 @@
 package de.mho.finpim.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -206,5 +208,29 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		setParameter("arg", person).getResultList());
 		
 		return l;
+	}
+
+	@Override
+	public void setBalance(Account acc, String balance) 
+	{
+		EntityManager em = Activator.getEntityManager();
+		
+		em.getTransaction().begin();
+		acc.setBalance(balance);
+		em.merge(acc);
+		em.getTransaction().commit();
+		em.close();
+	}
+
+	@Override
+	public void setRequestTime(Account acc, LocalDateTime request) 
+	{
+		EntityManager em = Activator.getEntityManager();
+		
+		em.getTransaction().begin();
+		acc.setRequestTime(request);
+		em.merge(acc);
+		em.getTransaction().commit();
+		em.close();
 	}
 }
