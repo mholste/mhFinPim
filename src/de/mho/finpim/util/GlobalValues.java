@@ -52,4 +52,11 @@ public interface GlobalValues
 	public static final String BOOKING_USAGE = "Verwendungszweck";
 	public static final String BOOKING_VALUE = "Buchungsbetrag";
 	public static final String BOOKING_VALUTA = "BuchungWertstellung";
+	public static final String BOOKING_CHARGE= "Bankgebuehren";
+	public static final String BOOKING_CUST_REF = "Kundenreferenz";
+	public static final String BOOKING_INST_REF= "Bankreferenz";
+	public static final String BOOKING_ORG_VALUE = "UrsprBetrag_ausl";
+	public static final String BOOKING_OTHER_ACC = "GegenkontoBuchung";
+	public static final String BOOKING_OTHER_ACC_OWNER = "HalterGegenkontoBuchung";
+	
 }
