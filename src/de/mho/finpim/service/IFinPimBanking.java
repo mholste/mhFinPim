@@ -14,5 +14,5 @@ public interface IFinPimBanking
 	
 	public String getAccountBalace(Account acc);
 	
-	public ArrayList<HashMap<String, Object>> getBalanceValues(Account acc);
+	public ArrayList<HashMap<String, Object>> getStatementList(Account acc);
 }
