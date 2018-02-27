@@ -126,8 +126,16 @@ public class FinPimBankingImpl implements IFinPimBanking
 			booking.put(GlobalValues.BOOKING_CUST_REF, ul.customerref);
 			booking.put(GlobalValues.BOOKING_INST_REF, ul.instref);
 			booking.put(GlobalValues.BOOKING_ORG_VALUE, ul.orig_value);
-			booking.put(GlobalValues.BOOKING_OTHER_ACC, ul.other.number);
-			booking.put(GlobalValues.BOOKING_OTHER_ACC_OWNER, ul.other.name);
+			if (ul.other != null)
+			{
+				booking.put(GlobalValues.BOOKING_OTHER_ACC, ul.other.number);
+				booking.put(GlobalValues.BOOKING_OTHER_ACC_OWNER, ul.other.name);
+			}
+			else
+			{
+				booking.put(GlobalValues.BOOKING_OTHER_ACC, "xxx");
+				booking.put(GlobalValues.BOOKING_OTHER_ACC_OWNER, "n/a");
+			}	
 			statements.add((HashMap<String, Object>) booking);  
 		}
 		
