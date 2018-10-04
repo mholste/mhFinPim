@@ -31,6 +31,7 @@ public interface GlobalValues
 	public static final String ACC__NAME = "name";
 	public static final String ACC_NO = "no";
 	public static final String ACC_TYPE = "typ";
+	public static final String ACC_REQ_TIME = "abfrage";
 	public static final String ACCOUNTS = "konten";
 	
 	//Werte für HashMap bei Übernahme der Buchungsdaten
