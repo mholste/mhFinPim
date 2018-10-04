@@ -59,6 +59,7 @@ public class AccountChoicePart
 	{
 		Person user = data.getUser();
 		accounts = persistence.getAccounts(user);
+		System.out.println(accounts);
 		parent.setLayout(new GridLayout(8, false));
 		String bankBuffer = "";		
 		
