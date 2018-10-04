@@ -216,7 +216,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		EntityManager em = Activator.getEntityManager();
 		
 		em.getTransaction().begin();
-		acc.setBalance(balance);
+		acc.setBalance(Long.parseLong(balance));
 		em.merge(acc);
 		em.getTransaction().commit();
 		em.close();
@@ -228,7 +228,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		EntityManager em = Activator.getEntityManager();
 		
 		em.getTransaction().begin();
-		acc.setRequestTime(request);
+		//acc.setRequestTime(request);
 		em.merge(acc);
 		em.getTransaction().commit();
 		em.close();
