@@ -87,10 +87,13 @@ public class AccountChoicePart
 		
 		for (Account acc : accounts) 
 		{
-			
-			LocalDateTime reqTime = acc.getRequestTime();
+			LocalDateTime reqTime = LocalDateTime.now();
+			if (acc.getRequestTime()!= null)
+			{
+				reqTime = acc.getRequestTime();
+			}
 			Duration duration = Duration.between(LocalDateTime.now(), reqTime);
-		    if (Math.abs(duration.toHours()) > 2)
+		    if (Math.abs(duration.toHours()) > 2 || acc.getRequestTime() == null)
 		    {
 		    	Job balanceJob = Job.create("BalanceUpdate", (ICoreRunnable) monitor -> {
 
@@ -105,7 +108,7 @@ public class AccountChoicePart
 		    }
 		    else
 		    {
-		    	data.setAccLabelText(acc, Long.toString(acc.getBalance()));
+		    	data.setAccLabelText(acc, acc.getBalance());
 		    }
 		    
 		}
