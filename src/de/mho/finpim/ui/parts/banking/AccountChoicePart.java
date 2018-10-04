@@ -87,6 +87,7 @@ public class AccountChoicePart
 		
 		for (Account acc : accounts) 
 		{
+			
 			LocalDateTime reqTime = acc.getRequestTime();
 			Duration duration = Duration.between(LocalDateTime.now(), reqTime);
 		    if (Math.abs(duration.toHours()) > 2)
@@ -104,8 +105,9 @@ public class AccountChoicePart
 		    }
 		    else
 		    {
-		    	data.setAccLabelText(acc, acc.getBalance());
+		    	data.setAccLabelText(acc, Long.toString(acc.getBalance()));
 		    }
+		    
 		}
 	}
 	
