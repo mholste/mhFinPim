@@ -132,13 +132,13 @@ public class AccountBalancePart
 			public String getText(Object element)
 			{
 				HashMap booking = (HashMap) element;
-				String bookingUsage = "";
+				StringBuilder  bookingUsage = new StringBuilder("");
 				ArrayList<String> al = (ArrayList<String>) booking.get(GlobalValues.BOOKING_USAGE);
 				for (String usage : al)
 				{
-					bookingUsage.concat(usage);
+					bookingUsage.append(usage);
 				}
-				return bookingUsage;
+				return bookingUsage.toString();
 			}
 	    });
 	    
