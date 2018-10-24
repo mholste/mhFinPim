@@ -2,7 +2,6 @@ package de.mho.finpim.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,6 +14,14 @@ import de.mho.finpim.persistence.model.CustomerRelation;
 import de.mho.finpim.persistence.model.Person;
 import de.mho.finpim.util.GlobalValues;
 
+/** 
+ * Implementierung des OSGI-Service FinPimPersistence. Dieser Service stellt 
+ * Methoden für die Interaktion mit der Datenbank bereit und kann in die Klassen
+ * der Applikation per @Inject injiziert werden. Der Service ist vollständig 
+ * unabhängig von der durch die Applikation benutzten Datenbank.
+ *  
+ */
+
 public class FinPimPersistenceImpl implements IFinPimPersistence 
 {
 	
@@ -24,7 +31,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 	 * das Ergebnis der Prüfung zurück. Im Key <code>GolbalValues.PERSON</code> steht im 
 	 * Erfolgsfall das entsprechende <code>Person</code>-Objekt.
 	 * @param user Der eingegebene Username
-	 * @param pwd Daseingegebne Passwort
+	 * @param pwd Das eingegebne Passwort
 	 * 
 	 * @return HashMap
 	 * 				Mögliche Werte im Key STATUS
@@ -73,6 +80,21 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		return retVal;		
 	}
 
+	/**
+	 * Persistiert die Daten des Nutzer als <code>Person</code> Objekt in der 
+	 * Datenbank. Die Datenwerte werden in einer HashMap übergeben. Dies sind 
+	 * die Keys der HashMap:
+	 *      Username
+	 *      FName
+	 *      Name
+	 *      Pwd
+	 * Die Methode gibt das persistierte <code>Person</code> Objekt zurück.
+	 * 
+	 * @param values Die Werte des Nutzers in einer HashMap mit den angegebenen 
+	 *               Keys.
+	 * @return Person 
+	 * 
+	 */
 	@Override
 	public Person persistPerson(HashMap<String, String> values) 
 	{				
@@ -228,7 +250,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		EntityManager em = Activator.getEntityManager();
 		
 		em.getTransaction().begin();
-		//acc.setRequestTime(request);
+		acc.setRequestTime(request);
 		em.merge(acc);
 		em.getTransaction().commit();
 		em.close();
