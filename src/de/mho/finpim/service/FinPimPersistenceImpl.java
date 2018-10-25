@@ -149,14 +149,15 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		
 		Person p = (Person) em.createQuery("SELECT p FROM Person p WHERE p.uName=:arg")
 				.setParameter("arg", values.get(IServiceValues.USERNAME)).getSingleResult();
-		Bank existingBank = (Bank) em.createQuery("SELECT b FROM Bank b WHERE b.bic=:arg")
-				.setParameter("arg", values.get(IServiceValues.BIC)).getSingleResult();
+		
+		List banks = em.createQuery("SELECT b FROM Bank b WHERE b.bic=:arg")
+				.setParameter("arg", values.get(IServiceValues.BIC)).getResultList();
 		
 		em.getTransaction().begin();
 		
 		Bank b = new Bank();
 		
-		if (existingBank == null)
+		if (banks.isEmpty())
 		{
 			b.setBankName((String)values.get(IServiceValues.BANK));
 			b.setLocation((String)values.get(IServiceValues.LOCATION));
@@ -168,7 +169,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		}
 		else
 		{
-			b = existingBank;
+			b = (Bank)banks.get(0);
 		}
 		
 		CustomerRelation cr = new CustomerRelation();
