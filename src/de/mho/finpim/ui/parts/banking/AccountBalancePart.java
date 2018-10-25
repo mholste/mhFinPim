@@ -1,6 +1,8 @@
 package de.mho.finpim.ui.parts.banking;
 
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,6 +10,9 @@ import java.util.HashMap;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.eclipse.core.runtime.ICoreRunnable;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -17,6 +22,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -26,6 +34,7 @@ import org.eclipse.swt.widgets.TableColumn;
 
 import de.mho.finpim.persistence.model.Account;
 import de.mho.finpim.service.IFinPimBanking;
+import de.mho.finpim.service.IFinPimPersistence;
 import de.mho.finpim.service.IPlatformDataService;
 import de.mho.finpim.util.GlobalValues;
 
@@ -37,6 +46,12 @@ public class AccountBalancePart
 	@Inject
 	IFinPimBanking service;
 	
+	@Inject
+	IFinPimPersistence persistence;
+	
+	@Inject
+	UISynchronize sync;
+	
 	private Table table;
 	private TableViewer viewer;
 	private ArrayList<HashMap<String, Object>> bookings;
@@ -45,10 +60,39 @@ public class AccountBalancePart
 	public void createControls(Composite parent)
 	{
 		Account account = data.getActiveAccount();
-		bookings = service.getStatementList(account);
 		
-		parent.setLayout(new GridLayout(8, false));
-				
+		LocalDateTime reqTime = LocalDateTime.now();
+		if (account.getRequestTime()!= null)
+		{
+			reqTime = account.getRequestTime();
+		}
+		Duration duration = Duration.between(LocalDateTime.now(), reqTime);
+	    if (Math.abs(duration.toHours()) > 2 || account.getRequestTime() == null)
+	    {
+	    	bookings = service.getStatementList(account);
+	    	
+	    	Job balanceJob = Job.create("PersistBalance", (ICoreRunnable) monitor -> {
+
+	    		sync.asyncExec(() -> {
+	    			persistence.setRequestTime(account, LocalDateTime.now());
+	    			persistence.updateStatementList(account, bookings);
+	    		});
+	    	});
+	    	balanceJob.schedule();
+	    	
+	    }
+	    else
+	    {
+	    	
+	    }
+		
+		
+		FormLayout layout = new FormLayout();
+		layout.marginHeight = 5;
+		layout.marginWidth = 5;
+		
+		parent.setLayout(layout);
+		
 		// Zeile 1			
 		Label lblBankName = new Label(parent, SWT.NONE);
 		FontDescriptor desc = FontDescriptor.createFrom(lblBankName.getFont()).setStyle(SWT.BOLD);
@@ -56,59 +100,77 @@ public class AccountBalancePart
 		FontData[] fd = boldFont.getFontData();
 		fd[0].setHeight(12);
 		lblBankName.setFont(new Font(lblBankName.getDisplay(), fd[0]));	
-		lblBankName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		lblBankName.setText(account.getBank().getBankName());
 		
-		new Label(parent, SWT.NONE);
+		FormData formData1 = new FormData();
+		formData1.top = new FormAttachment(10,0);
+		
+		lblBankName.setLayoutData(formData1);
+		
 		Label lblBankBIC = new Label(parent, SWT.NONE);
-		lblBankBIC.setLayoutData(new GridData(SWT.FILL, SWT.RIGHT, false, false, 1, 1));
 		lblBankBIC.setText(account.getBic());
 		
-		new Label(parent, SWT.NONE);
+		FormData formData2 = new FormData();
+		formData2.left = new FormAttachment(lblBankName, 5);
+		formData2.top = new FormAttachment(lblBankName, 0, SWT.TOP);
+		
+		lblBankBIC.setLayoutData(formData2);
+				
 		Label lblBankBLZ = new Label(parent, SWT.NONE);
-		lblBankBLZ.setLayoutData(new GridData(SWT.FILL, SWT.RIGHT, false, false, 1, 1));
 		lblBankBLZ.setText(account.getBlz());
 		
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-				
+		FormData formData3 = new FormData();
+		formData3.left = new FormAttachment(lblBankBIC, 5);
+		formData3.top = new FormAttachment(lblBankBIC,0, SWT.TOP);
+		
+		lblBankBLZ.setLayoutData(formData3);
+						
 		//Zeile 2
 		Label lblAccountNo = new Label(parent, SWT.NONE);
 		FontDescriptor descAcc = FontDescriptor.createFrom(lblAccountNo.getFont()).setStyle(SWT.ITALIC);
 		Font italFont = descAcc.createFont(lblAccountNo.getDisplay());
 		lblAccountNo.setFont(italFont);
-		lblAccountNo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		lblAccountNo.setText(account.getAccNo());
 		
-		new Label(parent, SWT.NONE);
+		FormData formData4 = new FormData();
+		formData4.top = new FormAttachment(lblBankName,10);		
+		
+		lblAccountNo.setLayoutData(formData4);
+		
 		Label lblAccountIBAN = new Label(parent, SWT.NONE);
-		lblAccountIBAN.setLayoutData(new GridData(SWT.FILL, SWT.RIGHT, false, false, 2, 1));
 		lblAccountIBAN.setText(account.getIban());
 		
-		new Label(parent, SWT.NONE);
+		FormData formData5 = new FormData();
+		formData5.top = new FormAttachment(lblBankBIC,10);		
+		
+		lblAccountIBAN.setLayoutData(formData5);
+		
 		Label lblAccountName = new Label(parent, SWT.NONE);
-		lblAccountName.setLayoutData(new GridData(SWT.FILL, SWT.RIGHT, false, false, 1, 1));
 		//lblAccountName.setText(account.getName());
 		lblAccountName.setText("");
 		
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
+		FormData formData6 = new FormData();
+		formData6.top = new FormAttachment(lblBankBLZ,10);	
 		
-		//Zeile 3
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
-				
+		lblAccountName.setLayoutData(formData6);
+		
 		// Zeile 4
 		
-		viewer = this.createTable(parent);
+		
+		TableViewer tableViewer = new TableViewer(parent, SWT.BORDER);		
+	    table = tableViewer.getTable();
+	    table.setLinesVisible(true);
+	    table.setHeaderVisible(true);
+	    
+	    FormData formData7 = new FormData();
+	    formData7.top = new FormAttachment(lblAccountNo,5);
+	    formData7.bottom = new FormAttachment(100, -10);
+	    formData7.right= new FormAttachment(100,-10);
+	    table.setLayoutData(formData7);
+		
+	    
+	    
+		viewer = tableViewer;
 		viewer.setContentProvider(ArrayContentProvider.getInstance());
 		
 		TableViewerColumn colDate = this.createColumns("Datum", 80);
@@ -170,13 +232,17 @@ public class AccountBalancePart
 	private TableViewer createTable(Composite parent)
 	{
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, 6, 1));		
-		composite.setLayout(new FillLayout());
+		composite.setLayout(new FormLayout());
 		
 		TableViewer tableViewer = new TableViewer(composite, SWT.BORDER);		
 	    table = tableViewer.getTable();
 	    table.setLinesVisible(true);
 	    table.setHeaderVisible(true);
+	    
+	    FormData formData = new FormData();
+	    formData.bottom = new FormAttachment(100, -10);
+	    formData.right= new FormAttachment(100,-10);
+	    table.setLayoutData(formData);
 		
 		return tableViewer;
 	}
