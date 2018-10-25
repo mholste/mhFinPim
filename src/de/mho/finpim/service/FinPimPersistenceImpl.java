@@ -1,7 +1,9 @@
 package de.mho.finpim.service;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,6 +14,7 @@ import de.mho.finpim.persistence.model.Account;
 import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.persistence.model.CustomerRelation;
 import de.mho.finpim.persistence.model.Person;
+import de.mho.finpim.persistence.model.Statement;
 import de.mho.finpim.util.GlobalValues;
 
 /** 
@@ -114,6 +117,31 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		return p;		
 	}
 	
+	/**
+	 * Persistiert die Daten zur in der HashMap übergebenen Bank in der 
+	 * Datenbank. Dazu werden zwei Objekte in der Datenbank angelegt: 
+	 * <code>Bank</code> und <code>CustomerRelation</code>
+	 * Sollte die Bank bereits angelegt worden sein, so wird mit dem 
+	 * existierenden Objekt weiter gearbeitet.
+	 * Zu der Bank wird eine kundenspezifische CustomerRelation angelegt, in 
+	 * der die Verbindungsdaten des Kunden zur Bank gehalten werden.
+	 * Die Werte der Keys in der übergebenen HashMap sind folgende:
+	 *      Bankname     Name der Bank
+	 *      Location     Sitz der Bank
+	 *      blz          Bankleitzahl
+	 *      bic          BIC
+	 *      url          Url des HBCI-Host der Bank
+	 *      cust_id      Kunden ID bei der Bank
+	 *      access       Zugangscode bei der Bank
+	 *      PIN          PIN
+	 *      
+	 * Die Methode gibt eine HashMap mit den beiden angelegten Objekten zurück.
+	 * Die Keys sind "Bank" und "Relation".
+	 * 
+	 * @param values Die Werte zur Bank und zum Zugang bei der Bank
+	 * @return HashMap Die in der Datenbak angelegten Objekte 
+	 * 
+	 */
 	@Override
 	public HashMap<String, Object> persistBank(HashMap<String, String> values)
 	{
@@ -121,21 +149,27 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		
 		Person p = (Person) em.createQuery("SELECT p FROM Person p WHERE p.uName=:arg")
 				.setParameter("arg", values.get(IServiceValues.USERNAME)).getSingleResult();
+		Bank existingBank = (Bank) em.createQuery("SELECT b FROM Bank b WHERE b.bic=:arg")
+				.setParameter("arg", values.get(IServiceValues.BIC)).getSingleResult();
 		
 		em.getTransaction().begin();
 		
 		Bank b = new Bank();
-		b.setBankName((String)values.get(IServiceValues.BANK));
-		b.setLocation((String)values.get(IServiceValues.LOCATION));
-		b.setBlz((String)values.get(IServiceValues.BLZ));
-		b.setBic((String)values.get(IServiceValues.BIC));
-		//b.setAccessCode((String)values.get(IServiceValues.ACCESS));
-		//b.setPIN((String)values.get(IServiceValues.PIN));
-		b.setHost((String)values.get(IServiceValues.URL));
-		//b.setCustomerId((String)values.get(IServiceValues.CUST_ID));
-		//b.setPerson(p);
 		
-		em.persist(b);
+		if (existingBank == null)
+		{
+			b.setBankName((String)values.get(IServiceValues.BANK));
+			b.setLocation((String)values.get(IServiceValues.LOCATION));
+			b.setBlz((String)values.get(IServiceValues.BLZ));
+			b.setBic((String)values.get(IServiceValues.BIC));
+			b.setHost((String)values.get(IServiceValues.URL));
+		
+			em.persist(b);
+		}
+		else
+		{
+			b = existingBank;
+		}
 		
 		CustomerRelation cr = new CustomerRelation();
 		cr.setCustomerId((String)values.get(IServiceValues.CUST_ID));
@@ -145,8 +179,6 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		cr.setBank(b);
 		em.persist(cr);
 		em.flush();
-		//p.addCustomerRelation(cr);
-		//em.createQuery("UPDATE Person p SET p.)
 		
 		em.getTransaction().commit();
 		
@@ -159,6 +191,12 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		return returnMap;
 	}
 	
+	/**
+	 * Gibt die Beziehungen zu Banken des übergebenen Kunden zurück.
+	 * 
+	 * @param user Der Nutzername in der Applikation
+	 * @return List Die Kundenbeziehungen in einer List
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<CustomerRelation> getCustomerRelations(String user) 
@@ -172,6 +210,23 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		return persons.get(0).getCustomerRelations();
 	}
 
+	/**
+	 * Persistiert die Daten zu den übergebenen Konten in der Datenbank. Die 
+	 * Daten zu den Konten werden in einer ArrayList von HasMaps mit folgenden 
+	 * Keys übergeben:
+	 *    bic          BIC
+	 *    no           Kontonummer
+	 *    blz          Bankleitzahl
+	 *    currency     Kontowährung
+	 *    iban         IBAN
+	 *    typ          Kontotyp
+	 *  
+	 *  Zusätzlich wird die CustomerRelation des Kunden zu der Bank übergeben.
+	 *  
+	 *  @param accounts ArrayList von HasMaps mit den Kontodaten
+	 *  @param cr Die entsprechende CustomerRelation
+	 *  @return ArrayList eine ArrayList mit den pedrsistierten Account-Objekten
+	 */
 	@Override
 	public ArrayList<Account> persistAccounts(ArrayList<HashMap<String, String>> accounts, CustomerRelation cr)
 	{		
@@ -209,6 +264,12 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		return bankAccounts;
 	}
 
+	/**
+	 * Gibt das <code>Person</code>Objekt des angemeldeten Nutzers zurück.
+	 * 
+	 * @param username Der Username des Nutzers in der Applikation
+	 * @return Person Das <code>Person</code>Objekt des Nutzers aus der Datenbank
+	 */
 	@Override
 	public Person getUser(String username) 
 	{
@@ -219,7 +280,11 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		return p;
 	}
 	
-
+	/**
+	 * Gibt die Konten des Nutzers zurück.
+	 * @param person Das <code>Person</code>Objekt eines Nutzers
+	 * @return ArrayList Liste der Konten des Nutzers
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public ArrayList<Account> getAccounts(Person person) 
@@ -232,6 +297,12 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		return l;
 	}
 
+	/**
+	 * Setzt den aktuellen Kontostand in der Datenbank
+	 * 
+	 * @param acc Das <code>Account</code>Objekt des Kontos
+	 * @param balance Der aktuelle Kontostand
+	 */
 	@Override
 	public void setBalance(Account acc, String balance) 
 	{
@@ -244,6 +315,12 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		em.close();
 	}
 
+	/** 
+	 * Setzt den Abfragezeitpunkt zu einem Konto in der Datenbank
+	 * 
+	 * @param acc Das <code>Account</code>Objekt des Kontos
+	 * @param request Der Abfragezeitpunkt
+	 */
 	@Override
 	public void setRequestTime(Account acc, LocalDateTime request) 
 	{
@@ -254,5 +331,41 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		em.merge(acc);
 		em.getTransaction().commit();
 		em.close();
+	}
+	
+	/** 
+	 * Aktualisiert die Liste der Buchungen zu einem Konto in der Datenbank.
+	 * 
+	 *  @param account   Das zu aktualisierende Konto
+	 *  @param bookings  Die von der HBCI ausgelesende Liste der Buchungen
+	 */
+	@Override
+	public void updateBalance (Account account,ArrayList<HashMap<String, Object>> bookings)
+	{
+		EntityManager em = Activator.getEntityManager();
+		
+		for (HashMap book : bookings)
+		{	
+			String strDate = (new SimpleDateFormat("dd.MM.yyyy")).format(
+					(Date) book.get(GlobalValues.BOOKING_VALUTA));  
+			StringBuilder  bookingUsage = new StringBuilder("");
+			ArrayList<String> al = (ArrayList<String>) book.get(GlobalValues.BOOKING_USAGE);
+			for (String usage : al)
+			{
+				bookingUsage.append(usage);
+			}
+			
+			em.getTransaction().begin();
+			Statement stmt = new Statement();
+			stmt.setValuta(strDate);
+			stmt.setUsage(bookingUsage.toString());
+			stmt.setValue((String)book.get(GlobalValues.BOOKING_VALUE));
+			stmt.setBalance((String)book.get(GlobalValues.BOOKING_BALANCE));
+			
+			em.persist(stmt);
+			em.flush();
+			em.getTransaction().commit();
+			em.close();
+		}
 	}
 }
