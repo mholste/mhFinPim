@@ -340,7 +340,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 	 *  @param bookings  Die von der HBCI ausgelesende Liste der Buchungen
 	 */
 	@Override
-	public void updateBalance (Account account,ArrayList<HashMap<String, Object>> bookings)
+	public void updateStatementList (Account account,ArrayList<HashMap<String, Object>> bookings)
 	{
 		EntityManager em = Activator.getEntityManager();
 		
@@ -367,5 +367,34 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 			em.getTransaction().commit();
 			em.close();
 		}
+	}
+	
+	/**
+	 * Gibt eine Liste der Kontoauszüge aus der Datenbank zurück.
+	 * 
+	 * @param account    Das Konto für die Auszüge
+	 * @return ArrayList Liste von HashMaps die jeweils einen Auszug repräsentieren.
+	 */
+	@Override
+	public ArrayList<HashMap<String, Object>> getStatements (Account account)
+	{
+		ArrayList<HashMap<String, Object>> result = new ArrayList<HashMap<String, Object>>();
+		EntityManager em = Activator.getEntityManager();
+		
+		ArrayList<Statement> statements = new ArrayList<Statement>(em.createQuery(
+				"SELECT s FROM Statement s WHERE s.account=:arg").setParameter(
+						"arg", account).getResultList()); 
+		for (Statement stmt : statements)
+		{
+			HashMap<String, Object> tmpMap = new HashMap<String, Object>();
+			tmpMap.put(GlobalValues.BOOKING_VALUTA, stmt.getValuta());
+			tmpMap.put(GlobalValues.BOOKING_USAGE, stmt.getUsage());
+			tmpMap.put(GlobalValues.BOOKING_VALUE,stmt.getValue());
+			tmpMap.put(GlobalValues.BOOKING_BALANCE, stmt.getBalance());
+			
+			result.add(tmpMap);
+		}		
+				
+		return result;
 	}
 }
