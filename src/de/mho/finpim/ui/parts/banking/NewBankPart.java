@@ -205,25 +205,42 @@ public class NewBankPart
 			@Override
 			public void widgetSelected(SelectionEvent e) 
 			{
-				String user = data.getUser().getUName();
-				bankValues = new HashMap<String, String>();
-				bankValues.put(IServiceValues.BANK, txtBank.getText());
-				bankValues.put(IServiceValues.LOCATION, txtLoc.getText());
-				bankValues.put(IServiceValues.BLZ, txtBLZ.getText());
-				bankValues.put(IServiceValues.BIC, txtBic.getText());
-				bankValues.put(IServiceValues.URL, url);
-				bankValues.put(IServiceValues.ACCESS, txtNo.getText());
-				bankValues.put(IServiceValues.PIN, txtPIN.getText());
-				bankValues.put(IServiceValues.USERNAME, user);
-				bankValues.put(IServiceValues.CUST_ID, txtCust.getText());
-				HashMap<String, Object> bankRelation = service.persistBank(bankValues);
-				data.setActiveRelation((CustomerRelation) bankRelation.get("Relation"));
+				String warningMsg = "";
+				if (txtNo.getText() == "")
+				{
+					warningMsg = "Bitte geben Sie eine Zugangnummer an.";
+				}
+				else if (txtPIN.getText() == "")
+				{
+					warningMsg = "Bitte geben Sie eine PIN an.";
+				}
 				
-				MessageDialog.openInformation( parent.getShell(), "Info", "Die Bankverbindung wurde "
-						+ "angelegt");
-				
-				partService.showPart("mhfinpim.part.bankaccselection", PartState.ACTIVATE);
-				partService.hidePart(part);
+				if (warningMsg.equals(""))
+				{
+					String user = data.getUser().getUName();
+					bankValues = new HashMap<String, String>();
+					bankValues.put(IServiceValues.BANK, txtBank.getText());
+					bankValues.put(IServiceValues.LOCATION, txtLoc.getText());
+					bankValues.put(IServiceValues.BLZ, txtBLZ.getText());
+					bankValues.put(IServiceValues.BIC, txtBic.getText());
+					bankValues.put(IServiceValues.URL, url);
+					bankValues.put(IServiceValues.ACCESS, txtNo.getText());
+					bankValues.put(IServiceValues.PIN, txtPIN.getText());
+					bankValues.put(IServiceValues.USERNAME, user);
+					bankValues.put(IServiceValues.CUST_ID, txtCust.getText());
+					HashMap<String, Object> bankRelation = service.persistBank(bankValues);
+					data.setActiveRelation((CustomerRelation) bankRelation.get("Relation"));
+
+					MessageDialog.openInformation( parent.getShell(), "Info", "Die Bankverbindung wurde "
+							+ "angelegt");
+
+					partService.showPart("mhfinpim.part.bankaccselection", PartState.ACTIVATE);
+					partService.hidePart(part);
+				}
+				else
+				{
+					MessageDialog.openWarning( parent.getShell(), "Achtung", warningMsg);
+				}
 			}	
 		});
 		
