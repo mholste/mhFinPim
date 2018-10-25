@@ -206,11 +206,12 @@ public class NewBankPart
 			public void widgetSelected(SelectionEvent e) 
 			{
 				String warningMsg = "";
-				if (txtNo.getText() == "")
+				
+				if (txtNo.getText().equals(""))
 				{
 					warningMsg = "Bitte geben Sie eine Zugangnummer an.";
 				}
-				else if (txtPIN.getText() == "")
+				else if (txtPIN.getText().equals(""))
 				{
 					warningMsg = "Bitte geben Sie eine PIN an.";
 				}
