@@ -29,4 +29,6 @@ public interface IFinPimPersistence
 	public void setBalance(Account acc, String balance);
 	
 	public void setRequestTime(Account acc, LocalDateTime request);
+	
+	public void updateBalance (Account account, ArrayList<HashMap<String, Object>> bookings);
 }
