@@ -30,7 +30,7 @@ public interface IFinPimPersistence
 	
 	public void setRequestTime(Account acc, LocalDateTime request);
 	
-	public void updatestatementList (Account account, ArrayList<HashMap<String, Object>> bookings);
+	public void updateStatementList (Account account, ArrayList<HashMap<String, Object>> bookings);
 	
 	public ArrayList<HashMap<String, Object>> getStatements (Account account);
 }
