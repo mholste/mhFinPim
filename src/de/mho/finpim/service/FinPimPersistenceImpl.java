@@ -358,6 +358,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 			
 			em.getTransaction().begin();
 			Statement stmt = new Statement();
+			stmt.setAccount(account);
 			stmt.setValuta(strDate);
 			stmt.setUsage(bookingUsage.toString());
 			stmt.setValue((String)book.get(GlobalValues.BOOKING_VALUE));
@@ -366,8 +367,9 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 			em.persist(stmt);
 			em.flush();
 			em.getTransaction().commit();
-			em.close();
+			
 		}
+		em.close();
 	}
 	
 	/**
@@ -385,6 +387,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		ArrayList<Statement> statements = new ArrayList<Statement>(em.createQuery(
 				"SELECT s FROM Statement s WHERE s.account=:arg").setParameter(
 						"arg", account).getResultList()); 
+		
 		for (Statement stmt : statements)
 		{
 			HashMap<String, Object> tmpMap = new HashMap<String, Object>();
