@@ -10,8 +10,6 @@ import java.util.HashMap;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.eclipse.core.runtime.ICoreRunnable;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -21,12 +19,9 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
@@ -68,22 +63,14 @@ public class AccountBalancePart
 		}
 		Duration duration = Duration.between(LocalDateTime.now(), reqTime);
 	    if (Math.abs(duration.toHours()) > 2 || account.getRequestTime() == null)
-	    {
+		{
 	    	bookings = service.getStatementList(account);
-	    	
-	    	Job balanceJob = Job.create("PersistBalance", (ICoreRunnable) monitor -> {
-
-	    		sync.asyncExec(() -> {
-	    			persistence.setRequestTime(account, LocalDateTime.now());
-	    			persistence.updateStatementList(account, bookings);
-	    		});
-	    	});
-	    	balanceJob.schedule();
-	    	
+	    	persistence.setRequestTime(account, LocalDateTime.now());
+	    	persistence.updateStatementList(account, bookings);	    		
 	    }
 	    else
 	    {
-	    	
+	    	bookings = persistence.getStatements(account);
 	    }
 		
 		
@@ -93,7 +80,7 @@ public class AccountBalancePart
 		
 		parent.setLayout(layout);
 		
-		// Zeile 1			
+		// Label für Bankname (links oben)
 		Label lblBankName = new Label(parent, SWT.NONE);
 		FontDescriptor desc = FontDescriptor.createFrom(lblBankName.getFont()).setStyle(SWT.BOLD);
 		Font boldFont = desc.createFont(lblBankName.getDisplay());
@@ -102,73 +89,76 @@ public class AccountBalancePart
 		lblBankName.setFont(new Font(lblBankName.getDisplay(), fd[0]));	
 		lblBankName.setText(account.getBank().getBankName());
 		
-		FormData formData1 = new FormData();
-		formData1.top = new FormAttachment(10,0);
+		FormData formDataBankName = new FormData();
+		formDataBankName.top = new FormAttachment(3,0);
 		
-		lblBankName.setLayoutData(formData1);
+		lblBankName.setLayoutData(formDataBankName);
 		
+		// Label für BIC (mitte oben)
 		Label lblBankBIC = new Label(parent, SWT.NONE);
 		lblBankBIC.setText(account.getBic());
 		
-		FormData formData2 = new FormData();
-		formData2.left = new FormAttachment(lblBankName, 5);
-		formData2.top = new FormAttachment(lblBankName, 0, SWT.TOP);
+		FormData formDataBIC = new FormData();
+		formDataBIC.left = new FormAttachment(lblBankName, 7);
+		formDataBIC.top = new FormAttachment(lblBankName, 0, SWT.TOP);
 		
-		lblBankBIC.setLayoutData(formData2);
-				
+		lblBankBIC.setLayoutData(formDataBIC);
+		
+		Label lblAccountIBAN = new Label(parent, SWT.NONE);
+		lblAccountIBAN.setText(account.getIban());
+		
+		// Label für Kontoname (links zweite Zeile)
+		Label lblAccountName = new Label(parent, SWT.NONE);
+		//lblAccountName.setText(account.getName());
+		lblAccountName.setText("test");
+
+		FormData formDataName = new FormData();
+		formDataName.top = new FormAttachment(lblBankName,10);	
+		lblAccountName.setLayoutData(formDataName);
+		
+		lblAccountName.setLayoutData(formDataName);
+		
+		// Label für IBAM (mitte zweite zeile) 
+		FormData formDataIBAN = new FormData();
+		formDataIBAN.left = new FormAttachment(lblBankName, 7);
+		formDataIBAN.top = new FormAttachment(lblAccountName, 0, SWT.TOP);
+		
+		lblAccountIBAN.setLayoutData(formDataIBAN);
+		
+		// Label für BLZ (rechts oben)
 		Label lblBankBLZ = new Label(parent, SWT.NONE);
 		lblBankBLZ.setText(account.getBlz());
 		
-		FormData formData3 = new FormData();
-		formData3.left = new FormAttachment(lblBankBIC, 5);
-		formData3.top = new FormAttachment(lblBankBIC,0, SWT.TOP);
+		FormData formDataBLZ = new FormData();
+		formDataBLZ.left = new FormAttachment(lblAccountIBAN, 7);
+		formDataBLZ.top = new FormAttachment(lblBankBIC,0, SWT.TOP);
 		
-		lblBankBLZ.setLayoutData(formData3);
-						
-		//Zeile 2
+		lblBankBLZ.setLayoutData(formDataBLZ);
+		
+		// Label für Kontonummer (rechts zweite Zeile) 		
 		Label lblAccountNo = new Label(parent, SWT.NONE);
 		FontDescriptor descAcc = FontDescriptor.createFrom(lblAccountNo.getFont()).setStyle(SWT.ITALIC);
 		Font italFont = descAcc.createFont(lblAccountNo.getDisplay());
 		lblAccountNo.setFont(italFont);
 		lblAccountNo.setText(account.getAccNo());
-		
-		FormData formData4 = new FormData();
-		formData4.top = new FormAttachment(lblBankName,10);		
-		
-		lblAccountNo.setLayoutData(formData4);
-		
-		Label lblAccountIBAN = new Label(parent, SWT.NONE);
-		lblAccountIBAN.setText(account.getIban());
-		
-		FormData formData5 = new FormData();
-		formData5.top = new FormAttachment(lblBankBIC,10);		
-		
-		lblAccountIBAN.setLayoutData(formData5);
-		
-		Label lblAccountName = new Label(parent, SWT.NONE);
-		//lblAccountName.setText(account.getName());
-		lblAccountName.setText("");
-		
-		FormData formData6 = new FormData();
-		formData6.top = new FormAttachment(lblBankBLZ,10);	
-		
-		lblAccountName.setLayoutData(formData6);
-		
-		// Zeile 4
-		
+
+		FormData formDataAccNo = new FormData();
+		formDataAccNo.left = new FormAttachment(lblAccountIBAN, 7);
+		formDataAccNo.top = new FormAttachment(lblAccountName, 0, SWT.TOP);
+
+		lblAccountNo.setLayoutData(formDataAccNo);	
 		
 		TableViewer tableViewer = new TableViewer(parent, SWT.BORDER);		
 	    table = tableViewer.getTable();
 	    table.setLinesVisible(true);
 	    table.setHeaderVisible(true);
 	    
-	    FormData formData7 = new FormData();
-	    formData7.top = new FormAttachment(lblAccountNo,5);
-	    formData7.bottom = new FormAttachment(100, -10);
-	    formData7.right= new FormAttachment(100,-10);
-	    table.setLayoutData(formData7);
-		
-	    
+	    FormData formDataTable = new FormData();
+	    formDataTable.top = new FormAttachment(lblAccountNo, 10);
+	    formDataTable.left = new FormAttachment(parent, 0);
+	    formDataTable.bottom = new FormAttachment(100, -10);
+	    formDataTable.right= new FormAttachment(100,-10);
+	    table.setLayoutData(formDataTable);	    
 	    
 		viewer = tableViewer;
 		viewer.setContentProvider(ArrayContentProvider.getInstance());
