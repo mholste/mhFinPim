@@ -345,10 +345,8 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 	{
 		EntityManager em = Activator.getEntityManager();
 		
-		for (HashMap book : bookings)
+		for (HashMap<String, Object> book : bookings)
 		{	
-			String strDate = (new SimpleDateFormat("dd.MM.yyyy")).format(
-					(Date) book.get(GlobalValues.BOOKING_VALUTA));  
 			StringBuilder  bookingUsage = new StringBuilder("");
 			ArrayList<String> al = (ArrayList<String>) book.get(GlobalValues.BOOKING_USAGE);
 			for (String usage : al)
@@ -359,7 +357,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 			em.getTransaction().begin();
 			Statement stmt = new Statement();
 			stmt.setAccount(account);
-			stmt.setValuta(strDate);
+			stmt.setValuta((Date) book.get(GlobalValues.BOOKING_VALUTA));
 			stmt.setUsage(bookingUsage.toString());
 			stmt.setValue((String)book.get(GlobalValues.BOOKING_VALUE));
 			stmt.setBalance((String)book.get(GlobalValues.BOOKING_BALANCE));
