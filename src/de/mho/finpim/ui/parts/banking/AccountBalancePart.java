@@ -177,7 +177,7 @@ public class AccountBalancePart
 			}
 	    });
 		
-	    TableViewerColumn colUsage = this.createColumns("Verwendungszweck", 240);
+	    TableViewerColumn colUsage = this.createColumns("Verwendungszweck", 720);
 	    colUsage.setLabelProvider(new ColumnLabelProvider()
 	    {
 	        @Override
@@ -194,7 +194,7 @@ public class AccountBalancePart
 			}
 	    });
 	    
-	    TableViewerColumn colValue = this.createColumns("Betrag", 100);
+	    TableViewerColumn colValue = this.createColumns("Betrag", 95);
 	    colValue.setLabelProvider(new ColumnLabelProvider()
 	    {
 	        @Override
