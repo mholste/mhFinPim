@@ -60,8 +60,10 @@ public class AccountChoicePart
 		Person user = data.getUser();
 		accounts = persistence.getAccounts(user);
 		parent.setLayout(new GridLayout(8, false));
-		String bankBuffer = "";		
+		//String bankBuffer = "";		
 		
+		/*
+		 * nutzlos?
 		for (int i = 0; i < 8; i++)
 		{
 			if (accounts.size() <= i)
@@ -79,7 +81,7 @@ public class AccountChoicePart
 				bankBuffer = accounts.get(i).getBank().getBankName();
 			}
 		}
-		
+		*/
 		for (Account acc : accounts) 
 		{
 			createGroup(parent, acc, service);
@@ -87,6 +89,8 @@ public class AccountChoicePart
 		
 		for (Account acc : accounts) 
 		{
+			// Nur per HBCI aktualisieren, wenn der letzte Abfragezeitpunkt länger 
+			// als zwei Stunden her ist. 
 			LocalDateTime reqTime = LocalDateTime.now();
 			if (acc.getRequestTime()!= null)
 			{
