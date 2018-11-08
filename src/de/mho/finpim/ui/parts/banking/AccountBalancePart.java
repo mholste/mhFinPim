@@ -64,16 +64,14 @@ public class AccountBalancePart
 		Duration duration = Duration.between(LocalDateTime.now(), reqTime);
 	    if (Math.abs(duration.toHours()) > 2 || account.getRequestTime() == null)
 		{
-	    	bookings = service.getStatementList(account);
+	    	ArrayList<HashMap<String, Object>> tmpBookings = service.getStatementList(account);
 	    	persistence.setRequestTime(account, LocalDateTime.now());
-	    	persistence.updateStatementList(account, bookings);	    		
+	    	persistence.updateStatementList(account, tmpBookings);	 
+	    	tmpBookings = null;
 	    }
-	    else
-	    {
-	    	bookings = persistence.getStatements(account);
-	    }
-		
-		
+	    
+	    bookings = persistence.getStatements(account);
+	    
 		FormLayout layout = new FormLayout();
 		layout.marginHeight = 5;
 		layout.marginWidth = 5;
@@ -183,14 +181,8 @@ public class AccountBalancePart
 	        @Override
 			public String getText(Object element)
 			{
-				HashMap booking = (HashMap) element;
-				StringBuilder  bookingUsage = new StringBuilder("");
-				ArrayList<String> al = (ArrayList<String>) booking.get(GlobalValues.BOOKING_USAGE);
-				for (String usage : al)
-				{
-					bookingUsage.append(usage);
-				}
-				return bookingUsage.toString();
+				HashMap booking = (HashMap) element;				
+				return (String) booking.get(GlobalValues.BOOKING_USAGE);				
 			}
 	    });
 	    
