@@ -3,7 +3,11 @@ package de.mho.finpim.lifecycle;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.ui.workbench.lifecycle.PostContextCreate;
+import org.eclipse.e4.ui.workbench.lifecycle.PreSave;
 import org.eclipse.equinox.app.IApplicationContext;
+
+import de.mho.finpim.persistence.model.Person;
+import de.mho.finpim.service.IFinPimPersistence;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,8 +19,15 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class Manager 
+import javax.inject.Inject;
+
+
+public class Manager
 {
+	
+	@Inject
+	IFinPimPersistence persistence;
+	
 	@PostContextCreate
     public void postContextCreate(IApplicationContext appContext) throws IllegalStateException, IOException 
     {
@@ -60,4 +71,14 @@ public class Manager
             e.printStackTrace();
         }
     }
+    
+    @PreSave
+    public void preSave()
+    {
+       Person p= null;
+               
+       p = persistence.getUser("test");
+       
+       System.out.println("User"+ p);
+    }      
 }
