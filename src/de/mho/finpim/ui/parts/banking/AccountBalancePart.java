@@ -15,10 +15,15 @@ import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FormAttachment;
@@ -67,7 +72,7 @@ public class AccountBalancePart
 			reqTime = account.getRequestTime();
 		}
 		Duration duration = Duration.between(LocalDateTime.now(), reqTime);
-	    if (Math.abs(duration.toHours()) > 2 || account.getRequestTime() == null)
+	    if (Math.abs(duration.toHours()) < 2 || account.getRequestTime() != null)
 		{
 	    	ArrayList<HashMap<String, Object>> tmpBookings = service.getStatementList(account);
 	    	persistence.setRequestTime(account, LocalDateTime.now());
@@ -75,15 +80,16 @@ public class AccountBalancePart
 	    	tmpBookings = null;
 	    }
 	    
-	    bookings = persistence.getStatements(account);
+	    bookings = persistence.getStatements(account);	    
 	    
 		FormLayout layout = new FormLayout();
 		layout.marginHeight = 5;
 		layout.marginWidth = 5;		
 		parent.setLayout(layout);
 		
-		// Layout für Labels über dem Table
-		// Label für Bankname (links oben)
+		/* Aufbau des Layouts
+		 * Zuerst die Labels über der Tabelle
+		 * Label für Bankname (links oben)*/
 			Label lblBankName = new Label(parent, SWT.NONE);
 			FontDescriptor desc = FontDescriptor.createFrom(lblBankName.getFont()).setStyle(SWT.BOLD);
 			Font boldFont = desc.createFont(lblBankName.getDisplay());
@@ -154,7 +160,8 @@ public class AccountBalancePart
 			formDataAccNo.top = new FormAttachment(lblAccountName, 0, SWT.TOP);
 			lblAccountNo.setLayoutData(formDataAccNo);	
 		
-		// Layout für Tabelle
+		/* Layout für Tabelle
+		 * Allgemeiner Aufbau der Tabelle */
 		
 			Composite tableComposite = new Composite(parent, SWT.NONE);
 			tableColumnLayout = new TableColumnLayout();
@@ -176,6 +183,7 @@ public class AccountBalancePart
 		viewer = tableViewer;
 		viewer.setContentProvider(ArrayContentProvider.getInstance());
 		
+		// Erste Spalte
 		TableViewerColumn colDate = this.createColumns("Datum", 80, 1, false);
 	    colDate.setLabelProvider(new ColumnLabelProvider()
 	    {
@@ -189,7 +197,20 @@ public class AccountBalancePart
 				return strDate;
 			}
 	    });
+	    
+	    ColumnViewerComparator cSorter = new ColumnViewerComparator(tableViewer, colDate) {
+			
+			@Override
+			protected int doCompare(Viewer viewer, Object e1, Object e2) {
+				HashMap h1 = (HashMap) e1;
+				HashMap h2 = (HashMap) e2;
+				Date d1 = (Date) h1.get(GlobalValues.BOOKING_VALUTA);
+				Date d2 = (Date) h2.get(GlobalValues.BOOKING_VALUTA);
+				return d1.compareTo(d2);
+			}
+		};
 		
+	    // Zweite Spalte
 	    TableViewerColumn colUsage = this.createColumns("Verwendungszweck", 720, 100, true);
 	    colUsage.setLabelProvider(new ColumnLabelProvider()
 	    {
@@ -201,6 +222,7 @@ public class AccountBalancePart
 			}
 	    });
 	    
+	    // Dritte Spalte
 	    TableViewerColumn colValue = this.createColumns("Betrag", 95, 2, false);
 	    colValue.setLabelProvider(new ColumnLabelProvider()
 	    {
@@ -212,6 +234,7 @@ public class AccountBalancePart
 			}
 	    });
 	    
+	    // Vierte Spalte
 	    TableViewerColumn colBalance = this.createColumns("Saldo", 100, 1, false);
 	    colBalance.setLabelProvider(new ColumnLabelProvider()
 	    {
@@ -225,6 +248,9 @@ public class AccountBalancePart
 	    
 	    tableComposite.setLayout(tableColumnLayout);
 	    viewer.setInput(this.bookings);
+	    cSorter.setSorter(cSorter, ColumnViewerComparator.DESC);
+	    // http://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet040TableViewerSorting.java
+	    
 	}
 	
 	
@@ -237,4 +263,94 @@ public class AccountBalancePart
 		tableColumnLayout.setColumnData(tableColumn, new ColumnWeightData(weight, width, resizable));
 		return tableViewColumn;
 	}
+	
+	private abstract class ColumnViewerComparator extends ViewerComparator
+	{
+		public static final int ASC = 1;
+		public static final int NONE = 0;
+		public static final int DESC = -1;
+		
+		private int direction = 0;
+		private TableViewerColumn column;
+		private ColumnViewer viewer;
+		
+		public ColumnViewerComparator(ColumnViewer viewer, TableViewerColumn column)
+		{
+			this.column = column;
+			this.viewer = viewer;
+			SelectionAdapter selectionAdapter = createSelectionAdapter();
+			this.column.getColumn().addSelectionListener(selectionAdapter);
+		}
+		
+		private SelectionAdapter createSelectionAdapter()
+		{
+			return new SelectionAdapter() {
+				
+				@Override
+				public void widgetSelected (SelectionEvent e)
+				{
+					if (ColumnViewerComparator.this.viewer.getComparator() != null)
+					{
+						if (ColumnViewerComparator.this.viewer.getComparator() == ColumnViewerComparator.this)
+						{
+						
+							int tdirection = ColumnViewerComparator.this.direction;
+							if (tdirection == ASC)
+							{
+								setSorter(ColumnViewerComparator.this, DESC);
+							}
+							else if (tdirection == DESC)
+							{
+								setSorter(ColumnViewerComparator.this, NONE);
+							}
+						}
+						else
+						{
+							setSorter(ColumnViewerComparator.this, ASC);
+						}
+					}
+					else
+					{
+						setSorter(ColumnViewerComparator.this, ASC);
+					}					
+				}
+			};
+					
+		}
+		
+		private void setSorter(ColumnViewerComparator sorter, int direction)
+		{
+			Table columnParent = column.getColumn().getParent();
+			if (direction == NONE)
+			{
+				columnParent.setSortColumn(null);
+				columnParent.setSortDirection(SWT.NONE);
+				viewer.setComparator(null);
+			}
+			else
+			{
+				columnParent.setSortColumn(column.getColumn());
+				sorter.direction = direction;
+				columnParent.setSortDirection(direction == ASC ? SWT.DOWN : SWT.UP);
+				
+				if (viewer.getComparator() == sorter)
+				{
+					viewer.refresh();
+				}
+				else
+				{
+					viewer.setComparator(sorter);
+				}
+			}
+		}
+		
+		@Override
+		public int compare(Viewer viewer, Object e1, Object e2)
+		{
+			return direction * doCompare(viewer, e1, e2);
+		}
+		
+		protected abstract int doCompare (Viewer viewer, Object e1, Object e2);
+	}
+	
 }
