@@ -72,13 +72,4 @@ public class Manager
         }
     }
     
-    @PreSave
-    public void preSave()
-    {
-       Person p= null;
-               
-       p = persistence.getUser("test");
-       
-       System.out.println("User"+ p);
-    }      
 }
