@@ -33,6 +33,15 @@ public class PlatformDataServiceImpl implements IPlatformDataService
 	/** Die gesammelten Labels der Kontostände */
 	private HashMap<Account, Label> labelStore;
 	
+	/**
+	 * Setzt die Werte aus der hbci.properties. In der ArrayList <code>suggest</code>
+	 * werden die Namen der Banken persistiert, in der HashMap <code>banks</code> 
+	 * werden Banken als Keys geführt und in der  HashMap dazu stehen BIC, BLZ, 
+	 * Sitz der Bank un die URL des HBCI Servers
+	 * 
+	 *   @param suggest Die Namen der Banken
+	 *   @param banks Informationen zu den Banken
+	 */
 	@Override
 	public void setBankingListValues(ArrayList<String> suggest, HashMap<String, HashMap<String, String>> banks) 
 	{
@@ -40,12 +49,22 @@ public class PlatformDataServiceImpl implements IPlatformDataService
 		this.bankList = banks;
 	}
 
+	/**
+	 * Gibt die Vorschlagsliste aller Banken mit Bankname und Sitz der Bank zurück.
+	 * 
+	 *  @return ArrayList<String> Vorschlagsliste der Banken
+	 */
 	@Override
 	public ArrayList<String> getSuggestions() 
 	{
 		return this.suggestion;
 	}
 
+	/**
+	 * Gibt die Liste aller Banken mit den zugehörigen Informationen zurück
+	 * 
+	 * @return HashMap<String, HashMap<String, String> Liste aller Banken
+	 */
 	@Override
 	public HashMap<String, HashMap<String, String>> getBankList() 
 	{
