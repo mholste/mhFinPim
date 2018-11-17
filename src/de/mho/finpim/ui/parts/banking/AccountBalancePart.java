@@ -264,6 +264,11 @@ public class AccountBalancePart
 		return tableViewColumn;
 	}
 	
+	/**
+	 * Private Comparator-Klasse für die Sortierung der Tabelle nach einer Spalte.
+	 * @author mho
+	 *
+	 */	
 	private abstract class ColumnViewerComparator extends ViewerComparator
 	{
 		public static final int ASC = 1;
@@ -274,6 +279,13 @@ public class AccountBalancePart
 		private TableViewerColumn column;
 		private ColumnViewer viewer;
 		
+		/**
+		 * Konstruktor des Comparators. Damit werden der umgebende Viewer der
+		 * Tabelle und die zu sortierende Spalte gesetzt.
+		 *  
+		 * @param viewer DerViewer der Tabelle
+		 * @param column Die Splate der Tabelleim Viewer
+		 */
 		public ColumnViewerComparator(ColumnViewer viewer, TableViewerColumn column)
 		{
 			this.column = column;
@@ -282,6 +294,11 @@ public class AccountBalancePart
 			this.column.getColumn().addSelectionListener(selectionAdapter);
 		}
 		
+		/**
+		 * Setzt einen SelectionAdapter, damit die Spalte auswählbar und 
+		 * sortierbar wird.
+		 * @return   Der SelectionAdapter
+		 */
 		private SelectionAdapter createSelectionAdapter()
 		{
 			return new SelectionAdapter() {
@@ -318,6 +335,12 @@ public class AccountBalancePart
 					
 		}
 		
+		/**
+		 * Hiermit wird der Comparator direkt auf die Spalte gesetzt, die nun 
+		 * in der bisher nicht ausgewählten Richtung sortiert wird. 
+		 * @param sorter
+		 * @param direction
+		 */
 		private void setSorter(ColumnViewerComparator sorter, int direction)
 		{
 			Table columnParent = column.getColumn().getParent();
