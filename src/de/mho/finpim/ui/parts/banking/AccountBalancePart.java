@@ -24,6 +24,7 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FormAttachment;
@@ -63,24 +64,10 @@ public class AccountBalancePart
 	
 	@PostConstruct
 	public void createControls(Composite parent)
-	{
+	{   
 		Account account = data.getActiveAccount();
 		
-		LocalDateTime reqTime = LocalDateTime.now();
-		if (account.getRequestTime()!= null)
-		{
-			reqTime = account.getRequestTime();
-		}
-		Duration duration = Duration.between(LocalDateTime.now(), reqTime);
-	    if (Math.abs(duration.toHours()) < 2 || account.getRequestTime() != null)
-		{
-	    	ArrayList<HashMap<String, Object>> tmpBookings = service.getStatementList(account);
-	    	persistence.setRequestTime(account, LocalDateTime.now());
-	    	persistence.updateStatementList(account, tmpBookings);	 
-	    	tmpBookings = null;
-	    }
-	    
-	    bookings = persistence.getStatements(account);	    
+	    bookings = updateContent(account, false);	    
 	    
 		FormLayout layout = new FormLayout();
 		layout.marginHeight = 5;
@@ -249,8 +236,17 @@ public class AccountBalancePart
 	    tableComposite.setLayout(tableColumnLayout);
 	    viewer.setInput(this.bookings);
 	    cSorter.setSorter(cSorter, ColumnViewerComparator.DESC);
-	    // http://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/examples/org.eclipse.jface.snippets/Eclipse%20JFace%20Snippets/org/eclipse/jface/snippets/viewers/Snippet040TableViewerSorting.java
 	    
+	    // Listener
+	    btnUpdate.addSelectionListener(new SelectionAdapter() {
+	    	
+	    	@Override
+	    	public void widgetSelected(SelectionEvent e) 
+	    	{
+	    		updateContent(account, true);
+	    		viewer.refresh();
+			}
+		});
 	}
 	
 	
@@ -262,6 +258,38 @@ public class AccountBalancePart
 		tableColumn.setText(title);
 		tableColumnLayout.setColumnData(tableColumn, new ColumnWeightData(weight, width, resizable));
 		return tableViewColumn;
+	}
+	
+	/**
+	 * Aktualisiert die Datenbasis der Tabelle für die Kontoauszüge. In Abhängigkeit
+	 * vom übergebenen Parameter wird entweder sofort ein HBCI-Call veranlasst
+	 * oder der Call wird ausgeführt, wenn in den letzten zwei Stunden kein Call 
+	 * ausgeführt wurde. Die Rückgabewerte des Calls werden in die Datenbank 
+	 * geschrieben und von dort aus für die Methode als Ergebnis geholt.
+	 * 
+	 * @param account   Das Konto, für das die Werte geholt werden sollen
+	 * @param now       Gibt an, ob der Call auf jeden Fall sofort durchgeführt 
+	 *                  werden soll
+	 * @return          Die Werte der Kontoauszüge als ArrayList von HashMaps
+	 */
+	private ArrayList<HashMap<String, Object>> updateContent(Account account, boolean now)
+	{
+		LocalDateTime reqTime = LocalDateTime.now();
+		if (account.getRequestTime()!= null)
+		{
+			reqTime = account.getRequestTime();
+		}
+		Duration duration = Duration.between(LocalDateTime.now(), reqTime);
+	    if ((Math.abs(duration.toHours()) > 2 || account.getRequestTime() != null) || now)
+		{
+	    	ArrayList<HashMap<String, Object>> tmpBookings = service.getStatementList(account);
+	    	persistence.setRequestTime(account, LocalDateTime.now());
+	    	persistence.updateStatementList(account, tmpBookings);	 
+	    	tmpBookings = null;
+	    }
+	    
+	    return persistence.getStatements(account);
+		
 	}
 	
 	/**
