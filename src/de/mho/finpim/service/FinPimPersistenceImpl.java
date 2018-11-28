@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 
 import de.mho.finpim.lifecycle.Activator;
 import de.mho.finpim.persistence.model.Account;
@@ -362,8 +363,26 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 			stmt.setBalance((String)book.get(GlobalValues.BOOKING_BALANCE));
 			
 			em.persist(stmt);
-			em.flush();
-			em.getTransaction().commit();
+			try 
+			{
+				em.flush();
+			}
+			catch (PersistenceException pe)
+			{
+				//TODO logging und besseres ErrorHandling
+				// Bei einer ConstraintViolation wird die Tranaktion auf RollbackOnly gesetzt.
+				// Daher keine weiteren todos...
+				System.out.println(pe.getCause());
+			}
+			
+			if (em.getTransaction().getRollbackOnly())
+			{
+				em.getTransaction().rollback();
+			}
+			else
+			{
+				em.getTransaction().commit();
+			}
 			
 		}
 		em.close();
