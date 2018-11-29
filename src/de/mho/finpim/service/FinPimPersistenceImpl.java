@@ -226,7 +226,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 	 *  
 	 *  @param accounts ArrayList von HasMaps mit den Kontodaten
 	 *  @param cr Die entsprechende CustomerRelation
-	 *  @return ArrayList eine ArrayList mit den pedrsistierten Account-Objekten
+	 *  @return ArrayList eine ArrayList mit den persistierten Account-Objekten
 	 */
 	@Override
 	public ArrayList<Account> persistAccounts(ArrayList<HashMap<String, String>> accounts, CustomerRelation cr)
@@ -341,7 +341,7 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 	 *  @param bookings  Die von der HBCI ausgelesende Liste der Buchungen
 	 */
 	@Override
-	public void updateStatementList (Account account,ArrayList<HashMap<String, Object>> bookings)
+	public void updateStatementList (Account account, ArrayList<HashMap<String, Object>> bookings)
 	{
 		EntityManager em = Activator.getEntityManager();
 		
