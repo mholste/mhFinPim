@@ -15,6 +15,7 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
+import de.mho.finpim.persistence.model.Account;
 import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.persistence.model.CustomerRelation;
 import de.mho.finpim.service.IFinPimBanking;
@@ -211,7 +212,8 @@ public class BankAccountSelectionPart
 			@Override
 		    public void widgetSelected(SelectionEvent e) 
 			{
-				persist(persistence);
+				//persist(persistence);
+				persist(persistence, service);
 				
 				partService.showPart("mhfinpim.part.overview", PartState.ACTIVATE);
 				partService.showPart("mhfinpim.part.account_choice", PartState.VISIBLE);
@@ -269,7 +271,8 @@ public class BankAccountSelectionPart
 		return tableViewColumn;
 	}
 	
-	private void persist(IFinPimPersistence persistence)
+	//private void persist(IFinPimPersistence persistence)
+	private void persist(IFinPimPersistence persistence, IFinPimBanking service)
 	{
 		ArrayList<HashMap<String, String>> removeAccounts = (ArrayList<HashMap<String, String>>) accounts.clone();
 		
@@ -282,7 +285,14 @@ public class BankAccountSelectionPart
 			}
 		}
 		
-		persistence.persistAccounts(accounts, activeRelation);
+		ArrayList<Account> persistedAccounts = persistence.persistAccounts(accounts, activeRelation);
+		
+		for (Account pAcc : persistedAccounts)
+		{
+			ArrayList<HashMap<String, Object>> statements = service.getStatementList(pAcc);
+			persistence.updateStatementList(pAcc, statements);
+		}
+		
 	}
 	
 	@PreDestroy
