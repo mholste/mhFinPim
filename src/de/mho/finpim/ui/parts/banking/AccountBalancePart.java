@@ -66,7 +66,7 @@ public class AccountBalancePart
 	{   
 		Account account = data.getActiveAccount();
 		
-	    bookings = updateContent(account, false);	    
+	    bookings = updateContent(account);	    
 	    
 		FormLayout layout = new FormLayout();
 		layout.marginHeight = 5;
@@ -249,7 +249,7 @@ public class AccountBalancePart
 	    	@Override
 	    	public void widgetSelected(SelectionEvent e) 
 	    	{
-	    		updateContent(account, true);
+	    		updateContent(account);
 	    		viewer.refresh();
 			}
 		});
@@ -278,24 +278,14 @@ public class AccountBalancePart
 	 *                  werden soll
 	 * @return          Die Werte der Kontoauszüge als ArrayList von HashMaps
 	 */
-	private ArrayList<HashMap<String, Object>> updateContent(Account account, boolean now)
+	private ArrayList<HashMap<String, Object>> updateContent(Account account)
 	{
-		LocalDateTime reqTime = LocalDateTime.now();
-		if (account.getRequestTime()!= null)
-		{
-			reqTime = account.getRequestTime();
-		}
-		Duration duration = Duration.between(LocalDateTime.now(), reqTime);
-	    if ((Math.abs(duration.toHours()) > 2 || account.getRequestTime() != null) || now)
-		{
-	    	ArrayList<HashMap<String, Object>> tmpBookings = service.getStatementList(account);
-	    	persistence.setRequestTime(account, LocalDateTime.now());
-	    	persistence.updateStatementList(account, tmpBookings);	 
-	    	tmpBookings = null;
-	    }
+		ArrayList<HashMap<String, Object>> tmpBookings = service.getStatementList(account, false);
+		persistence.setRequestTime(account, LocalDateTime.now());
+		persistence.updateStatementList(account, tmpBookings);	 
+		tmpBookings = null;
 	    
 	    return persistence.getStatements(account);
-		
 	}
 	
 	/**
