@@ -24,7 +24,6 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FormAttachment;
@@ -177,6 +176,7 @@ public class AccountBalancePart
 	        @Override
 			public String getText(Object element)
 			{
+	        	@SuppressWarnings("rawtypes")
 				HashMap booking = (HashMap) element;
 				Date bDate = (Date) booking.get(GlobalValues.BOOKING_VALUTA);
 				SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");  
@@ -188,8 +188,11 @@ public class AccountBalancePart
 	    ColumnViewerComparator cSorter = new ColumnViewerComparator(tableViewer, colDate) {
 			
 			@Override
-			protected int doCompare(Viewer viewer, Object e1, Object e2) {
+			protected int doCompare(Viewer viewer, Object e1, Object e2) 
+			{
+				@SuppressWarnings("rawtypes")
 				HashMap h1 = (HashMap) e1;
+				@SuppressWarnings("rawtypes")
 				HashMap h2 = (HashMap) e2;
 				Date d1 = (Date) h1.get(GlobalValues.BOOKING_VALUTA);
 				Date d2 = (Date) h2.get(GlobalValues.BOOKING_VALUTA);
@@ -204,6 +207,7 @@ public class AccountBalancePart
 	        @Override
 			public String getText(Object element)
 			{
+	        	@SuppressWarnings("rawtypes")
 				HashMap booking = (HashMap) element;				
 				return (String) booking.get(GlobalValues.BOOKING_USAGE);				
 			}
@@ -216,6 +220,7 @@ public class AccountBalancePart
 	        @Override
 			public String getText(Object element)
 			{
+	        	@SuppressWarnings("rawtypes")
 				HashMap booking = (HashMap) element;
 				return (String)booking.get(GlobalValues.BOOKING_VALUE);
 			}
@@ -228,6 +233,7 @@ public class AccountBalancePart
 	        @Override
 			public String getText(Object element)
 			{
+	        	@SuppressWarnings("rawtypes")
 				HashMap booking = (HashMap) element;
 				return (String)booking.get(GlobalValues.BOOKING_BALANCE);
 			}
