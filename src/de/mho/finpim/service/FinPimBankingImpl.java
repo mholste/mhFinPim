@@ -92,15 +92,23 @@ public class FinPimBankingImpl implements IFinPimBanking
 	}
 	
 	@Override
-	public ArrayList<HashMap<String, Object>> getStatementList(Account acc) 
+	public ArrayList<HashMap<String, Object>> getStatementList(Account acc, boolean init) 
 	{
+		HBCIJob valueJob = null;
 		Bank b = acc.getBank();
 		CustomerRelation cr = acc.getPerson().getCustomerRelation(b);
 		HBCIPassport passport = initBanking(cr);
 		handle = new HBCIHandler(VERSION.getId(),passport);
 		
 		Konto k = passport.getAccount(acc.getAccNo());
-		HBCIJob valueJob = handle.newJob("KUmsAll");
+		if (init)
+		{
+			valueJob = handle.newJob("KUmsAll");
+		}
+		else
+		{
+			valueJob = handle.newJob("KUmsNew");
+		}
 		valueJob.setParam("my", k);
 		valueJob.addToQueue();
 		
