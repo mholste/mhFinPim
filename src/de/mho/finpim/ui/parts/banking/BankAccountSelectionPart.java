@@ -16,7 +16,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import de.mho.finpim.persistence.model.Account;
-import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.persistence.model.CustomerRelation;
 import de.mho.finpim.service.IFinPimBanking;
 import de.mho.finpim.service.IFinPimPersistence;
@@ -138,6 +137,7 @@ public class BankAccountSelectionPart
 	        @Override
 			public String getText(Object element)
 			{
+	        	@SuppressWarnings("rawtypes")
 				HashMap acc = (HashMap) element;
 				return (String)acc.get(GlobalValues.ACC_NO);
 			}
@@ -149,6 +149,7 @@ public class BankAccountSelectionPart
 	    	@Override
 			public String getText(Object element)
 			{
+	    		@SuppressWarnings("rawtypes")
 	    		HashMap acc = (HashMap) element;
 				return (String)acc.get(GlobalValues.ACC_TYPE);
 			}
@@ -160,6 +161,7 @@ public class BankAccountSelectionPart
 	    	@Override
 			public String getText(Object element)
 			{
+	    		@SuppressWarnings("rawtypes")
 	    		HashMap acc = (HashMap) element;
 				return (String)acc.get(GlobalValues.ACC_IBAN);
 			}
@@ -212,7 +214,6 @@ public class BankAccountSelectionPart
 			@Override
 		    public void widgetSelected(SelectionEvent e) 
 			{
-				//persist(persistence);
 				persist(persistence, service);
 				
 				partService.showPart("mhfinpim.part.overview", PartState.ACTIVATE);
@@ -228,7 +229,7 @@ public class BankAccountSelectionPart
 			@Override
 		    public void widgetSelected(SelectionEvent e) 
 			{
-				persist(persistence);
+				persist(persistence, service);
 				
 				partService.showPart("mhfinpim.part.newbank", PartState.ACTIVATE);
 				partService.showPart("mhfinpim.part.account_choice", PartState.VISIBLE);
@@ -271,9 +272,9 @@ public class BankAccountSelectionPart
 		return tableViewColumn;
 	}
 	
-	//private void persist(IFinPimPersistence persistence)
 	private void persist(IFinPimPersistence persistence, IFinPimBanking service)
 	{
+		@SuppressWarnings("unchecked")
 		ArrayList<HashMap<String, String>> removeAccounts = (ArrayList<HashMap<String, String>>) accounts.clone();
 		
 		for (HashMap<String, String> m : removeAccounts)
