@@ -67,7 +67,8 @@ public class AccountBalancePart
 	private TableViewer viewer;
 	private TableColumnLayout tableColumnLayout;
 	private ArrayList<HashMap<String, Object>> bookings;
-	private boolean isUsed;
+	private boolean isUsedTo = false;
+	private boolean isUsedFrom = false;
 	
 	@PostConstruct
 	public void createControls(Composite parent)
@@ -294,7 +295,7 @@ public class AccountBalancePart
 	    	{
 	    		dtFrom.setEnabled(true);
 	    		dtTo.setEnabled(true);	
-	    		if (! isUsed)
+	    		if (! isUsedTo && ! isUsedFrom)
 	    		{
 	    			dtTo.setYear(LocalDate.now().getYear());
 	    			dtTo.setMonth(LocalDate.now().getMonthValue());
@@ -309,6 +310,26 @@ public class AccountBalancePart
 	    		dtFrom.setEnabled(false);
 	    		dtTo.setEnabled(false);
 	    	}  		
+	    }
+	    ));
+	    
+	    dtTo.addSelectionListener(widgetSelectedAdapter(event -> {
+	    	if (LocalDate.now().getYear() != dtTo.getYear() || 
+	    			LocalDate.now().getMonthValue() != dtTo.getMonth() || 
+	    			LocalDate.now().getDayOfMonth() != dtTo.getDay())
+	    	{
+	    		isUsedTo = true;
+	    	}
+	    }
+	    ));
+	    
+	    dtFrom.addSelectionListener(widgetSelectedAdapter(event -> {
+	    	if (LocalDate.now().minusWeeks(4).getYear() != dtFrom.getYear() || 
+	    			LocalDate.now().minusWeeks(4).getMonthValue() != dtTo.getMonth() || 
+	    			LocalDate.now().minusWeeks(4).getDayOfMonth() != dtTo.getDay())
+	    	{
+	    		isUsedTo = true;
+	    	}
 	    }
 	    ));
 	}
