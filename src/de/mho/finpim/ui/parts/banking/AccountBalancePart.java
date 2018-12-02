@@ -1,7 +1,7 @@
 package de.mho.finpim.ui.parts.banking;
 
 import java.text.SimpleDateFormat;
-import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,18 +29,25 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DateTime;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+
+import static org.eclipse.swt.events.SelectionListener.*;
 
 import de.mho.finpim.persistence.model.Account;
 import de.mho.finpim.service.IFinPimBanking;
 import de.mho.finpim.service.IFinPimPersistence;
 import de.mho.finpim.service.IPlatformDataService;
 import de.mho.finpim.util.GlobalValues;
+
 
 public class AccountBalancePart 
 {
@@ -60,6 +67,7 @@ public class AccountBalancePart
 	private TableViewer viewer;
 	private TableColumnLayout tableColumnLayout;
 	private ArrayList<HashMap<String, Object>> bookings;
+	private boolean isUsed;
 	
 	@PostConstruct
 	public void createControls(Composite parent)
@@ -85,7 +93,7 @@ public class AccountBalancePart
 			lblBankName.setText(account.getBank().getBankName());
 
 			FormData formDataBankName = new FormData();
-			formDataBankName.top = new FormAttachment(3,0);
+			formDataBankName.top = new FormAttachment(1, 0);
 			lblBankName.setLayoutData(formDataBankName);
 		
 		// Label für BIC (mitte oben)
@@ -145,7 +153,37 @@ public class AccountBalancePart
 			formDataAccNo.left = new FormAttachment(lblAccountIBAN, 7);
 			formDataAccNo.top = new FormAttachment(lblAccountName, 0, SWT.TOP);
 			lblAccountNo.setLayoutData(formDataAccNo);	
-		
+			
+		// Einstellungselemente für Zeitraum
+			
+			Group timeGroup = new Group(parent, SWT.NONE);
+			FormData formDataGroup = new FormData();
+			formDataGroup.left = new FormAttachment(lblAccountNo, 70);
+			formDataGroup.top = new FormAttachment(lblBankBIC, 0, SWT.TOP);
+			GridLayout groupLayout = new GridLayout();
+			timeGroup.setText("Zeitraum");
+			timeGroup.setLayoutData(formDataGroup);
+			timeGroup.setLayout(new GridLayout(2, false));
+			
+			Button btnUse = new Button(timeGroup, SWT.CHECK);
+			btnUse.setText("Einschränken");
+			new Label(timeGroup, SWT.NONE);
+			
+			Label lblFrom = new Label(timeGroup, SWT.NONE);
+			lblFrom.setText("von");
+			lblFrom.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));			
+			Label lblTo = new Label(timeGroup, SWT.NONE);
+			lblTo.setText("bis");
+			lblTo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
+			
+			DateTime dtFrom = new DateTime(timeGroup, SWT.DATE);
+			dtFrom.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));	
+			dtFrom.setEnabled(false);
+			DateTime dtTo = new DateTime(timeGroup, SWT.DATE);
+			dtTo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
+			dtTo.setEnabled(false);
+			
+			
 		/* Layout für Tabelle
 		 * Allgemeiner Aufbau der Tabelle */
 		
@@ -159,7 +197,7 @@ public class AccountBalancePart
 			table.setHeaderVisible(true);
 	      
 			FormData formDataTable = new FormData();
-			formDataTable.top = new FormAttachment(lblAccountNo, 10);
+			formDataTable.top = new FormAttachment(lblAccountNo, 90);
 			formDataTable.left = new FormAttachment(parent, 0);
 			formDataTable.bottom = new FormAttachment(100, -10);
 			formDataTable.right= new FormAttachment(100,-10);
@@ -244,15 +282,35 @@ public class AccountBalancePart
 	    cSorter.setSorter(cSorter, ColumnViewerComparator.DESC);
 	    
 	    // Listener
-	    btnUpdate.addSelectionListener(new SelectionAdapter() {
-	    	
-	    	@Override
-	    	public void widgetSelected(SelectionEvent e) 
+	    btnUpdate.addSelectionListener(widgetSelectedAdapter(event -> {
+	    	updateContent(account);
+	    	viewer.refresh();	
+	    	}
+	    ));
+	    
+	    btnUse.addSelectionListener(widgetSelectedAdapter(event -> {
+	    	Button btn = (Button) event.getSource();
+	    	if (btn.getSelection())
 	    	{
-	    		updateContent(account);
-	    		viewer.refresh();
-			}
-		});
+	    		dtFrom.setEnabled(true);
+	    		dtTo.setEnabled(true);	
+	    		if (! isUsed)
+	    		{
+	    			dtTo.setYear(LocalDate.now().getYear());
+	    			dtTo.setMonth(LocalDate.now().getMonthValue());
+	    			dtTo.setDay(LocalDate.now().getDayOfMonth());			
+	    			dtFrom.setYear(LocalDate.now().minusWeeks(4).getYear());
+	    			dtFrom.setMonth(LocalDate.now().minusWeeks(4).getMonthValue());
+	    			dtFrom.setDay(LocalDate.now().minusWeeks(4).getDayOfMonth());	
+	    		}
+	    	}
+	    	else
+	    	{
+	    		dtFrom.setEnabled(false);
+	    		dtTo.setEnabled(false);
+	    	}  		
+	    }
+	    ));
 	}
 	
 	
@@ -267,15 +325,11 @@ public class AccountBalancePart
 	}
 	
 	/**
-	 * Aktualisiert die Datenbasis der Tabelle für die Kontoauszüge. In Abhängigkeit
-	 * vom übergebenen Parameter wird entweder sofort ein HBCI-Call veranlasst
-	 * oder der Call wird ausgeführt, wenn in den letzten zwei Stunden kein Call 
-	 * ausgeführt wurde. Die Rückgabewerte des Calls werden in die Datenbank 
-	 * geschrieben und von dort aus für die Methode als Ergebnis geholt.
+	 * Aktualisiert die Datenbasis der Tabelle für die Kontoauszüge. Die 
+	 * Rückgabewerte des Calls werden in die Datenbank geschrieben und von dort 
+	 * aus für die Methode als Ergebnis geholt.
 	 * 
 	 * @param account   Das Konto, für das die Werte geholt werden sollen
-	 * @param now       Gibt an, ob der Call auf jeden Fall sofort durchgeführt 
-	 *                  werden soll
 	 * @return          Die Werte der Kontoauszüge als ArrayList von HashMaps
 	 */
 	private ArrayList<HashMap<String, Object>> updateContent(Account account)
