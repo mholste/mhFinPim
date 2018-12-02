@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,20 +96,17 @@ public class FinPimBankingImpl implements IFinPimBanking
 	@Override
 	public ArrayList<HashMap<String, Object>> getStatementList(Account acc, boolean init) 
 	{
-		HBCIJob valueJob = null;
 		Bank b = acc.getBank();
 		CustomerRelation cr = acc.getPerson().getCustomerRelation(b);
 		HBCIPassport passport = initBanking(cr);
 		handle = new HBCIHandler(VERSION.getId(),passport);
 		
 		Konto k = passport.getAccount(acc.getAccNo());
-		if (init)
-		{
-			valueJob = handle.newJob("KUmsAll");
-		}
-		else
-		{
-			valueJob = handle.newJob("KUmsNew");
+		HBCIJob valueJob = handle.newJob("KUmsAll");
+		if (!init)
+		{			
+			Date start = Date.from(acc.getRequestTime().atZone(ZoneId.systemDefault()).toInstant());			
+			valueJob.setParam("startdate", start);
 		}
 		valueJob.setParam("my", k);
 		valueJob.addToQueue();
