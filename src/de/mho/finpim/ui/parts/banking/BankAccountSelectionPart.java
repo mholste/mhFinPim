@@ -1,5 +1,7 @@
 package de.mho.finpim.ui.parts.banking;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -290,8 +292,9 @@ public class BankAccountSelectionPart
 		
 		for (Account pAcc : persistedAccounts)
 		{
-			ArrayList<HashMap<String, Object>> statements = service.getStatementList(pAcc);
+			ArrayList<HashMap<String, Object>> statements = service.getStatementList(pAcc, true);
 			persistence.updateStatementList(pAcc, statements);
+			persistence.setRequestTime(pAcc, LocalDateTime.now());
 		}
 		
 	}
