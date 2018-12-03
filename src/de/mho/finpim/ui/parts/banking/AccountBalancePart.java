@@ -3,7 +3,9 @@ package de.mho.finpim.ui.parts.banking;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -69,6 +71,8 @@ public class AccountBalancePart
 	private ArrayList<HashMap<String, Object>> bookings;
 	private boolean isUsedTo = false;
 	private boolean isUsedFrom = false;
+	private DateTime dtFrom;
+	private DateTime dtTo;
 	
 	@PostConstruct
 	public void createControls(Composite parent)
@@ -177,10 +181,10 @@ public class AccountBalancePart
 			lblTo.setText("bis");
 			lblTo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
 			
-			DateTime dtFrom = new DateTime(timeGroup, SWT.DATE);
+			dtFrom = new DateTime(timeGroup, SWT.DATE);
 			dtFrom.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));	
 			dtFrom.setEnabled(false);
-			DateTime dtTo = new DateTime(timeGroup, SWT.DATE);
+			dtTo = new DateTime(timeGroup, SWT.DATE);
 			dtTo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
 			dtTo.setEnabled(false);
 			
@@ -355,10 +359,31 @@ public class AccountBalancePart
 	 */
 	private ArrayList<HashMap<String, Object>> updateContent(Account account)
 	{
-		ArrayList<HashMap<String, Object>> tmpBookings = service.getStatementList(account, false);
-		persistence.setRequestTime(account, LocalDateTime.now());
-		persistence.updateStatementList(account, tmpBookings);	 
-		tmpBookings = null;
+		Date from = null;
+		Date to = null;
+		if (dtFrom.isEnabled())
+		{
+			LocalDate ldFrom = LocalDate.of(dtFrom.getYear(), dtFrom.getMonth(),
+					dtFrom.getDay());
+			LocalDate ldTo = LocalDate.of(dtTo.getYear(), dtTo.getMonth(),
+					dtTo.getDay());
+			from = Date.from(ldFrom.atStartOfDay(ZoneId.systemDefault()).toInstant());
+			to = Date.from(ldTo.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		}
+		
+		if (! isUsedFrom && ! isUsedTo)
+		{
+			ArrayList<HashMap<String, Object>> tmpBookings = service.getStatementList(account, false);
+			persistence.setRequestTime(account, LocalDateTime.now());
+			persistence.updateStatementList(account, tmpBookings);
+			tmpBookings = null;
+		}
+		else
+		{
+			
+		}
+		
+		
 	    
 	    return persistence.getStatements(account);
 	}
