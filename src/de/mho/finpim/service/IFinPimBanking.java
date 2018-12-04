@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 
 import de.mho.finpim.persistence.model.Account;
-import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.persistence.model.CustomerRelation;
 
 public interface IFinPimBanking 
