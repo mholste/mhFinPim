@@ -371,18 +371,10 @@ public class AccountBalancePart
 			to = Date.from(ldTo.atStartOfDay(ZoneId.systemDefault()).toInstant());
 		}
 		
-		if (! isUsedFrom && ! isUsedTo)
-		{
-			ArrayList<HashMap<String, Object>> tmpBookings = service.getStatementList(account, null, null, false);
-			persistence.setRequestTime(account, LocalDateTime.now());
-			persistence.updateStatementList(account, tmpBookings);
-			tmpBookings = null;
-		}
-		else
-		{
-			
-		}
-		
+		ArrayList<HashMap<String, Object>> tmpBookings = service.getStatementList(account, from, to, false);
+		persistence.setRequestTime(account, LocalDateTime.now());
+		persistence.updateStatementList(account, tmpBookings);
+		tmpBookings = null;
 		
 	    
 	    return persistence.getStatements(account);
