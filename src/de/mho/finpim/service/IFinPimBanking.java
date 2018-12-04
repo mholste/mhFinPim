@@ -1,6 +1,7 @@
 package de.mho.finpim.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import de.mho.finpim.persistence.model.Account;
@@ -15,4 +16,6 @@ public interface IFinPimBanking
 	public String getAccountBalace(Account acc);
 	
 	public ArrayList<HashMap<String, Object>> getStatementList(Account acc, boolean init);
+	
+	public ArrayList<HashMap<String, Object>> getStatementList(Account acc, Date from, Date to);
 }
