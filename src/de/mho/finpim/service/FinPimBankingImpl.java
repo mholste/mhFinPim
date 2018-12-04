@@ -150,6 +150,36 @@ public class FinPimBankingImpl implements IFinPimBanking
 		return statements;
 	}
 	
+	private ArrayList<HashMap<String, Object>> collectStatements(List<UmsLine> statementList)
+	{
+		ArrayList<HashMap<String, Object>> statements = new ArrayList<HashMap<String, Object>>();
+		for (UmsLine ul : statementList)
+		{
+			Map<String, Object> booking = new HashMap<String, Object>();
+			booking.put(GlobalValues.BOOKING_DATE, ul.bdate);
+			booking.put(GlobalValues.BOOKING_BALANCE, ul.saldo.value.toString());
+			booking.put(GlobalValues.BOOKING_USAGE, ul.usage);
+			booking.put(GlobalValues.BOOKING_VALUE, ul.value.toString());
+			booking.put(GlobalValues.BOOKING_VALUTA, ul.valuta);
+			booking.put(GlobalValues.BOOKING_CHARGE, ul.charge_value);
+			booking.put(GlobalValues.BOOKING_CUST_REF, ul.customerref);
+			booking.put(GlobalValues.BOOKING_INST_REF, ul.instref);
+			booking.put(GlobalValues.BOOKING_ORG_VALUE, ul.orig_value);
+			if (ul.other != null)
+			{
+				booking.put(GlobalValues.BOOKING_OTHER_ACC, ul.other.number);
+				booking.put(GlobalValues.BOOKING_OTHER_ACC_OWNER, ul.other.name);
+			}
+			else
+			{
+				booking.put(GlobalValues.BOOKING_OTHER_ACC, "xxx");
+				booking.put(GlobalValues.BOOKING_OTHER_ACC_OWNER, "n/a");
+			}
+			statements.add((HashMap<String, Object>) booking);  
+		}
+		return statements;
+	}
+	
 	private HBCIPassport initBanking(CustomerRelation cr)
 	{
 		Properties props = new Properties();
