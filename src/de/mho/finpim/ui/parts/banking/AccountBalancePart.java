@@ -373,7 +373,7 @@ public class AccountBalancePart
 		
 		if (! isUsedFrom && ! isUsedTo)
 		{
-			ArrayList<HashMap<String, Object>> tmpBookings = service.getStatementList(account, false);
+			ArrayList<HashMap<String, Object>> tmpBookings = service.getStatementList(account, null, null, false);
 			persistence.setRequestTime(account, LocalDateTime.now());
 			persistence.updateStatementList(account, tmpBookings);
 			tmpBookings = null;
