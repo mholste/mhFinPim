@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import de.mho.finpim.persistence.model.Account;
+import de.mho.finpim.persistence.model.Bank;
 import de.mho.finpim.persistence.model.CustomerRelation;
 
 public interface IFinPimBanking 
@@ -14,7 +15,6 @@ public interface IFinPimBanking
 	
 	public String getAccountBalace(Account acc);
 	
-	public ArrayList<HashMap<String, Object>> getStatementList(Account acc, boolean init);
+	public ArrayList<HashMap<String, Object>> getStatementList(Account acc, Date from, Date to, boolean init);
 	
-	public ArrayList<HashMap<String, Object>> getStatementList(Account acc, Date from, Date to);
 }

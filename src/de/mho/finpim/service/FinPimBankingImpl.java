@@ -94,7 +94,7 @@ public class FinPimBankingImpl implements IFinPimBanking
 	}
 	
 	@Override
-	public ArrayList<HashMap<String, Object>> getStatementList(Account acc, boolean init) 
+	public ArrayList<HashMap<String, Object>> getStatementList(Account acc, Date from, Date to, boolean init) 
 	{
 		Bank b = acc.getBank();
 		CustomerRelation cr = acc.getPerson().getCustomerRelation(b);
@@ -103,8 +103,10 @@ public class FinPimBankingImpl implements IFinPimBanking
 		
 		Konto k = passport.getAccount(acc.getAccNo());
 		HBCIJob valueJob = handle.newJob("KUmsAll");
-		if (!init)
-		{			
+		if (!init && from != null) valueJob.setParam("startdate", from);
+		if (!init && to != null) valueJob.setParam("enddate", to);
+		if (!init && from == null && to == null)
+		{
 			Date start = Date.from(acc.getRequestTime().atZone(ZoneId.systemDefault()).toInstant());			
 			valueJob.setParam("startdate", start);
 		}
