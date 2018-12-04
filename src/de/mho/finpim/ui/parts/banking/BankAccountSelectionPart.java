@@ -292,7 +292,7 @@ public class BankAccountSelectionPart
 		
 		for (Account pAcc : persistedAccounts)
 		{
-			ArrayList<HashMap<String, Object>> statements = service.getStatementList(pAcc, true);
+			ArrayList<HashMap<String, Object>> statements = service.getStatementList(pAcc, null, null, true);
 			persistence.updateStatementList(pAcc, statements);
 			persistence.setRequestTime(pAcc, LocalDateTime.now());
 		}
