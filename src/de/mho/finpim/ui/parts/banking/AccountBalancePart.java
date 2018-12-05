@@ -77,9 +77,7 @@ public class AccountBalancePart
 	@PostConstruct
 	public void createControls(Composite parent)
 	{   
-		Account account = data.getActiveAccount();
-		
-	    bookings = updateContent(account);	    
+		Account account = data.getActiveAccount(); 
 	    
 		FormLayout layout = new FormLayout();
 		layout.marginHeight = 5;
@@ -283,6 +281,7 @@ public class AccountBalancePart
 	    });
 	    
 	    tableComposite.setLayout(tableColumnLayout);
+	    bookings = updateContent(account);
 	    viewer.setInput(this.bookings);
 	    cSorter.setSorter(cSorter, ColumnViewerComparator.DESC);
 	    
