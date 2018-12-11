@@ -23,6 +23,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.nebula.widgets.datechooser.DateChooserCombo;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -71,8 +72,8 @@ public class AccountBalancePart
 	private ArrayList<HashMap<String, Object>> bookings;
 	private boolean isUsedTo = false;
 	private boolean isUsedFrom = false;
-	private DateTime dtFrom;
-	private DateTime dtTo;
+	private DateChooserCombo dccFrom;
+	private DateChooserCombo dccTo;
 	
 	@PostConstruct
 	public void createControls(Composite parent)
@@ -179,13 +180,21 @@ public class AccountBalancePart
 			lblTo.setText("bis");
 			lblTo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
 			
-			dtFrom = new DateTime(timeGroup, SWT.DATE);
-			dtFrom.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));	
-			dtFrom.setEnabled(false);
-			dtTo = new DateTime(timeGroup, SWT.DATE);
-			dtTo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
-			dtTo.setEnabled(false);
 			
+			dccFrom = new DateChooserCombo(timeGroup, SWT.BORDER);
+			dccFrom.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
+			dccFrom.setEnabled(false);
+			dccTo = new DateChooserCombo(timeGroup, SWT.BORDER);
+			dccTo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
+			dccTo.setEnabled(false);
+			 
+			//dtFrom = new DateTime(timeGroup, SWT.DATE);
+			//dtFrom.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));	
+			//dtFrom.setEnabled(false);
+			//dtTo = new DateTime(timeGroup, SWT.DATE);
+			//dtTo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
+			//dtTo.setEnabled(false);
+			  
 			
 		/* Layout für Tabelle
 		 * Allgemeiner Aufbau der Tabelle */
@@ -296,43 +305,14 @@ public class AccountBalancePart
 	    	Button btn = (Button) event.getSource();
 	    	if (btn.getSelection())
 	    	{
-	    		dtFrom.setEnabled(true);
-	    		dtTo.setEnabled(true);	
-	    		if (! isUsedTo && ! isUsedFrom)
-	    		{
-	    			dtTo.setYear(LocalDate.now().getYear());
-	    			dtTo.setMonth(LocalDate.now().getMonthValue());
-	    			dtTo.setDay(LocalDate.now().getDayOfMonth());			
-	    			dtFrom.setYear(LocalDate.now().minusWeeks(4).getYear());
-	    			dtFrom.setMonth(LocalDate.now().minusWeeks(4).getMonthValue());
-	    			dtFrom.setDay(LocalDate.now().minusWeeks(4).getDayOfMonth());	
-	    		}
+	    		dccFrom.setEnabled(true);
+	    		dccTo.setEnabled(true);	
 	    	}
 	    	else
 	    	{
-	    		dtFrom.setEnabled(false);
-	    		dtTo.setEnabled(false);
+	    		dccFrom.setEnabled(false);
+	    		dccTo.setEnabled(false);
 	    	}  		
-	    }
-	    ));
-	    
-	    dtTo.addSelectionListener(widgetSelectedAdapter(event -> {
-	    	if (LocalDate.now().getYear() != dtTo.getYear() || 
-	    			LocalDate.now().getMonthValue() != dtTo.getMonth() || 
-	    			LocalDate.now().getDayOfMonth() != dtTo.getDay())
-	    	{
-	    		isUsedTo = true;
-	    	}
-	    }
-	    ));
-	    
-	    dtFrom.addSelectionListener(widgetSelectedAdapter(event -> {
-	    	if (LocalDate.now().minusWeeks(4).getYear() != dtFrom.getYear() || 
-	    			LocalDate.now().minusWeeks(4).getMonthValue() != dtTo.getMonth() || 
-	    			LocalDate.now().minusWeeks(4).getDayOfMonth() != dtTo.getDay())
-	    	{
-	    		isUsedTo = true;
-	    	}
 	    }
 	    ));
 	}
@@ -357,20 +337,9 @@ public class AccountBalancePart
 	 * @return          Die Werte der Kontoauszüge als ArrayList von HashMaps
 	 */
 	private ArrayList<HashMap<String, Object>> updateContent(Account account)
-	{
-		Date from = null;
-		Date to = null;
-		if (dtFrom.isEnabled())
-		{
-			LocalDate ldFrom = LocalDate.of(dtFrom.getYear(), dtFrom.getMonth(),
-					dtFrom.getDay());
-			LocalDate ldTo = LocalDate.of(dtTo.getYear(), dtTo.getMonth(),
-					dtTo.getDay());
-			from = Date.from(ldFrom.atStartOfDay(ZoneId.systemDefault()).toInstant());
-			to = Date.from(ldTo.atStartOfDay(ZoneId.systemDefault()).toInstant());
-		}
-		
-		ArrayList<HashMap<String, Object>> tmpBookings = service.getStatementList(account, from, to, false);
+	{	
+		ArrayList<HashMap<String, Object>> tmpBookings = service.getStatementList(
+				account, dccFrom.getValue(), dccTo.getValue(), false);
 		persistence.setRequestTime(account, LocalDateTime.now());
 		persistence.updateStatementList(account, tmpBookings);
 		tmpBookings = null;
