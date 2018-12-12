@@ -1,11 +1,8 @@
 package de.mho.finpim.ui.parts.banking;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -36,7 +33,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
@@ -70,8 +66,6 @@ public class AccountBalancePart
 	private TableViewer viewer;
 	private TableColumnLayout tableColumnLayout;
 	private ArrayList<HashMap<String, Object>> bookings;
-	private boolean isUsedTo = false;
-	private boolean isUsedFrom = false;
 	private DateChooserCombo dccFrom;
 	private DateChooserCombo dccTo;
 	
@@ -164,7 +158,6 @@ public class AccountBalancePart
 			FormData formDataGroup = new FormData();
 			formDataGroup.left = new FormAttachment(lblAccountNo, 70);
 			formDataGroup.top = new FormAttachment(lblBankBIC, 0, SWT.TOP);
-			GridLayout groupLayout = new GridLayout();
 			timeGroup.setText("Zeitraum");
 			timeGroup.setLayoutData(formDataGroup);
 			timeGroup.setLayout(new GridLayout(2, false));
@@ -187,14 +180,6 @@ public class AccountBalancePart
 			dccTo = new DateChooserCombo(timeGroup, SWT.BORDER);
 			dccTo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
 			dccTo.setEnabled(false);
-			 
-			//dtFrom = new DateTime(timeGroup, SWT.DATE);
-			//dtFrom.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));	
-			//dtFrom.setEnabled(false);
-			//dtTo = new DateTime(timeGroup, SWT.DATE);
-			//dtTo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
-			//dtTo.setEnabled(false);
-			  
 			
 		/* Layout für Tabelle
 		 * Allgemeiner Aufbau der Tabelle */
@@ -344,7 +329,7 @@ public class AccountBalancePart
 		persistence.updateStatementList(account, tmpBookings);
 		tmpBookings = null;
 		
-	    
+	   
 	    return persistence.getStatements(account);
 	}
 	
