@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 
 import de.mho.finpim.lifecycle.Activator;
 import de.mho.finpim.persistence.model.Account;
@@ -389,21 +390,41 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 	}
 	
 	/**
-	 * Gibt eine Liste der Kontoauszüge aus der Datenbank zurück.
+	 * Gibt eine Liste der Kontoauszüge aus der Datenbank zurück. Die einschränkenden 
+	 * Parameter für die Datumswerte dürfen auch null sein.
 	 * 
 	 * @param account    Das Konto für die Auszüge
+	 * @param from       Datum, ab dem Kontoauszüge geholt werden
+	 * @param to         Datum, bis zu dem Kontoauszüge geholt werden
 	 * @return ArrayList Liste von HashMaps die jeweils einen Auszug repräsentieren.
 	 */
 	@Override
-	public ArrayList<HashMap<String, Object>> getStatements (Account account)
+	public ArrayList<HashMap<String, Object>> getStatements (Account account, Date from, Date to)
 	{
+		Query query = null;
 		ArrayList<HashMap<String, Object>> result = new ArrayList<HashMap<String, Object>>();
 		EntityManager em = Activator.getEntityManager();
 		
+		if (from == null || to == null)
+		{
+			query = em.createQuery("SELECT s FROM Statement s WHERE s.account=:arg1");
+		}
+		else
+		{
+			query = em.createQuery("SELECT s FROM Statement s WHERE s.account=:arg2 "
+					+ "AND s.valuta > :arg3 AND s.valuta < :arg3");
+			query.setParameter("arg2", from);
+			query.setParameter("arg3", to);
+		}
+		
+		query.setParameter("arg1", account);
+		ArrayList<Statement> statements = new ArrayList<Statement>(query.getResultList()); 
+		
+		/*
 		ArrayList<Statement> statements = new ArrayList<Statement>(em.createQuery(
 				"SELECT s FROM Statement s WHERE s.account=:arg").setParameter(
 						"arg", account).getResultList()); 
-		
+		*/
 		for (Statement stmt : statements)
 		{
 			HashMap<String, Object> tmpMap = new HashMap<String, Object>();
