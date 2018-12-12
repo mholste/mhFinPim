@@ -330,7 +330,7 @@ public class AccountBalancePart
 		tmpBookings = null;
 		
 	   
-	    return persistence.getStatements(account);
+	    return persistence.getStatements(account, dccFrom.getValue(), dccTo.getValue());
 	}
 	
 	/**
