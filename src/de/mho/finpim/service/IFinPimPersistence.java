@@ -32,5 +32,5 @@ public interface IFinPimPersistence
 	
 	public void updateStatementList (Account account, ArrayList<HashMap<String, Object>> bookings);
 	
-	public ArrayList<HashMap<String, Object>> getStatements (Account account);
+	public ArrayList<HashMap<String, Object>> getStatements (Account account, Date from, Date to);
 }
