@@ -281,7 +281,8 @@ public class AccountBalancePart
 	    
 	    // Listener
 	    btnUpdate.addSelectionListener(widgetSelectedAdapter(event -> {
-	    	updateContent(account);
+	    	bookings = updateContent(account);
+		    viewer.setInput(this.bookings);
 	    	viewer.refresh();	
 	    	}
 	    ));
