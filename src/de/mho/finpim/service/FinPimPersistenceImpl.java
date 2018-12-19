@@ -411,8 +411,8 @@ public class FinPimPersistenceImpl implements IFinPimPersistence
 		}
 		else
 		{
-			query = em.createQuery("SELECT s FROM Statement s WHERE s.account=:arg2 "
-					+ "AND s.valuta > :arg3 AND s.valuta < :arg3");
+			query = em.createQuery("SELECT s FROM Statement s WHERE s.account=:arg1 "
+					+ "AND s.valuta > :arg2 AND s.valuta < :arg3");
 			query.setParameter("arg2", from);
 			query.setParameter("arg3", to);
 		}
