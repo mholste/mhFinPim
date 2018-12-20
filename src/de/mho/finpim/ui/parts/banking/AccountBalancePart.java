@@ -68,6 +68,7 @@ public class AccountBalancePart
 	private ArrayList<HashMap<String, Object>> bookings;
 	private DateChooserCombo dccFrom;
 	private DateChooserCombo dccTo;
+	private boolean isTimeFrame;
 	
 	@PostConstruct
 	public void createControls(Composite parent)
@@ -293,11 +294,13 @@ public class AccountBalancePart
 	    	{
 	    		dccFrom.setEnabled(true);
 	    		dccTo.setEnabled(true);	
+	    		isTimeFrame = true;
 	    	}
 	    	else
 	    	{
 	    		dccFrom.setEnabled(false);
 	    		dccTo.setEnabled(false);
+	    		isTimeFrame = false;
 	    	}  		
 	    }
 	    ));
@@ -324,14 +327,22 @@ public class AccountBalancePart
 	 */
 	private ArrayList<HashMap<String, Object>> updateContent(Account account)
 	{	
+		Date from = null;
+		Date to = null;
+		
+		if (isTimeFrame)
+		{
+			from = dccFrom.getValue();
+			to = dccTo.getValue();
+		}
 		ArrayList<HashMap<String, Object>> tmpBookings = service.getStatementList(
-				account, dccFrom.getValue(), dccTo.getValue(), false);
+				account, from, to, false);
 		persistence.setRequestTime(account, LocalDateTime.now());
 		persistence.updateStatementList(account, tmpBookings);
 		tmpBookings = null;
 		
 	   
-	    return persistence.getStatements(account, dccFrom.getValue(), dccTo.getValue());
+	    return persistence.getStatements(account, from, to);
 	}
 	
 	/**
