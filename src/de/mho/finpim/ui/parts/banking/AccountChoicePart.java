@@ -1,6 +1,7 @@
 package de.mho.finpim.ui.parts.banking;
 
 import java.time.Duration;
+
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import de.mho.finpim.persistence.model.Account;
@@ -31,6 +33,8 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.layout.GridData;
+
+import static org.eclipse.swt.events.SelectionListener.widgetSelectedAdapter;
 
 public class AccountChoicePart 
 {
@@ -60,28 +64,7 @@ public class AccountChoicePart
 		Person user = data.getUser();
 		accounts = persistence.getAccounts(user);
 		parent.setLayout(new GridLayout(8, false));
-		//String bankBuffer = "";		
-		
-		/*
-		 * nutzlos?
-		for (int i = 0; i < 8; i++)
-		{
-			if (accounts.size() <= i)
-			{
-				new Label(parent, SWT.NONE);
-				continue;
-			}
-			if (bankBuffer.equalsIgnoreCase(accounts.get(i).getBank().getBankName()))
-			{
-				new Label(parent, SWT.NONE);
-			}
-			else
-			{
-				setBankLabel(parent, accounts.get(i).getBank().getBankName());
-				bankBuffer = accounts.get(i).getBank().getBankName();
-			}
-		}
-		*/
+
 		for (Account acc : accounts) 
 		{
 			createGroup(parent, acc, service);
@@ -151,21 +134,15 @@ public class AccountChoicePart
 		lblBalanceVal.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));		
 		lblBalanceVal.setText("123");
 		
-		accGroup.addMouseListener(new MouseListener() 
-		{	
-			@Override
-			public void mouseUp(MouseEvent e) {	}
-			
-			@Override
-			public void mouseDown(MouseEvent e) { }
+		Button btnStatement = new Button(accGroup,SWT.PUSH);
+		btnStatement.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		btnStatement.setText("Übersicht");
 		
-			@Override
-			public void mouseDoubleClick(MouseEvent e) 
-			{
-				AccountChoicePart.this.data.setActiveAccount(account);
-				partService.showPart("mhfinpim.part.acc.balance", PartState.ACTIVATE);
+		btnStatement.addSelectionListener(widgetSelectedAdapter(event -> {
+			AccountChoicePart.this.data.setActiveAccount(account);
+			partService.showPart("mhfinpim.part.acc.balance", PartState.ACTIVATE);
 			}
-		});
+		));
 	}
 
 	@PreDestroy
