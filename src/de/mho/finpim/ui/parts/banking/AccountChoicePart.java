@@ -15,6 +15,9 @@ import org.eclipse.core.runtime.ICoreRunnable;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
+import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.swt.widgets.Button;
@@ -56,6 +59,9 @@ public class AccountChoicePart
 	@Inject 
 	EPartService partService;
 	
+	@Inject
+	EModelService modelService;
+	
 	private ArrayList<Account> accounts;
 	
 	@PostConstruct
@@ -95,7 +101,16 @@ public class AccountChoicePart
 		    }
 		    else
 		    {
-		    	data.setAccLabelText(acc, acc.getBalance());
+		    	String labelText = "";
+		    	if (acc.getBalance() == null)
+		    	{
+		    		labelText = "n/a";
+		    	}
+		    	else
+		    	{
+		    		labelText = acc.getBalance();
+		    	}
+		    	data.setAccLabelText(acc, labelText);
 		    }
 		    
 		}
@@ -139,8 +154,12 @@ public class AccountChoicePart
 		btnStatement.setText("Übersicht");
 		
 		btnStatement.addSelectionListener(widgetSelectedAdapter(event -> {
-			AccountChoicePart.this.data.setActiveAccount(account);
-			partService.showPart("mhfinpim.part.acc.balance", PartState.ACTIVATE);
+			AccountChoicePart.this.data.setActiveAccount(account);			
+			MPart statementPart = partService.createPart("mhfinpim.part.acc.balance");
+			MPartStack partStack = (MPartStack)modelService.find("mhfinpim.partstack.r_oben", app);
+			partStack.getChildren().add(statementPart);
+			statementPart.setLabel("Kontostand " + account.getAccNo());
+			partService.showPart(statementPart, PartState.ACTIVATE);
 			}
 		));
 	}
