@@ -1,6 +1,7 @@
 package de.mho.finpim.ui.parts.banking;
 
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,7 +53,6 @@ public class AccountBalancePart
 {
 	@Inject 
 	IPlatformDataService data;
-	
 	@Inject
 	IFinPimBanking service;
 	
@@ -335,19 +335,23 @@ public class AccountBalancePart
 			from = dccFrom.getValue();
 			to = dccTo.getValue();
 		}
-		ArrayList<HashMap<String, Object>> tmpBookings = service.getStatementList(
-				account, from, to, false);
-		persistence.setRequestTime(account, LocalDateTime.now());
-		persistence.updateStatementList(account, tmpBookings);
-		tmpBookings = null;
-		
+
+		Duration duration = Duration.between(LocalDateTime.now(), account.getRequestTime());
+	    if (Math.abs(duration.toHours()) > 2)
+	    {
+	    	ArrayList<HashMap<String, Object>> tmpBookings = service.getStatementList(
+					account, from, to, false);
+			persistence.setRequestTime(account, LocalDateTime.now());
+			persistence.updateStatementList(account, tmpBookings);
+			tmpBookings = null; 
+	    }
 	   
 	    return persistence.getStatements(account, from, to);
 	}
 	
 	/**
 	 * Private Comparator-Klasse für die Sortierung der Tabelle nach einer Spalte.
-	 * @author mho
+	 * @author Michael Holste
 	 *
 	 */	
 	private abstract class ColumnViewerComparator extends ViewerComparator
