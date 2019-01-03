@@ -93,7 +93,7 @@ public class AccountChoicePart
 		    		sync.asyncExec(() -> {
 		    			String balance = service.getAccountBalace(acc); 
 		    			data.setAccLabelText(acc, balance);					
-		    			persistence.setRequestTime(acc, LocalDateTime.now());
+		    			//persistence.setRequestTime(acc, LocalDateTime.now());
 		    			persistence.setBalance(acc, balance);
 		    		});
 		    	});
